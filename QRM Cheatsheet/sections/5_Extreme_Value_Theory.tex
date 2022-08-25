@@ -1,0 +1,396 @@
+\section{Extreme Value Theory}
+
+\pink{5.1 Maxima}
+
+\subsection*{Limiting behavior of averages}
+\begin{itemize}[leftmargin=*]
+    \item Consider losses given by independent random variables $X_{1}, X_{2}, \ldots$ with cdf $F$
+    \item If $\mathbb{E}\left[X_{1}\right]=\mu$, the \green{SLLN (strong law of large numbers)} gives
+$
+\frac{1}{n} \sum_{i=1}^{n} X_{i} \rightarrow \mu \quad \text { a.s. }
+$
+    \item If $\mathbb{E}\left[X_{1}\right]=\mu$ and $\operatorname{Var}\left(X_{1}\right)=\sigma^{2}<\infty$, the \green{CLT (central limit theorem)} gives $\frac{1}{\sqrt{n}} \sum_{i=1}^{n} \frac{X_{i}-\mu}{\sigma} \rightarrow \N(0,1) \quad$ in distribution
+\end{itemize}
+
+
+
+
+
+\subsection*{Limiting behavior of maxima}
+\begin{itemize}[leftmargin=*]
+    \item The \green{block maximum} of $X_{1}, \ldots, X_{n}$ is given by $M_{n}=\max \left\{X_{1}, \ldots, X_{n}\right\}$
+    \item $F_{M_{n}}(x)=\mathbb{P}\left[M_{n} \leq x\right]=\mathbb{P}\left[X_{1} \leq x, \ldots, X_{n} \leq x\right]=F^{n}(x), \quad x \in \mathbb{R}$
+    \item One can show that $M_{n} \rightarrow x_{F}$ a.s., where $x_{F}=\sup \{x \in \mathbb{R}: F(x)<1\} \leq \infty$ denotes the right end point of $F$ (\melon{similar to SLLN})
+\end{itemize}
+
+
+
+\subsection*{Slowly Varying}
+A func $L:[a, \infty) \rightarrow(0, \infty)$ is \green{sv (slowly varying)} if
+$
+\lim _{x \rightarrow \infty} \frac{L(t x)}{L(x)}=1$ for all $t>0
+$
+
+
+
+
+
+
+
+\subsection*{Maximum Domain of Attraction (MDA)}
+If there exist \melon{normalizing sequences} of real numbers $\left\{c_{n}\right\}>0$ and $\left\{d_{n}\right\}$ such that $\left(M_{n}-d_{n}\right) / c_{n}$ converges in distribution; that is,
+$$ 
+\mathbb{P}\left[\left(M_{n}-d_{n}\right) / c_{n} \leq x\right]=F^{n}\left(c_{n} x+d_{n}\right) \rightarrow H(x)
+$$
+for all continuity points $x$ of a \melon{non-degenerate cdf} $H$ (not a unit jump), then $F$ is said to be in the \green{MDA} of $H$. \melon{Notation}: $F \in \operatorname{MDA}(H)$
+
+\begin{itemize}[leftmargin=*]
+    \item We say $H$ is of the \green{same type} as $\tilde{H}$ if $H(x)=\tilde{H}(c x+d)$ for some $c>0$ and $d \in \mathbb{R}$
+    \item \green{Convergence to types theorem}:
+If $\mathbb{P}\left[\left(M_{n}-d_{n}\right) / c_{n} \leq x\right] \rightarrow H(x)$ for all continuity points of $H$ and $\mathbb{P}\left[\left(M_{n}-\tilde{d}_{n}\right) / \tilde{c}_{n} \leq x\right] \rightarrow \tilde{H}(x)$ for all continuity points of $\tilde{H}$, then $H$ and $\tilde{H}$ are of the same type
+\end{itemize}
+
+\subsubsection*{Reverse Weibull case: $\xi<0$}
+$F \in \operatorname{MDA}\left(H_{\xi}\right) \quad \Leftrightarrow \quad x_{F}<\infty$ and $\bar{F}\left(x_{F}-\frac{1}{x}\right)=1-F\left(x_{F}-\frac{1}{x}\right)=x^{\frac{1}{\xi}} L(x), x>0$ for some sv func $L$.
+
+All $F \in \operatorname{MDA}\left(H_{\xi}\right)$ share $x_{F}<\infty$
+
+\melon{Examples}: Uniform and Beta
+\subsubsection*{Gumbel case: $\xi=0$}
+\begin{itemize}[leftmargin=*]
+    \item Ccontains dists whose tails decay roughly exponentially (we call these dists \green{light-tailed}).
+    \item All moments exist for dists in Gumbel class
+    \item \melon{Examples}: normal, log-normal, exp, gamma
+\end{itemize}
+
+\subsubsection*{Fréchet case: $\xi>0$}
+\begin{itemize}[leftmargin=*]
+    \item $F \in \operatorname{MDA}\left(H_{\xi}\right) \quad \Leftrightarrow \quad \bar{F}(x)=1-F(x)=x^{-1 / \xi} L(x), x>0 \quad$ for some sv function $L$
+
+    \item Distributions in $\operatorname{MDA}\left(H_{\xi}\right)$ for $\xi>0$ are those whose tails decay like power functions.
+
+    \item \melon{Examples}: Student- $t$, Pareto, log-gamma, inverse gamma, Cauchy, $\alpha$-stable with $0<\alpha<2$
+
+    \item \melon{Example - Pareto distribution}:  $\bar{F}(x)=\left(\frac{\kappa}{\kappa+x}\right)^{\theta}, \quad \theta, \kappa>0, \quad x \geq 0$
+$$
+\bar{F}(x)=\left(1+\frac{x}{\kappa}\right)^{-\theta}=x^{-\theta} L(x) \quad \text { for } L(x)=\left(\frac{\kappa x}{\kappa+x}\right)^{\theta}
+$$
+So $F$ is in $\operatorname{MDA}\left(H_{1 / \theta}\right)$
+\end{itemize}
+
+
+
+
+
+
+
+\subsection*{Generalized Extreme Value (GEV) Distribution}
+The \green{standard generalized extreme value (GEV) distribution} is given by its cdf and pdf
+$$
+\begin{aligned}
+H_{\xi}(s)&= \begin{cases}\exp \left(-(1+\xi s)^{-1 / \xi}\right) & \text { if } \xi \neq 0 \\ \exp \left(-e^{-s}\right) & \text { if } \xi=0\end{cases} \\ 
+h_{\xi}(s)&= \begin{cases}(1+\xi s)^{-1 / \xi-1} H_{\xi}(s) & \text { if } \xi \neq 0 \\ e^{-s} H_{\xi=0}(s) & \text { if } \xi=0\end{cases} \\
+\end{aligned}
+$$
+Support is all $s$ s.t. $1+\xi s>0$. $\xi$ is the \green{shape param}.
+
+\green{Generalized extreme value (GEV) distribution} with \green{shape param} $\xi \in \mathbb{R}$, \green{location param} $\mu \in \mathbb{R}$ and \green{scale param} $\sigma>0$ is of the form $H_{\xi, \mu, \sigma}(x)=H_{\xi}((x-\mu) / \sigma)$.
+
+The shape param $\xi$ determines the tail of the dist:
+\begin{itemize}[leftmargin=*]
+    \item $\xi<0$ gives a \green{Reverse Weibull distribution}: short-tailed, $x_{H_{\xi}}=-1 / \xi<\infty$
+    \item $\xi=0$ gives a \green{Gumbel distribution}: $x_{H_{\xi}}=\infty, \bar{H}_{\xi}(x)=1-H_{\xi}(x) \approx e^{-x}$
+    \item $\xi>0$ gives a Fréchet distribution: $x_{H_{\xi}}=\infty$, heavy-tailed.
+    
+    $\bar{H}_{\xi}(x)=1-H_{\xi}(x) \approx(\xi x)^{-1 / \xi}$.
+    
+    $\mathbb{E}\left[X^{k}\right]=\infty \Leftrightarrow k \geq 1 / \xi$, (tail becomes heavier for larger $\xi$)
+\end{itemize}
+
+\navy{Thm (Fisher–Tippett)}: 
+If $F \in M D A(H)$, then $H$ is of the form $H_{\xi, \mu, \sigma}$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection*{Maxima of stationary time series}
+\begin{itemize}[leftmargin=*]
+    \item Let $\left(X_{t}\right)_{t \in \mathbb{Z}}$ be a stationary time series with stationary distribution $X_{t} \sim F$
+    \item Let $\tilde{X}_{t} \sim F$ be iid and $\tilde{M}_{n}=\max \left\{\tilde{X}_{1}, \ldots, \tilde{X}_{n}\right\}$
+    \item For many processes one can show that there exists a real number $\theta \in(0,1]$ such that $\lim _{n \rightarrow \infty} \mathbb{P}\left[\left(M_{n}-d_{n}\right) / c_{n} \leq x\right]=H^{\theta}(x) \Leftrightarrow \lim _{n \rightarrow \infty} \mathbb{P}\left[\left(\tilde{M}_{n}-d_{n}\right) / c_{n} \leq x\right]=H(x)$ (non-degenerate), $\theta$ is known as the \green{extremal index}
+    \item If $F \in \operatorname{MDA}\left(H_{\xi}\right)$ for some $\xi$, then $\left(M_{n}-d_{n}\right) / c_{n}$ converges in distribution to $H_{\xi}^{\theta}$ Since $H_{\xi}^{\theta}$ is of the same type as $H_{\xi}$, the limiting distribution of the block maxima of the dependent series is the same as in the iid case \red{(only location and scale may change)}
+    \item For large $n$,
+$$
+\mathbb{P}\left[\left(M_{n}-d_{n}\right) / c_{n} \leq x\right] \approx H^{\theta}(x) \approx F^{\theta n}\left(c_{n} x+d_{n}\right) .
+$$
+
+So the distribution $M_{n}$ of a time series with extremal index $\theta$ can be approximated by the distribution $\tilde{M}_{\theta n}$ of the maximum of $\theta n<n$ observations from the associated iid series.
+
+$\Rightarrow \theta n$ counts the number of roughly independent clusters in $n$ observations
+
+$\theta$ is often interpreted as \green{1/mean cluster size}
+    \item If $\theta=1$, large sample maxima behave as in the iid case; 
+    
+    if $\theta \in(0,1)$, large sample maxima tend to cluster
+    \item \melon{Examples}: Strict white noise: $\theta=1$, GARCH processes: $\theta \in(0,1)$
+\end{itemize}
+
+
+
+
+
+
+\pink{5.2 Block maxima method}
+\begin{itemize}[leftmargin=*]
+    \item Assume $n$ is so large that $\mathbb{P}\left[\left(M_{n}-d_{n}\right) / c_{n} \leq x\right] \approx H_{\xi}(x)$ is a good approximation
+    \item For $y=c_{n} x+d_{n}, \mathbb{P}\left[M_{n} \leq y\right] \approx H_{\xi}\left(\left(y-d_{n}\right) / c_{n}\right)=H_{\xi, d_{n}, c_{n}}(y)$
+    \item We collect data on block maxima and fit the three-parameter form of the GEV; that is, we wish to estimate $\xi, \mu=d_{n}, \sigma=c_{n}$
+    \item Assume we have block maxima data $M_{n}^{1}, \ldots, M_{n}^{m}$ from $m$ blocks of size $n$
+    \item We want to estimate $\theta=(\xi, \mu, \sigma)$
+    \item We construct a \melon{log-likelihood} by assuming we have independent observations from a GEV with density $h_{\theta}$, given by
+$$
+\ell\left(\theta ; M_{n}^{1}, \ldots, M_{n}^{m}\right)=\sum_{i=1}^{m} \log \left(h_{\theta}\left(M_{n}^{i}\right)\right)
+$$
+where $h_{\theta}(x)=h_{\xi}((x-\mu) / \sigma) / \sigma$ with
+$$
+h_{\xi}(x)= \begin{cases}(1+\xi x)^{-(1+1 / \xi)} H_{\xi}(x) 1_{\{1+\xi x>0\}} & \text { if } \xi \neq 0 \\ e^{-x} H_{0}(x) & \text { if } \xi=0\end{cases}
+$$
+    \item This can be maximized with respect to $\theta$ to obtain the MLE: $\hat{\theta}=(\hat{\xi}, \hat{\mu}, \hat{\sigma})$
+\end{itemize}
+
+
+
+
+\subsubsection*{Remarks}
+The \melon{fitted GEV model} can be used to estimate the 
+(1) size of an event with prescribed frequency (\melon{return level problem}); 
+(2) frequency of an event with prescribed size (\melon{return period problem})
+
+\subsubsection*{Definition (Return Level; Return Period)}
+\begin{enumerate}[label = (\arabic*), leftmargin=*]
+    \item The indicator in the density $h_{\theta}$ makes life difficult. The support depends on the parameters and it introduces non-differentiability. This does not allow the classical MLE regularity conditions for consistency and asymptotic efficiency to be applied
+    \item For $\xi>-1 / 2$ (fine for practice), it can be shown that the MLE is regular
+    \item Sufficiently many/large blocks require large amounts of data
+    \item In defining blocks, bias and variance must be traded off (bias-variance tradeoff)
+    \begin{itemize}[leftmargin=*]
+        \item Bias is reduced by increasing the block size $n$
+        \item Variance is reduced by increasing the number of blocks $m$
+        \item There is no general best strategy known to find the optimal block size
+    \end{itemize}
+\end{enumerate}
+Confidence intervals for $r_{n, k}, k_{n, u}$ can be constructed via profile-likelihoods.
+
+
+\subsection*{Return levels and return periods}
+The \green{$k n$-block return level} is $r_{n, k}=q_{M_{n}}^{-}(1-1 / k)=\operatorname{VaR}_{1-1 / k}\left(M_{n}\right)$
+
+The \green{return period} of the event $\left\{M_{n}>u\right\}$ is $k_{n, u}=1 / \bar{F}_{M_{n}}(u)=1 /\left(1-F_{M_{n}}(u)\right)$
+
+\begin{itemize}[leftmargin=*]
+    \item $\mathbb{P}\left[M_{n}>r_{n, k}\right] \approx 1 / k$. So $r_{n, k}$ is the level which is expected to be exceeded in one out of every $k$ blocks of size $n$. E.g. 10-year return level $r_{260,10}=$ level exceeded in one out of every 10 years $\approx 2600$ days
+    \item $r_{n, k_{n, u}} \approx u$.
+So $k_{n, u}$ is the number of $n$-blocks for which we expect to see single $n$-block exceeding $u$
+\end{itemize}
+
+
+We use the approximation
+$
+F_{M_{n}} \approx H_{\hat{\xi}, \hat{\mu}, \hat{\sigma}}
+$
+Then, parametric estimators for $r_{n, k}$ and $k_{n, u}$ are given by
+$$
+\begin{aligned}
+&\hat{r}_{n, k}=H_{\hat{\xi}, \hat{\mu}, \hat{\sigma}}^{-1}(1-1 / k) \\
+&= \begin{cases}\hat{\mu}+\frac{\hat{\sigma}}{\hat{\xi}}\left((-\log (1-1 / k))^{-\hat{\xi}}-1\right) & \text { if } \hat{\xi} \neq 0 \\
+\hat{\mu}-\hat{\sigma} \log (-\log (1-1 / k)) & \text { if } \hat{\xi}=0\end{cases} \\
+&\hat{k}_{n, u}=1 / \bar{H}_{\hat{\xi}, \hat{\mu}, \hat{\sigma}}(u)
+\end{aligned}
+$$
+
+
+
+
+
+
+
+
+
+\pink{5.3 Peaks over threshold}
+
+
+\subsection*{Generalized Pareto distribution (GPD)}
+\green{GPD} is given by its cdf and pdf
+$$
+\begin{aligned}
+G_{\xi, \beta}(x)&= \begin{cases}1-(1+\xi x / \beta)^{-1 / \xi} & \text { if } \xi \neq 0, \\ 1-\exp (-x / \beta) & \text { if } \xi=0,\end{cases} \\
+g_{\xi, \beta}(x)&= \begin{cases}\frac{1}{\beta}(1+\xi x / \beta)^{-(1+1 / \xi)} 1_{\{x \geq 0\}} & \xi>0, \\ \frac{1}{\beta}(1+\xi x / \beta)^{-(1+1 / \xi)} 1_{\{0 \leq x<-\beta / \xi\}} & \xi<0 \\ \frac{1}{\beta} \exp (-x / \beta) 1_{\{x \geq 0\}} & \xi=0\end{cases}
+\end{aligned}
+$$
+
+where $\beta>0$, and the support is $x \geq 0$ for $\xi \geq 0$ and $0 \leq x \leq-\beta / \xi$ for $\xi<0$.
+$\xi$ is \green{shape}; $\beta$ is \green{scale}.
+
+
+\begin{itemize}[leftmargin=*]
+    \item Special cases:
+(1) $\xi>0: \operatorname{Par}(1 / \xi, \beta / \xi)$;
+(2) $\xi=0: \operatorname{Exp}(1 / \beta)$;
+(3) $\xi<0$ : short-tailed Pareto type II distribution;
+
+
+ \item The larger $\xi$, the heavier tailed $G_{\xi, \beta}$. 
+ 
+ For $\xi>0: \mathbb{E}\left[X^{k}\right]=\infty \Leftrightarrow k \geq 1 / \xi$; 
+ 
+ For $\xi \leq 0: \mathbb{E}[X]=\beta /(1-\xi)$
+ 
+ \item $G_{\xi, \beta} \in \operatorname{MDA}\left(H_{\xi}\right)$
+\end{itemize}
+
+
+
+
+
+\subsection*{Excess Distribution; Mean Excess Function}
+The \green{excess distribution} above the threshold $u$ is given by
+$$
+F_{u}(x)=\mathbb{P}[X-u \leq x \mid X>u]=\frac{F(x+u)-F(u)}{1-F(u)}, x \in\left[0, x_{F}-u\right)
+$$
+
+If $\mathbb{E}|X|<\infty$, the \green{mean excess function} is (by \green{Fubini's Theorem})
+$$
+\begin{aligned}
+e(u)=\mathbb{E}[X-u \mid X>u]=\frac{\mathbb{E}\left[\int_{u}^{\infty} 1_{\{X>x\}} d x\right]}{\bar{F}(u)} \\
+=\frac{\int_{u}^{\infty} \mathbb{E}\left[1_{\{X>x\}}\right] d x}{\bar{F}(u)}=\frac{1}{\bar{F}(u)} \int_{u}^{x_{F}} \bar{F}(x) d x
+\end{aligned}
+$$
+\begin{itemize}[leftmargin=*]
+    \item $F_{u}$ describes the distribution of the excess loss over $u$, given that $u$ is exceeded 
+    \item $e(u)$ is the mean of $F_{u}$.
+    \item If $\mathbb{E}|X|<\infty$ and the cdf $F$ is continuous, then $\mathrm{ES}_{\alpha}(X)=e\left(\operatorname{VaR}_{\alpha}(X)\right)+\operatorname{VaR}_{\alpha}(X)$
+    \item If $F = G_{\xi, \beta}$, $\xi \neq 0$, then $F_{u}$ is GPD with the same shape $\xi$ and scale $\beta+\xi u$ (grows \red{linearly} in u). 
+    If $\xi \in(-\infty, 0) \cup(0,1)$, then $e(u)=\frac{\beta+\xi u}{1-\xi}$, again \red{linear} in $u$. This is a \red{characterizing property of GPD.}
+\end{itemize}
+
+
+
+
+
+
+
+\subsection*{Theorem (Pickands–Balkema–de Haan)}
+There exists a positive measurable function $\beta$ such that
+$$
+\lim _{u \uparrow x_{F}} \sup _{0<x<x_{F}-u}\left|F_{u}(x)-G_{\xi, \beta(u)}(x)\right|=0
+$$
+\red{if and only if} $F \in \operatorname{MDA}\left(H_{\xi}\right)$
+
+
+
+
+\subsection*{Peaks over threshold (POT) method}
+\begin{itemize}[leftmargin=*]
+    \item Consider losses $X_{1}, \ldots, X_{n} \sim F \in \operatorname{MDA}\left(H_{\xi}\right)$
+    \item Let $N_{u}=\#\left\{i \in\{1, \ldots, n\}: X_{i}>u\right\}$ be the number of exceedances of $u, \tilde{X}_{1}, \ldots, \tilde{X}_{N_{u}}$
+    \item If the excesses $Y_{i}=\tilde{X}_{i}-u, i=1, \ldots, N_{u}$ are iid and (roughly) distributed as $G_{\xi, \beta}$, the log-likelihood is given by
+$$
+\displaystyle \begin{aligned}
+&\ell\left(\xi, \beta ; Y_{1}, \ldots, Y_{N_{u}}\right)=\sum_{i=1}^{N_{u}} \log g_{\xi, \beta}\left(Y_{i}\right) \\
+=&  \begin{cases}-N_{u} \log (\beta)-(1+ \frac{1}{\xi}) \displaystyle \sum_{i=1}^{N_{u}} \log \left(1+ \frac{\xi Y_{i}}{\beta} \right) & \xi \neq 0 \\ -N_{u} \log (\beta)-\displaystyle \sum_{i=1}^{N_{u}} \frac{Y_{i}}{\beta} & \xi=0\end{cases}
+\end{aligned}
+$$
+
+$\Rightarrow$ maximize wrt $\xi$ and $\beta$ s.t. $1+\xi Y_{i} / \beta>0$ for $i=1, \ldots, N_{u}$
+\end{itemize}
+
+
+
+
+
+\subsubsection*{Excesses over higher thresholds}
+\begin{itemize}[leftmargin=*]
+    \item Assume $F_{u} \sim G_{\xi, \beta}$, then $F_{v} \sim G_{\xi, \beta+\xi(v-u)}$
+    \item The excess distribution over $v \geq u$ remains \melon{GPD with the same $\xi$, and $\beta$ grows linearly in $v$}
+    \item If $\xi \in(-\infty, 0) \cup(0,1)$, the mean excess function exists and is given by
+$
+e(v)=\frac{\beta+\xi(v-u)}{1-\xi}
+$, again, grows \red{linearly} in $v$
+\end{itemize}
+
+
+
+
+
+\subsection*{Sample mean excess plot and choice of the threshold}
+\subsubsection*{Definition (Sample Mean Excess Func; Mean Excess Plot)}
+For given loss data $X_{1}, \ldots, X_{n}$, the \green{sample mean excess function} is given by
+$
+e_{n}(v)=\frac{\sum_{i=1}^{n}\left(X_{i}-v\right) 1_{\left\{X_{i}>v\right\}}}{\sum_{i=1}^{n} 1_{\left\{X_{i}>v\right\}}},
+$
+and the \green{mean excess plot} is the plot of $\left(X_{(i)}, e_{n}\left(X_{(i)}\right)\right), i=1, \ldots, n$, where $X_{(1)} \leq \ldots \leq X_{(n)}$ are the ordered loss data
+
+\begin{itemize}[leftmargin=*]
+    \item If the data supports the GPD model over $u, e_{n}(v)$ should become \melon{increasingly linear} for higher values of $v \geq u$
+    \item An \melon{upward, zero or downward trend} indicates whether $\xi>0, \xi=0$ or $\xi<0$
+    \item Select $\mathrm{u}$ as the smallest point where $e_{n}(v), v \geq u$, becomes linear
+    \item \green{Rule-of-thumb}: One needs a couple of thousand data points and can often take $u$ around the $90 \%$ quantile
+    \item The sample mean excess plot is rarely perfectly linear (particularly for large $u$ where one averages over a small number of excesses).
+\end{itemize}
+
+
+
+\subsection*{Modeling tails and measures of tail risk}
+\begin{itemize}[leftmargin=*]
+    \item Let $N_{u}=\sum_{i=1}^{n} 1_{\left\{X_{i}>u\right\}}$ be the random number of exceedances of $u$ by an iid sample $X_{1}, \ldots, X_{n}$
+For $x \geq u$, one has
+$$
+\begin{aligned}
+&\bar{F}(x) =\mathbb{P}\left[X_{1}>x\right]=\mathbb{P}\left[X_{1}>u\right] \times \mathbb{P}\left[X_{1}>x \mid X_{1}>u\right] \\
+=&\mathbb{P}\left[X_{1}>u\right] \times \mathbb{P}\left[X_{1}-u>x-u \mid X_{1}>u\right]=\bar{F}(u) \bar{F}_{u}(x-u)
+\end{aligned}
+$$
+    \item Estimate $\bar{F}(u)$ empirically by $N_{u} / n$ and $\bar{F}_{u}(x-u)$ by $1-G_{\hat{\xi}, \hat{\beta}}(x-u)$
+    \item The (semi-parametric) \melon{tail estimator of Smith}
+$$
+\hat{\bar{F}}(x)=\left\{\begin{array}{ll}
+\left(N_{u} / n\right)\left(1+\hat{\xi} \frac{x-u}{\hat{\beta}}\right)^{-1 / \hat{\xi}} & \hat{\xi} \neq 0, \\
+\left(N_{u} / n\right) \exp (-(x-u) / \hat{\beta}) & \hat{\xi}=0,
+\end{array} \quad x>u\right.
+$$
+    \item \melon{Bias-variance tradeoff}: A high u reduces bias in estimating the excess function but increases
+the variance in estimating $F(u)$
+\end{itemize}
+
+
+
+
+
+\subsection*{GPD based VaR and ES estimates}
+For $\alpha>1-N_{u} / n$ and $\hat{\xi} \neq 0$,
+$
+\widehat{\operatorname{VaR}}_{\alpha}(X)=u+\frac{\hat{\beta}}{\hat{\xi}}\left(\left(\frac{1-\alpha}{N_{u} / n}\right)^{-\hat{\xi}}-1\right)
+$
+
+For $\alpha>1-N_{u} / n$ and $\hat{\xi} \in(-\infty, 0) \cup(0,1)$,
+$
+\widehat{\mathrm{ES}}_{\alpha}(X)=e\left(\widehat{\operatorname{VaR}}_{\alpha}(X)\right)+\widehat{\operatorname{VaR}}_{\alpha}(X)=\frac{\beta+\hat{\xi}\left(\widehat{\operatorname{VaR}}_{\alpha}(X)-u\right)}{1-\hat{\xi}}+\widehat{\operatorname{VaR}}_{\alpha}(X)=\frac{\widehat{\operatorname{VaR}}_{\alpha}(X)}{1-\hat{\xi}}+\frac{\beta-\hat{\xi} u}{1-\hat{\xi}}
+$
+
+\begin{itemize}[leftmargin=*]
+    \item $\widehat{\operatorname{VaR}}_{\alpha}(X)$ usually outperforms the \green{empirical quantile estimator} $X_{([\alpha n])}$ when estimating at the edge of the sample
+    \item \melon{Confidence intervals} for $F(x)$, VaR, ES can be derived based on likelihood ratio test
+\end{itemize}

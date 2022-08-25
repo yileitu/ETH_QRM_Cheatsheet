@@ -1,0 +1,173 @@
+\section{Exercises}
+\subsection*{Ex1 Multi $t$-dist}
+\begin{enumerate}[label = (\arabic*), leftmargin=*]
+    \item Does there exist a two-dimensional random vector with a $t_{2}(\nu, \mu, \Sigma)$-distribution such that $\Sigma$ is invertible and the components are independent of each other?
+
+\melon{Solution}: No. If $X \sim t_{2}(\nu, \mu, \Sigma)$ for an invertible $2 \times 2$ matrix $\Sigma$, it has a two-dimensional density of the form
+$$
+f_{X}(x)=c\left(1+\frac{(x-\mu)^{T} \Sigma^{-1}(x-\mu)}{\nu}\right)^{-\frac{\nu+2}{2}}, x \in \mathbb{R}^{2}
+$$
+for a normalizing constant $c>0$. On the other hand, $X_{1} \sim t_{1}\left(\nu, \mu_{1}, \Sigma_{11}\right)$ and $X_{2} \sim$ $t_{1}\left(\nu, \mu_{2}, \Sigma_{22}\right)$. In particular, they have one-dimensional densities
+$$
+f_{1}\left(x_{1}\right)=c_{1}\left(1+\frac{\left(x_{1}-\mu_{1}\right)^{2}}{\nu \Sigma_{11}}\right)^{-\frac{\nu+1}{2}}
+$$
+$$f_{2}\left(x_{2}\right)=c_{2}\left(1+\frac{\left(x_{2}-\mu_{2}\right)^{2}}{\nu \Sigma_{22}}\right)^{-\frac{\nu+1}{2}}$$
+for normalizing contants $c_{1}, c_{2}>0$. So even if $\Sigma$ is diagonal, $f_{X}(x)$ is not of the form $f_{1}\left(x_{1}\right) f_{2}\left(x_{2}\right)$, which shows that $X_{1}$ and $X_{2}$ are not independent.
+
+
+
+    \item Does there exist a two-dimensional random vector with a $t_{2}(\nu, \mu, \Sigma)$-distribution such that the components are independent of each other?
+
+\melon{Solution}: Yes. But this is only possible if $\Sigma$ is not invertible. The simplest case is $X=(0,0) \sim t_{2}(\nu, 0,0)$
+
+A less degenerate (but still degenerate) case is $X=\left(X_{1}, X_{2}\right)$, where $X_{1}=\mu_{1}+\sqrt{W} Z_{1}$ and $X_{2}=\mu_{2}$ for a deterministic vector $\mu=\left(\mu_{1}, \mu_{2}\right) \in \mathbb{R}^{2}$ and independent random variables $Z_{1} \sim N(0,1)$ and $W=1 / G$ for $G \sim \Gamma(\nu / 2, \nu / 2)$. Then $X_{1}$ and $X_{2}$ are independent, and $X=\left(X_{1}, X_{2}\right)$ can be written as
+$$
+X=\mu+\sqrt{W} A Z \quad \text { for } \quad A=\left[\begin{array}{ll}
+1 & 0 \\
+0 & 0
+\end{array}\right]
+$$
+and a two-dimensional standard normal random vector $Z=\left(Z_{1}, Z_{2}\right)$ independent of $W$. So, $X \sim t_{2}(\nu, \mu, \Sigma)$ for $\Sigma=A A^{T}=A$.
+
+    \item Does there exist a two-dimensional random vector such that both components have a standard one-dimensional $t$-distribution and are independent of each other?
+
+\melon{Solution}: Yes. Denote by $f_{\nu}$ the density of the standard one-dimensional $t$-distribution with $\nu>0$ degrees of freedom. For all $\nu_{1}, \nu_{2}>0, f_{\nu_{1}, \nu_{2}}\left(x_{1}, x_{2}\right)=f_{\nu_{1}}\left(x_{1}\right) f_{\nu_{2}}\left(x_{2}\right)$ is the density of a two-dimensional random vector whose components are independent and have standard one-dimensional $t$-distributions.
+    \item Does there exist a $t_{2}(\nu, \mu, \Sigma)$-distribution that is spherical?
+\melon{Solution}: Yes. The simplest example is again $t_{2}(\nu, 0,0)$. More generally, $t_{2}\left(\nu, 0, \sigma^{2} I_{2}\right)$ is spherical for all $\nu>0$ and $\sigma \geq 0$. Indeed, it has a representation of the form $X=\sqrt{W} \sigma Z$ for $Z \sim N_{2}\left(0, I_{2}\right)$ and an independent $W=1 / G$ such that $G \sim \Gamma(\nu / 2, \nu / 2)$. Since $Z$ is spherical, one has for every orthogonal $2 \times 2$ matrix $U$,
+$$
+U X=\sqrt{W} \sigma U Z \stackrel{(d)}{=} \sqrt{W} \sigma Z=X,
+$$
+which shows that $t_{2}\left(\nu, 0, \sigma^{2} I_{2}\right)$ is spherical.
+\end{enumerate}
+
+
+\subsection*{Ex2}
+Give a two-dimensional elliptical distribution that is not a normal or a $t$-distribution.
+
+\melon{Solution}: Let $Z \sim N_{2}\left(0, I_{2}\right)$ and $W$ an independent non-negative random variable.| Then the distribution of $X=\sqrt{W} Z$ is spherical and, as a consequence, also elliptical. If $W$ is constant, then $X$ is normal, and if $W=1 / G$ for $G \sim \Gamma(\nu / 2, \nu / 2), X$ has a 2-dimensional $t$ distribution with $\nu$ degrees of freedom. In all other cases, $X$ is neither normal nor $t$-distributed.
+
+E.g. if $W$ takes $k \geq 2$ different values with positive probabilities, $X$ has a $k$ point normal variance mixture distribution, which is neither normal nor a $t$-distribution.
+
+
+
+
+\subsection*{Ex3 Fréchet-Hoeffding Bounds}
+a) Let $X$ be an $\operatorname{Exp}(\lambda)$-distributed random variable for a parameter $\lambda>0$. Calculate the distribution function and the moments of $Y=\exp (X)$.
+
+b) $Y$ have a density? If yes, can you compute it?
+
+c) Now, consider a two-dimensional random vector $\left(X_{1}, X_{2}\right)$ such that $X_{i} \sim \operatorname{Exp}\left(\lambda_{i}\right)$ for parameters $\lambda_{i}>0, i=1,2$. Under which conditions does the linear correlation between $Y_{1}=\exp \left(X_{1}\right)$ and $Y_{2}=\exp \left(X_{2}\right)$ exist?
+
+d) Assume $\lambda_{1}=3$ and $\lambda_{2}=4$. What is the range of possible correlations between $Y_{1}$ and $Y_{2}$?
+
+
+\melon{Solution}:
+a)
+$
+F_{Y}(y)=\mathbb{P}[\exp (X) \leq y]=F_{X}(\log (y))=1-y^{-\lambda}
+$
+for all $y>1$ and $F_{Y}(y)=0$ for all $y \leq 1$. 
+
+$
+\mathbb{E}\left[Y^{k}\right]=\lambda \int_{0}^{\infty} e^{k z} e^{-\lambda z} d z=\left.\frac{\lambda}{k-\lambda} e^{(k-\lambda) z}\right|_{0} ^{\infty}=\frac{\lambda}{\lambda-k}
+$
+for all $k \in \mathbb{N}$ such that $k<\lambda$ and otherwise $\mathbb{E}\left[Y^{k}\right]=\infty$.
+
+b) Since the cdf $F_{Y}$ from a) is smooth on $(1, \infty)$ its pdf is given by
+$
+f_{Y}(y)=\frac{d F_{Y}}{d y}(y)=\frac{\lambda}{y^{\lambda+1}}
+$
+for all $y>1$ and otherwise vanishes.
+
+c) The linear correlation of $X_{1}, X_{2}$ exists if $X_{i} \in L^{2}(\mathbb{P})$ and $\operatorname{Var}\left(X_{i}\right)>0$ for $i=1,2$. Using b) we conclude that this is equivalent to $\min \left\{\lambda_{1}, \lambda_{2}\right\}>2$ as in this case the second condition is automatically satisfied.
+
+d) Since $\min \left\{\lambda_{1}, \lambda_{2}\right\}=3$, exercise c) shows that the linear correlation is well-defined. Hence, Hoeffding's identity implies $\rho \in\left[\rho_{\min }, \rho_{\max }\right]$ whereas the the minimal, maximal linear correlation is attained if $Y_{1}$ and $Y_{2}$ are coupled by the counter-monotonicity, comonotonicity copula $W(u, v)=(u+v-1)_{+}, M(u, v)=\min \{u, v\}$, respectively (1 Pts). Hence, we have $\rho_{\min }=\rho\left(Y_{1}, Y_{2}\right)$ and $\rho_{\max }=\rho\left(Y_{1}, Y_{2}\right)$ in the respective cases. To calculate $\rho_{\min }, \rho_{\max }$ explicitly, we need $\mathbb{E}\left[Y_{1}\right], \mathbb{E}\left[Y_{2}\right], \operatorname{Var}\left(Y_{1}\right), \operatorname{Var}\left(Y_{2}\right)$ and $\operatorname{Cov}\left(Y_{1}, Y_{2}\right)$. 
+
+Using the calculations from b), one easily obtains
+$
+\mathbb{E}\left[Y_{1}\right]=\frac{3}{2}, \mathbb{E}\left[Y_{2}\right]=\frac{4}{3}, \operatorname{Var}\left(Y_{1}\right)=\frac{3}{4}, \operatorname{Var}\left(Y_{2}\right)=\frac{2}{9}
+$
+
+Finally, to compute $\operatorname{Cov}\left(Y_{1}, Y_{2}\right)$ we need $\mathbb{E}\left[Y_{1} Y_{2}\right]$. If $Y_{1}, Y_{2}$ are coupled by the countermonotonicity, comonotonicity copula, respectively, we know $\left(Y_{1}, Y_{2}\right) \stackrel{(d)}{=}\left(q_{Y_{1}}(U), q_{Y_{2}}(1-U)\right)$, $\left(Y_{1}, Y_{2}\right) \stackrel{(d)}{=}\left(q_{Y_{1}}(U), q_{Y_{2}}(U)\right)$ for some $U \sim \operatorname{Unif}(0,1)$ and $q_{Y_{1}}, q_{Y_{2}}$ are quantile functions of $Y_{1}, Y_{2}$. By inverting the distrubtion functions of $Y_{1}, Y_{2}$ we obtain
+$
+q_{Y_{1}}(u)=(1-u)^{-1 / 3} \quad q_{Y_{2}}(v)=(1-v)^{-1 / 4}
+$
+for all $u, v \in(0,1)$. 
+
+Hence, we obtain
+$
+\mathbb{E}\left[Y_{1} Y_{2}\right]=\mathbb{E}\left[h\left(Y_{1}, Y_{2}\right)\right]=\mathbb{E}\left[h\left(q_{Y_{1}}(U), q_{Y_{2}}(1-U)\right)\right]=\int_{0}^{1}(1-x)^{-1 / 3} x^{-1 / 4} d x
+$
+and
+$
+\mathbb{E}\left[Y_{1} Y_{2}\right]=\mathbb{E}\left[h\left(Y_{1}, Y_{2}\right)\right]=\mathbb{E}\left[h\left(q_{Y_{1}}(U), q_{Y_{2}}(U)\right)\right]=\int_{0}^{1}(1-x)^{-(1 / 3+1 / 4)} d x=\frac{12}{5}
+$
+where $h: \mathbb{R}^{2} \rightarrow \mathbb{R}$ is given by $h(x, y)=x y$ for all $x, y \in \mathbb{R}$. Recalling that the Beta function is given by $B(x, y)=\int_{0}^{1} t^{x-1}(1-t)^{y-1} d y$. So
+$
+\mathbb{E}\left[Y_{1} Y_{2}\right]=B(3 / 4,2 / 3)
+$
+
+Moreover, we have
+$
+\operatorname{Cov}\left(Y_{1}, Y_{2}\right)=\mathbb{E}\left[Y_{1} Y_{2}\right]-\mathbb{E}(Y_1)\mathbb{E}(Y_2)=\mathbb{E}\left[Y_{1} Y_{2}\right]-2
+$
+
+Using $\rho\left(Y_{1}, Y_{2}\right)=\operatorname{Cov}\left(Y_{1}, Y_{2}\right) / \sqrt{\operatorname{Var}\left(Y_{1}\right) \operatorname{Var}\left(Y_{2}\right)}$ we finally obtain
+$
+\rho_{\min }=\rho\left(Y_{1}, Y_{2}\right)=\frac{B(3 / 4,2 / 3)-2}{\sqrt{6 / 36}}
+$
+and
+$
+\rho_{\max }=\rho\left(Y_{1}, Y_{2}\right)=\frac{2 \sqrt{6}}{5}
+$
+
+
+
+\subsection*{Ex4 Quantile Transformation}
+Construct a two-dimensional random vector $\left(X_{1}, X_{2}\right)$ such that
+(i) $X_{i} \sim \operatorname{Exp}\left(\lambda_{i}\right)$ for $\lambda_{i}>0, i=1,2$, and
+(ii) $\operatorname{VaR}_{\alpha}\left(X_{1}+X_{2}\right)=\operatorname{VaR}_{\alpha}\left(X_{1}\right)+\operatorname{VaR}_{\alpha}\left(X_{2}\right)$ for all $\alpha \in(0,1)$
+
+\melon{Solution}: Let $U \sim \operatorname{Unif}(0,1)$ and let $q_{i}(u)=-\frac{1}{\lambda_{i}} \log (1-u)$, $i=1,2$. Since, $q_{i}$ is the quantile function of $\operatorname{Exp}\left(\lambda_{i}\right)$ distribution, we have by the quantile transformation lemma that $q_{i}(U) \sim \operatorname{Exp}\left(\lambda_{i}\right)$. Setting $X_{i}=q_{i}(U)$, we have $X_{1}+X_{2}=$ $q_{1}(U)+q_{2}(U)=\left(q_{1}+q_{2}\right)(U)$. The quantile transformation then implies that $q_{1}+q_{2}$ is the quantile function of $X_{1}+X_{2}$. We thus have by the definition of VaR that
+$
+\operatorname{VaR}_{\alpha}\left(X_{1}+X_{2}\right)=\left(q_{1}+q_{2}\right)(\alpha)=q_{1}(\alpha)+q_{2}(\alpha)=\operatorname{VaR}_{\alpha}\left(X_{1}\right)+\operatorname{VaR}_{\alpha}\left(X_{2}\right)
+$
+
+
+
+
+
+\subsection*{Ex5. Exchangeability}
+Let $X$ be a $d$-dimensional random vector with a $t_{d}(\nu, 0, \Sigma)$-distribution for $d \geq 2, \nu>0$ and a positive definite $d \times d$-matrix $\Sigma$. Are the components of $X$ exchangeable?
+
+\melon{Solution}: We say that a random vector $X=\left(X_{1}, \ldots, X_{d}\right)$ is exchangeable if
+$
+\left(X_{1}, \ldots, X_{d}\right) \stackrel{(d)}{=}\left(X_{\pi(1)}, \ldots, X_{\pi(d)}\right)
+$
+for any permutation $\pi$ of $\{1, \ldots, d\}$. 
+
+Since every permutation of $\{1, \ldots, d\}$ can be represented by a $d \times d$-matrix $P$ with
+$
+P_{i j}=\mathbb{1}_{\{\pi(i)=j\}}
+$
+for all $i, j \in\{1, \ldots, d\}$ and since we know from the lecture that $t$ distribution is (as a normal variance mixture) closed under affine transformations, we have that $Y:=P X \sim$ $t_{d}\left(\nu, 0, P \Sigma P^{\top}\right)$. It is therefore enough to find a positive definite $d \times d$-matrix $\Sigma$, such that $P \Sigma P^{\top} \neq \Sigma$. Without loss of generality, take $\Sigma$ diagonal with $\Sigma_{11}>\Sigma_{22}$ and $P$ a permutation matrix corresponding to a permutation that swaps the first and second component of $X$ (that is a matrix obtained by swapping the first and the second row of the $d \times d$ identity matrix). In that case it follows that $\left(P \Sigma P^{\top}\right)_{11}=\Sigma_{22}$ and $\left(P \Sigma P^{\top}\right)_{22}=\Sigma_{11}$, that is, $P \Sigma P^{\top} \neq \Sigma$.
+
+
+
+\subsection*{Ex6. Quantile Transportation to Prove AVaR Eq}
+Let $X$ be a random variable such that $\mathbb{E}[|X|]<\infty$. Show that
+$
+\operatorname{AVaR}_{\alpha}(X)=\operatorname{VaR}_{\alpha}(X)+\frac{1}{1-\alpha} \mathbb{E}\left[\left(X-\operatorname{VaR}_{\alpha}(X)\right)_{+}\right]
+$
+for all $\alpha \in(0,1)$.
+
+
+\melon{Solution}: 
+$$\begin{aligned} 
+&\operatorname{AVaR}_{\alpha}(X) \\
+&=\frac{1}{1-\alpha} \int_{\alpha}^{1} \operatorname{VaR}_{u}(X) d u\\
+&=\operatorname{VaR}_{\alpha}(X)+\frac{1}{1-\alpha} \int_{\alpha}^{1}\left(\operatorname{VaR}_{u}(X)-\operatorname{VaR}_{\alpha}(X)\right) d u \\ &=\operatorname{VaR}_{\alpha}(X)+\frac{1}{1-\alpha} \int_{0}^{1}\left(\operatorname{VaR}_{u}(X)-\operatorname{VaR}_{\alpha}(X)\right)_{+} \mathbb{1}_{(\alpha, 1)}(u) d u \\ &=\operatorname{VaR}_{\alpha}(X)+\frac{1}{1-\alpha} \mathbb{E}_{U}\left[\left(q_{U}^{-}(X)-\operatorname{VaR}_{\alpha}(X)\right)_{+}\right] \end{aligned}$$ where $U \sim \operatorname{Unif}(0,1), \alpha \in(0,1)$. Using the quantile transformation theorem, we obtain
+$
+\operatorname{AVaR}_{\alpha}(X)=\operatorname{VaR}_{\alpha}(X)+\frac{1}{1-\alpha} \mathbb{E}\left[\left(X-\operatorname{VaR}_{\alpha}(X)\right)_{+}\right]
+$
+for all $\alpha \in(0,1)$

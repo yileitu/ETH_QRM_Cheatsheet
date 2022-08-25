@@ -1,0 +1,934 @@
+\section{Multivariate Models}
+
+\pink{6.1 Basics of Multivariate Modeling}
+
+\subsection*{Random Vectors and Their Distributions}
+Let $\vect{X}=\left(X_{1}, \ldots, X_{d}\right): \Omega \rightarrow \mathbb{R}^{d}$ be a $d$-dim \green{random vector}. The distribution of $X$ is completely specified by the cdf $F_{\vect{X}}: \mathbb{R}^{d} \rightarrow[0,1]$, $F_{\vect{X}}(\vect{x})=\mathbb{P}[\vect{X} \leq \vect{x}]=\mathbb{P}\left[X_{1} \leq x_{1}, \ldots, X_{d} \leq x_{d}\right], x \in \mathbb{R}^{d}$. It satisfies
+\begin{enumerate}[label = (\arabic*), leftmargin=*]
+    \item \melon{Normalization}:
+$\displaystyle \lim _{x_{1}, \ldots, x_{d} \rightarrow \infty} F_{X}\left(x_{1}, \ldots, x_{d}\right)=1$ and $\displaystyle \lim _{x_{j} \rightarrow-\infty} F_{X}\left(x_{1}, \ldots, x_{j}, \ldots, x_{d}\right)=0$ for every $j=1, \ldots, d$
+    \item \melon{Right-continuity}: $F_{\X}\left(\x^{n}\right) \downarrow F_{\X}(\x)$ for $\x^{n} \downarrow \x \in \mathbb{R}^{d}$
+    \item \melon{$d$-Monotonicity}: For all $\a \leq \b \in \mathbb{R}^{d}$,
+$$
+\Delta_{(\a, \b]} F_{\vect{X}}=\sum_{i \in\{0,1\}^{d}}(-1)^{\sum_{j=1}^{d} i_{j}} F_{\vect{X}}\left(a_{1}^{i_{1}} b_{1}^{1-i_{1}}, \ldots, a_{d}^{i_{d}} b_{d}^{1-i_{d}}\right) \geq 0
+$$
+\end{enumerate}
+On the other hand, every func $F: \mathbb{R}^{d} \rightarrow[0,1]$ satisfying (1)-(3) is a cdf of a $d$-dimensional random vec $\vect{X}$ (\green{Carathéodory's extension theorem})
+
+\begin{itemize}[leftmargin=*]
+    \item The $j$-th \green{marginal cdf} of $\vect{X}$ is the cdf of $X_{j}$ :
+$$
+\begin{aligned}
+&F_{j}\left(x_{j}\right)\\
+=&\mathbb{P}\left[X_{j} \leq x_{j}\right]=\mathbb{P}\left[X_{1} \leq \infty, \ldots, X_{j} \leq x_{j}, \ldots, X_{d} \leq \infty\right] \\
+=&F_{\vect{X}}\left(\infty, \ldots, x_{j}, \ldots, \infty\right), x_{j} \in \mathbb{R}
+\end{aligned}
+$$
+
+    i.e., taking \red{limits} on all other elements.
+    \item Similarly, the \green{$k$-dimensional marginal cdf} of $X$ corresponding to $1 \leq j_{1} \leq j_{2} \leq \ldots \leq j_{k} \leq d$ is the cdf of $\vect{Y}=\left(X_{j_{1}}, \ldots, X_{j_{k}}\right)$ :
+$$
+F_{\vect{Y}}(\vect{y})=F_{\vect{X}}\left(\infty, y_{1}, \infty, \ldots, \infty, y_{k}, \infty\right), \vect{y} \in \mathbb{R}^{k}
+$$
+    \item $F_{\vect{X}}$ is \green{absolutely continuous} if
+$$
+\begin{aligned}
+F_{\vect{X}}(\vect{x})&=\int_{-\infty}^{x_{1}} \ldots \int_{-\infty}^{x_{d}} f_{\vect{X}}\left(z_{1}, \ldots, z_{d}\right) d z_{d} \ldots d z_{1} \\
+&=\int_{(-\infty, \vect{x}]} f_{\vect{X}}(\vect{z}) d \vect{z}
+\end{aligned}
+$$
+
+for some measurable function $f_{\vect{X}}: \mathbb{R}^{d} \rightarrow \mathbb{R}_{+}$, known as the \green{pdf}, or \green{density}.
+
+    \item If $\X$ has a density $f_{\vect{X}}$, every marginal $X_{j}$ has a density $f_{j}$, given by
+$$
+f_{j}\left(x_{j}\right)=\int_{\mathbb{R}^{d-1}} f_{\vect{X}}\left(z_{1}, \ldots, x_{j}, \ldots, z_{d}\right) d z_{d} \ldots d z_{1}
+$$
+    \item Existence of a \green{density} $\Rightarrow$ Existence of \green{marginal densities} for all $k$-dimensional marginals, $1 \leq k \leq d-1$. \red{The converse is false in general!}
+    \item The \green{survival function} $\bar{F}_{\X}$ of $\X$ :
+$$
+\bar{F}_{\vect{X}}(\vect{x})=\mathbb{P}[\vect{X}>\vect{x}]=\mathbb{P}\left[X_{1}>x_{1}, \ldots, X_{d}>x_{d}\right], \vect{x} \in \mathbb{R}^{d}
+$$
+
+with corresponding \green{$j$-th marginal survival func}
+$$
+\bar{F}_{j}\left(x_{j}\right)=\mathbb{P}\left[X_{j}>x_{j}\right]=\bar{F}_{\vect{X}}\left(-\infty, \ldots, x_{j}, \ldots,-\infty\right)
+$$
+    \item Note that $\bar{F}_{\vect{X}}(\vect{x}) \neq 1-F_{X}(x)$ (\red{unless} $d=1$)
+\end{itemize}
+
+
+
+
+
+
+
+\subsection*{Conditional distributions and independence}
+Denote $\vect{Y}_{1}=\left(X_{1}, \ldots, X_{k}\right)$ and $\vect{Y}_{2}=\left(X_{k+1}, \ldots, X_{d}\right)$. The \green{conditional cdf} of $\vect{Y}_{2}$ given $\vect{Y}_{1}=\vect{y}_{1}$ is
+$$
+F_{\vect{Y}_{2} \mid \vect{Y}_{1}}\left(\vect{y}_{2} \mid \vect{y}_{1}\right)=\mathbb{P}_{\vect{y}_{1}}\left[\left(-\infty, \vect{y}_{2}\right]\right],
+$$
+
+where $\mathbb{P}_{\vect{y}_{1}}$ is a \green{regular conditional dist} of $\vect{Y}_{2}$ given $\vect{Y}_{1}$; that is:
+\begin{enumerate}[label = (\arabic*), leftmargin=*]
+    \item For every $y_{1} \in \mathbb{R}^{k}, \mathbb{P}_{y_{1}}$ is a probability measure on $\mathbb{R}^{d-k}$
+    \item For every Borel set $B$ in $\mathbb{R}^{d-k}, \mathbb{P}_{y_{1}}[B]$ is measurable in $y_{1}$
+    \item $\mathbb{P}_{\vect{Y}_{1}}\left[\left(-\infty, \vect{y}_{2}\right]\right]=\mathbb{E}\left[1_{\left\{\vect{Y}_{2} \leq \vect{y}_{2}\right\}} \mid \vect{Y}_{1}\right]$ a.s.
+\end{enumerate}
+
+
+
+
+
+\begin{itemize}[leftmargin=*]
+    \item \green{Disintegrate}:
+    
+$
+F_{\vect{X}}\left(\vect{y}_{1}, \vect{y}_{2}\right)=\int_{\left(-\infty, \vect{y}_{1}\right]} F_{\vect{Y}_{2} \mid \vect{Y}_{1}}\left(\vect{y}_{2} \mid z\right) d F_{\vect{Y}_{1}}(\vect{z})
+$
+    \item For $\y_{1} \rightarrow \infty$, one obtains
+$
+F_{\Y_{2}}\left(\y_{2}\right)=\int_{\mathbb{R}^{k}} F_{\Y_{2} \mid \Y_{1}}\left(\y_{2} \mid \z\right) d F_{\Y_{1}}(\z)
+$
+    \item If $\vect{X}$ has a density $f_{\vect{X}}$, then
+$
+f_{\vect{X}}\left(\vect{y}_{1}, \vect{y}_{2}\right)=\frac{\partial^{2}}{\partial \vect{y}_{1} \partial \vect{y}_{2}} F_{\vect{X}}\left(\vect{y}_{1}, \vect{y}_{2}\right)
+$
+and
+$
+f_{\vect{Y}_{2}}\left(\vect{y}_{2}\right)=\int_{\mathbb{R}^{k}} f_{\vect{X}}\left(\vect{z}, \vect{y}_{2}\right) d \vect{z}=\int_{\mathbb{R}^{k}} f_{\vect{Y}_{2} \mid \vect{Y}_{1}}\left(\vect{y}_{2} \mid \vect{z}\right) f_{\vect{Y}_{1}}(\vect{z}) d \vect{z},
+$
+where
+$
+f_{\vect{Y}_{2} \mid \vect{Y}_{1}}\left(\vect{y}_{2} \mid \vect{y}_{1}\right)=\frac{f_{\vect{X}}\left(\vect{y}_{1}, \vect{y}_{2}\right)}{f_{\vect{Y}_{1}}\left(\vect{y}_{1}\right)}
+$
+is the \green{conditional density} of $\vect{Y}_{2}$ given $\vect{Y}_{1}=\vect{y}_{1}$
+    \item If $\vect{X}$ has a density $f_{\vect{X}}$, the \green{conditional cdf} can be recovered from the \green{conditional density}:
+$
+F_{\vect{Y}_{2} \mid \vect{Y}_{1}}\left(\vect{y}_{2} \mid \vect{y}_{1}\right)=\int_{\left(-\infty, \vect{y}_{2}\right]} f_{\vect{Y}_{2} \mid \vect{Y}_{1}}\left(\vect{z} \mid \vect{y}_{1}\right) d \vect{z}
+$
+    \item $\vect{Y}_{1}, \vect{Y}_{2}$ are \green{independent} $\Leftrightarrow F_{\vect{X}}\left(\vect{y}_{1}, \vect{y}_{2}\right)=F_{\vect{Y}_{1}}\left(\vect{y}_{1}\right) F_{\vect{Y}_{2}}\left(\vect{y}_{2}\right)$ for all $\vect{y}_{1} \in \mathbb{R}^{k}, \vect{y}_{2} \in \mathbb{R}^{d-k}$
+    \item If $\X$ has a density, then $\vect{Y}_{1}, \vect{Y}_{2}$ are \green{independent} $\Leftrightarrow f_{\vect{X}}\left(\vect{y}_{1}, \vect{y}_{2}\right)=f_{\vect{Y}_{1}}\left(\vect{y}_{1}\right) f_{\vect{Y}_{2}}\left(\vect{y}_{2}\right)$ for all $\vect{y}_{1}, \vect{y}_{2}$
+    \item The components $X_{1}, \ldots, X_{d}$ of $X$ are \green{independent} $\Leftrightarrow F_{\vect{X}}(\vect{x})=\prod_{j=1}^{d} F_{j}\left(x_{j}\right)$ for all $\vect{x} \in \mathbb{R}^{d}$
+    \item If $\vect{X}$ has a density, the components $X_{1}, \ldots, X_{d}$ are \green{independent} $\Leftrightarrow$ $f_{\vect{X}}(\vect{x})=\prod_{j=1}^{d} f_{j}\left(x_{j}\right)$ for all $\vect{x} \in \mathbb{R}^{d}$
+
+\end{itemize}
+
+
+
+
+
+
+
+
+
+\subsection*{Moments}
+\begin{itemize}[leftmargin=*]
+    \item If $\mathbb{E}\left|X_{j}\right|<\infty$, for all $j=1, \ldots, d$, the \green{mean vector} is 
+$
+\mathbb{E} \vect{X}=\left(\mathbb{E} X_{1}, \ldots, \mathbb{E} X_{d}\right)^{\top}
+$ (column vec). If $X_{1}, \ldots, X_{d}$ are independent, then $\mathbb{E}\left[X_{1} \cdots X_{d}\right]=\prod_{j=1}^{d} \mathbb{E} X_{j}$
+    \item If $\mathbb{E}\left[X_{j}^{2}\right]<\infty$ for all $j=1, \ldots, d$, the \green{covariance matrix} is
+$
+\vect{\Sigma} = \operatorname{Cov}(\vect{X})=\mathbb{E}\left[(\vect{X}-\mathbb{E} \vect{X})(\vect{X}-\mathbb{E} \vect{X})^{\top}\right]
+$. 
+$
+\mSigma_{i j}=\operatorname{Cov}(\vect{X})=\operatorname{Cov}\left(X_{i}, X_{j}\right), \mSigma_{j j}=\operatorname{Var}\left(X_{j}\right)
+$
+    \item $X_{1}, X_{2}$ \green{ind} $\Rightarrow \operatorname{Cov}\left(X_{1}, X_{2}\right)=0$.  \red{The converse is not true}!
+    \item If $\mathbb{E}\left[X_{j}^{2}\right]<\infty$ for all $j=1, \ldots, d$, the \green{correlation matrix} $\operatorname{corr}(\vect{X})$ is
+$
+\operatorname{corr}\left(X_{i}, X_{j}\right)=\frac{\operatorname{Cov}\left(X_{i}, X_{j}\right)}{\sqrt{\operatorname{Var}\left(X_{i}\right) \operatorname{Var}\left(X_{j}\right)}} \quad\left(\text { if } \operatorname{Var}\left(X_{i}\right) \operatorname{Var}\left(X_{j}\right)>0\right)
+$
+    \item By \green{Cauchy-Schwarz inequality},
+$
+-1 \leq \operatorname{corr}\left(X_{i}, X_{j}\right) \leq 1
+$
+with $\operatorname{corr}\left(X_{i}, X_{j}\right)=\pm 1$ iff $X_{i}=a X_{j}+b$ a.s. for $a \neq 0$ and $b \in \mathbb{R}$
+    \item $\operatorname{Cov}(\vect{AX}+\vect{b})=\vect{A \Sigma} \vect{A}^{\top}$
+    \item $\mSigma$ is PD (that is, $\v^{\T} \mSigma \v>0$ for all $\v \in \mathbb{R}^{d} \backslash\{0\}$ ) $\Leftrightarrow$ all eigenvalues of $\mSigma$ are positive $\Leftrightarrow \mSigma$ is invertible
+\end{itemize}
+
+
+
+
+
+
+
+\subsection*{Cholesky Decomposition}
+\begin{itemize}[leftmargin=*]
+    \item A symmetric PD(PSD) $\vect{\Sigma}$ can be written as
+$\vect{\Sigma}=\vect{AA}^{\top}$ (\green{Cholesky decomp}), 
+for a lower triangular $d \times d$-matrix $\vect{A}$ with $A_{j j}>0\left(A_{j j} \geq 0\right)$
+    \item If $\Sigma$ is PD, the Cholesky decomp is \red{unique}. Otherwise, it is not.
+    \item Consider a $d$-dimensional random vec $\vect{X}$ with iid standard normal components $X_{1}, \ldots, X_{d}$. Then
+$
+\operatorname{Var}\left(X_{j}\right)=1$, and $\operatorname{Cov}\left(X_{i}, X_{j}\right)=0 \text { for } i \neq j .
+$
+
+As a consequence, $\operatorname{Cov}(\vect{AX})=\vect{A} \operatorname{Cov}(\vect{X}) \vect{A}^{\top}=\vect{AA}^{\top}=\vect{\Sigma}$
+$\rightsquigarrow$ \red{every PSD matrix $\vect{\Sigma}$ is a cov matrix}
+\end{itemize}
+
+
+
+
+
+\subsection*{Characteristic Functions}
+The \green{characteristic function (cf)} of a $d$-dimensional random vec $\vect{X}$ is the func $\phi_{\vect{X}}: \mathbb{R}^{d} \rightarrow \mathbb{C}$,
+$
+\phi_{\vect{X}}(\vect{u})=\mathbb{E}\left[\exp \left(i \vect{u}^{T} \vect{X}\right)\right]
+$
+(for a complex-valued RV $Z=V+i W$, one defines $\mathbb{E} Z=\mathbb{E} V+i \mathbb{E} W$ )
+
+
+The cf is \red{determined by and determines} the distribution of a random vector.
+
+The components $X_{1}, \ldots, X_{d}$ of a random vec $\vect{X}$ are independent $\Leftrightarrow$
+$
+\phi_{\vect{X}}(\vect{u})=\prod_{j=1}^{d} \phi_{X_{j}}\left(u_{j}\right)$ for all $ \vect{u} \in \mathbb{R}^{d}
+$
+
+
+
+
+
+
+\subsection*{Standard Estimators of Means, Cov \& Corr}
+Let $\vect{X}_{1}, \ldots, \vect{X}_{n}$ be \red{uncorrelated} $d$-dim random vecs, all with the same cdf $F$ Assume second moments exist and set
+$
+\mu=\mathbb{E} \vect{X}_{1}, \vect{\Sigma}=\operatorname{Cov}\left(\vect{X}_{1}\right), \vect{P}=\operatorname{corr}\left(\vect{X}_{1}\right)
+$.
+\begin{itemize}[leftmargin=*]
+    \item \green{Sample means}: $\bar{X}_{j}=\frac{1}{n} \sum_{t=1}^{n} X_{t, j}$, \melon{unbiased}
+    \item \green{Sample cov}: $S_{i j} =\frac{1}{n} \sum_{t=1}^{n}\left(X_{t, i}-\bar{X}_{i}\right)\left(X_{t, j}-\bar{X}_{j}\right)$
+    \item \green{Sample corr}: $R_{i j} =\frac{S_{i j}}{\sqrt{S_{i i} S_{j j}}} $
+    \item $S$ is \melon{biased}. But $S^{n}=\frac{n}{n-1} S$ is \melon{unbiased}.
+
+\navy{Proof}: Since there is no serial correlation,
+$$
+\begin{aligned}
+& \mathbb{E} S_{i j}^{n}=\frac{1}{n-1} \mathbb{E} \sum_{t=1}^{n}\left(X_{t, i}-\bar{X}_{i}\right)\left(X_{t, j}-\bar{X}_{j}\right) \\
+=& \frac{1}{n-1} \mathbb{E} \sum_{t=1}^{n}\left(\left[X_{t, i}-\mu_{i}\right]-\left[\bar{X}_{i}-\mu_{i}\right]\right)\left(\left[X_{t, j}-\mu_{j}\right]-\left[\bar{X}_{j}-\mu_{j}\right]\right) \\
+=& \frac{1}{n-1}\left(n \Sigma_{i j}-\frac{2 n}{n} \Sigma_{i j}+\frac{n^{2}}{n^{2}} \Sigma_{i j}\right)=\Sigma_{i j}
+\end{aligned}
+$$
+\end{itemize}
+
+
+
+
+
+
+
+\subsection*{Normal Distributions}
+\begin{itemize}[leftmargin=*]
+    \item A random vec $\vect{Z}$ with components $Z_{1}, \ldots, Z_{d}$ is \green{$d$-dim standard normal} if $Z_{1}, \ldots, Z_{d}$ are ind one-dimensional standard normal, or equivalently, if it has density
+$
+\prod_{j=1}^{d} \frac{1}{\sqrt{2 \pi}} \exp \left(-\frac{x_{j}^{2}}{2}\right)=\frac{1}{(2 \pi)^{d / 2}} \exp \left(-\frac{1}{2} \sum_{j=1}^{d} x_{j}^{2}\right)
+$
+    \item A $d$-dim random vec $\vect{X}$ has a \green{multivariate normal (or Gaussian) distribution} if
+$
+\vect{X} = \vect{\mu}+\vect{A Z},
+$
+where $\vect{\mu} \in \mathbb{R}^{d}, \vect{A} \in \mathbb{R}^{d \times k}$ and $\vect{Z}$ is $k$-dim standard normal.
+
+$\mathbb{E} \vect{X}=\vect{\mu}+\vect{A} \mathbb{E} \vect{Z}=\vect{\mu}$, $\operatorname{Cov}(\vect{X})=\vect{A} \operatorname{Cov}(\vect{Z}) \vect{A}^{\top}=\vect{AA}^{\top}=: \vect{\Sigma}$
+
+    \item If $X$ is one-dim standard normal, then $\mathbb{E} \exp (a X)=\exp \left(\frac{a^{2}}{2}\right) \rightsquigarrow \phi_{X}(u)=\mathbb{E} \exp (i u X)=\exp \left(-\frac{u^{2}}{2}\right)$
+    
+    \item If $\vect{X}$ is $d$-dim standard normal, then
+$
+\phi_{\vect{X}}(\vect{u})=\exp \left(-\frac{1}{2} \vect{u}^{\top} \vect{u}\right)
+$
+    \item If $\vect{X} = \vect{\mu}+\vect{AZ}$, then
+$
+\phi_{\vect{X}}(\vect{u}) =\mathbb{E} \exp \left(i \vect{u}^{\top} \vect{X}\right)=\exp \left(i \vect{u}^{\top} \vect{\mu}\right) \mathbb{E} \exp \left(i \vect{u}^{\top} \vect{AZ}\right) =\exp \left(i \vect{u}^{\top} \mu-\frac{1}{2} \vect{u}^{\top} \vect{\Sigma} \vect{u}\right)
+$
+\end{itemize}
+
+If $\vect{X} \sim \N_{d}(\vect{\mu}, \vect{\Sigma})$, then
+\begin{itemize}[leftmargin=*]
+    \item $\vect{Y}=\vect{v}+\vect{MX}$ for $\vect{v} \in \mathbb{R}^{m}$ and $\vect{M} \in \mathbb{R}^{m \times d}$ is $\N_{m}\left(\vect{v}+\vect{M \mu}, \vect{M} \vect{\Sigma} \vect{M}^{\top}\right)$
+    \item In particular, $\vect{Y}=\left(X_{j_{1}}, \ldots, X_{j_{m}}\right)$ is $\N_{m}(\mathbb{E} \vect{Y}, \operatorname{Cov}(\vect{Y}))$
+    \item \green{Margins}: $X_{j} \sim \N\left(\vect{\mu}_{j}, \vect{\Sigma}_{j j}\right)$;
+\green{Sum}: $\sum_{j=1}^{d} X_{j} \sim \N\left(\sum_{j=1}^{d} \mu_{j}, \sum_{i, j=1}^{d} \Sigma_{i j}\right)$
+    \item $X_{i}$ and $X_{j}$ are ind $\Leftrightarrow \phi_{\left(X_{i}, X_{j}\right)}\left(x_{i}, x_{j}\right)=\phi_{X_{i}}\left(x_{i}\right) \phi_{X_{j}}\left(x_{j}\right) \Leftrightarrow \operatorname{Cov}\left(X_{i}, X_{j}\right)=0$
+    \item $\vect{X} \sim \N_{d}(\vect{\mu}, \vect{\Sigma}) \Leftrightarrow \vect{v}^{\top} \vect{X}=\N\left(\vect{v}^{\T} \vect{\mu}, \vect{v}^{\T} \vect{\Sigma v}\right)$ for all $\vect{v} \in \mathbb{R}^{d}$
+    \item We call $\vect{X}$ \green{regular normal} if $\vect{\Sigma}$ is invertible and \green{singular normal} if $\vect{\Sigma}$ is not invertible.
+    \item $\vect{X}$ has a density \red{iff} it is regular, which is $\x \in \mathbb{R}^{d}$
+$$
+f_{\vect{X}}(\vect{x})=\frac{1}{(2 \pi)^{d / 2} \sqrt{\operatorname{det} \vect{\Sigma}}} \exp \left(-\frac{1}{2}(\vect{x}-\vect{\mu})^{\T} \vect{\Sigma}^{-1}(\vect{x}-\vect{\mu})\right)
+$$
+
+    \navy{Proof}: If $\mSigma$ is invertible, then $\X \stackrel{(d)}{=} \mmu+\A \Z$ for an invertible $\A \in \mathbb{R}^{d \times d}$ such that $\A \A^{\T}=\mSigma$.
+    
+So for $\x=\mmu+\A \z \leftrightarrow \z=\A^{-1}(\x-\mmu)$ :
+$$
+\begin{aligned}
+& \mathbb{P}[\X \in B]=\mathbb{P}[\mmu+\A \Z \in B]=\mathbb{P}\left[\Z \in \A^{-1}(B-\mmu)\right] \\
+=& \frac{1}{(2 \pi)^{\frac{d}{2}}} \int_{\A^{-1}(B-\mu)} \exp \left(-\frac{\z^{\T} \z}{2}\right) d \z \\
+=& \frac{1}{(2 \pi)^{\frac{d}{2}} \sqrt{\operatorname{det} \mSigma}} \int_{B} \exp \left(-\frac{(\x-\mmu)^{\T}\left(\A^{-1}\right)^{\T} \A^{-1}(\x-\mmu)}{2}\right) d \x \\
+=& \frac{1}{(2 \pi)^{\frac{d}{2}} \sqrt{\operatorname{det} \mSigma}} \int_{B} \exp \left(-\frac{(\x-\mmu)^{T} \mSigma^{-1}(\x-\mmu)}{2}\right) d \x
+\end{aligned}
+$$
+    \item The \green{contour sets} of the above density consist of all $x \in \mathbb{R}^{d}$ satisfying $(\vect{x}-\vect{\mu})^{\T} \vect{\Sigma}^{-1}(\vect{x}-\vect{\mu})=\vect{c}$.
+ \melon{The contour sets are ellipsoids}.
+    \item More generally, distributions with densities whose contour sets are ellipsoids are called \green{elliptical}.
+\end{itemize}
+
+
+
+
+
+
+
+
+\subsection*{Sampling from a $\N_{d}(\vect{\mu}, \vect{\Sigma})$ distribution}
+\begin{enumerate}[label = (\arabic*), leftmargin=*]
+    \item Compute Cholesky decomposition: $\vect{\Sigma}=\vect{AA}^{\T}$
+    \item Generate ind standard normals $Z_{1}, \ldots, Z_{d}$
+    \item Return $\vect{X}=\vect{\mu}+\vect{A Z}$
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+\subsection*{Conditioning normal distributions}
+Let $X \sim \N_{d}(\vect{\mu}, \vect{\Sigma})$ with $\vect{\Sigma}$ PD.
+Denote $\Y_{1}=\left(X_{1}, \ldots, X_{k}\right), \Y_{2}=\left(X_{k+1}, \ldots, X_{d}\right)$,
+$
+\mmu=\left(\begin{array}{l}
+\mmu_{1} \\
+\mmu_{2}
+\end{array}\right) \quad \text { and } \quad \mSigma=\left(\begin{array}{cc}
+\mSigma_{11} & \mSigma_{12} \\
+\mSigma_{21} & \mSigma_{22}
+\end{array}\right)
+$
+(note: $\mSigma_{11}, \mSigma_{22}$ are symmetric and $\mSigma_{21}=\mSigma_{12}^{\T}$).
+
+One has
+$
+\left(\Y_{2} \mid \Y_{1}=\y_{1}\right) \sim \N_{d-k}(\tilde{\vect{\mu}}, \tilde{\vect{\Sigma}}),
+$ where $
+\tilde{\vect{\mu}}=\vect{\mu}_{2}+\mSigma_{21} \mSigma_{11}^{-1}\left(\y_{1}-\vect{\mu}_{1}\right)$, and $ \tilde{\vect{\mSigma}}=\mSigma_{22}-\mSigma_{21} \mSigma_{11}^{-1} \mSigma_{12}
+$
+
+\subsubsection*{Proof for $d=2$ and $k=1$}
+$
+\X=\left(\begin{array}{c}
+X_{1} \\
+X_{2}
+\end{array}\right), \mmu=\left(\begin{array}{c}
+\mu_{1} \\
+\mu_{2}
+\end{array}\right), \mSigma=\left(\begin{array}{cc}
+a & b \\
+b & c
+\end{array}\right), \mSigma^{-1}=\frac{1}{a c-b^{2}}\left(\begin{array}{cc}
+c & -b \\
+-b & a
+\end{array}\right)
+$. 
+Then
+$$
+\begin{aligned}
+& f_{X_{2} \mid X_{1}}\left(x_{2} \mid x_{1}\right)=\frac{f_{X}\left(x_{1}, x_{2}\right)}{f_{X_{1}}\left(x_{1}\right)} \\
+=&C \frac{\exp \left(-(x-\mu)^{T} \Sigma^{-1}(x-\mu) / 2\right)}{\exp \left(-a^{-1}\left(x_{1}-\mu_{1}\right)^{2} / 2\right)} \\
+=& C \exp \left\{\left(\frac{1}{a}-\frac{c}{a c-b^{2}}\right) \frac{\left(x_{1}-\mu_{1}\right)^{2}}{2} \\
+& \quad +\frac{b}{a c-b^{2}}\left(x_{1}-\mu_{1}\right)\left(x_{2}-\mu_{2}\right)-\frac{a}{a c-b^{2}} \frac{\left(x_{2}-\mu_{2}\right)^{2}}{2}\right)\right\} \\
+=& h\left(x_{1}\right) \exp \left(-\frac{a}{2\left(a c-b^{2}\right)}\left(x_{2}-\left[\mu_{2}+\frac{b}{a}\left(x_{1}-\mu_{1}\right)\right]\right)^{2}\right)
+\end{aligned}
+$$
+
+So
+$
+\left(X_{2} \mid X_{1}=x_{1}\right) \sim \N\left(\mu_{2}+\frac{b}{a}\left(x_{1}-\mu_{1}\right), c-\frac{b^{2}}{a}\right)
+$
+
+
+
+
+
+\subsection*{Convolutions}
+If $\vect{X} \sim \N_{d}(\vect{\mu}, \vect{\Sigma})$ and $\vect{Y} \sim \N_{d}(\tilde{\vect{\mu}}, \tilde{\vect{\Sigma}})$ are ind, then
+$
+\vect{X}+\vect{Y}=\N_{d}(\vect{\mu}+\tilde{\vect{\mu}}, \vect{\Sigma}+\tilde{\vect{\Sigma}})
+$
+
+
+
+
+\subsection*{Quadratic forms}
+Let $\vect{X} \sim \N_{d}(\mmu, \mSigma)$ with $\mSigma$ PD and $\vect{A} \in \mathbb{R}^{d \times d}$ such that $\vect{AA}^{\T}=\mSigma$
+Then $\vect{X}=\vect{\mmu}+\vect{AZ}$ for $\vect{Z} \sim \N_{d}\left(0, \vect{I}_{d}\right)$. 
+
+So $\vect{Z}=\vect{A}^{-1}(\vect{X}-\mu) \sim \N_{d}\left(0, \vect{I}_{d}\right)$ and
+$
+(\vect{X}-\mmu)^{\T} \mSigma^{-1}(\vect{X}-\mmu)=(\vect{X}-\mmu)^{\T}\left(\vect{A}^{-1}\right)^{\T} \vect{A}^{-1}(\vect{X}-\mmu)=\vect{Z}^{\T} \vect{Z} \sim \chi_{d}^{2}
+$
+
+
+
+
+
+\subsection*{Testing multivariate normality}
+If $\vect{X}_{1}, \ldots, \vect{X}_{n}$ are iid $\N_{d}(\mu, \Sigma)$, then, for $\vect{a} \in \mathbb{R}^{d}, \vect{a}^{\T} \vect{X}_{1}, \ldots, \vect{a}^{\T} \vect{X}_{n}$ are iid $\N\left(\vect{a}^{\T} \vect{\mu}, \vect{a}^{\T} \vect{\Sigma} \vect{a}\right)$ This can be tested statistically (for different $\vect{a}$) with various goodness-of-fit tests (e.g. Q-Q plots)
+
+\green{Mardia's test}
+\begin{itemize}[leftmargin=*]
+\item If $\vect{X} \sim \N_{d}(\mmu, \mSigma)$ with $\mSigma$ PD, then $(\vect{X}-\mmu)^{\T} \mSigma^{-1}(\vect{X}-\mmu) \sim \chi_{d}^{2}$
+\item Let $D_{i}^{2}=\left(\X_{i}-\bar{\X}\right)^{\top} \mSigma^{-1}\left(\X_{i}-\bar{\X}\right)$ denote the \green{squared Mahalanobis distances} and $D_{i j}=\left(\X_{i}-\bar{\X}\right)^{\top} \mSigma^{-1}\left(\X_{j}-\bar{\X}\right)$ the \green{Mahalanobis angles}
+\item Set
+$
+b_{d}=\frac{1}{n^{2}} \displaystyle \sum_{i, j=1}^{n} D_{i j}^{3}$ and $k_{d}=\frac{1}{n} \displaystyle \sum_{i=1}^{n} D_{i}^{4}
+$
+\item Under the \green{null hypothesis}, one has
+$
+\frac{n}{6} b_{d} \rightarrow \chi_{d(d+1)(d+2) / 6}^{2}$ and $ \frac{k_{d}-d(d+2)}{\sqrt{8 d(d+2) / n}} \rightarrow \N(0,1) \text { for } n \rightarrow \infty,
+$
+\end{itemize}
+
+
+
+
+
+
+
+
+\subsection*{Advantages \& Drawbacks of $N_{d}(\mu, \Sigma)$}
+\navy{Advantages}: Inference easy; Distribution is determined by $\mu$ and $\Sigma$; Linear combinations are normal $\rightsquigarrow \mathrm{VaR}$ and $\mathrm{ES}$ calculations for portfolios are easy; Marginal distributions are normal; Conditional distributions are normal; Quadratic forms are known; Convolutions are normal; Simulation is straightforward; Independence and uncorrelatedness are equivalent
+
+\navy{Drawbacks}:
+\begin{enumerate}[label = (\arabic*), leftmargin=*]
+    \item Tails of univariate (normal) margins are too thin (generate too few extreme events)
+    \item Joint tails are too thin (generate too few joint extreme events). $\N_{d}(\mu, \Sigma)$ cannot capture the notion of tail dependence.
+    \item Very strong symmetry: radial symmetry.
+\end{enumerate}
+
+
+\navy{In short}:
+\begin{itemize}[leftmargin=*]
+    \item Normal variance mixture distributions can address (1) and (2) while sharing many of the desirable properties of $\N_{d}(\mmu, \mSigma)$
+    \item Normal mean-variance mixture distributions can also address (3) but at the expense of tractability in comparison to $\N_{d}(\mmu, \mSigma)$
+\end{itemize}
+
+
+\pink{6.2 Normal mixture distributions}
+\subsection*{Multivariate normal variance mixtures}
+A $d$-dim random vec $\vect{X}$ has a (multivariate) normal variance mixture distribution if
+$
+\vect{X} \stackrel{(d)}{=} \vect{\mu}+\sqrt{W} \vect{AZ},
+$
+where $\vect{\mu} \in \mathbb{R}^{d}, \vect{A} \in \mathbb{R}^{d \times k}, \vect{Z} \sim \N_{k}\left(0, \vect{I}_{k}\right)$ and $W \geq 0$ is a RV ind of $\vect{Z}$. $\mu$ is called \green{location vec} and $\mSigma=\vect{AA}^{\T}$ \green{scale (or dispersion) matrix}.
+
+Note:
+$
+(\vect{X} \mid W=w) \stackrel{(d)}{=} \vect{\mu}+\sqrt{w} \vect{A Z} \sim \N_{d}\left(\mu, w \vect{AA}^{\T}\right)=\N_{d}(\mmu, w \mSigma)
+$
+or
+$
+\vect{X} \mid W \sim \N_{d}(\mmu, W \mSigma)
+$.
+
+\melon{$W$ can be interpreted as a shock} affecting the variances of all risk factors
+
+
+
+
+
+
+
+\subsection*{Properties of multivariate normal variance mixtures}
+Let $\vect{X}=\vect{\mu}+\sqrt{W} \vect{A Z}$ and $\vect{Y}=\vect{\mu}+\vect{A Z}$
+\begin{itemize}[leftmargin=*]
+    \item If $\mathbb{E} \sqrt{W}<\infty$, then $\mathbb{E}[\vect{X}]=\mmu+\mathbb{E}[\sqrt{W}] \vect{A} \mathbb{E}[\vect{Z}]=\mmu=\mathbb{E}[\vect{Y}]$
+    \item If $\mathbb{E} W<\infty$, then
+$
+\operatorname{Cov}(\vect{X})=\operatorname{Cov}(\sqrt{W} \vect{AZ})=\mathbb{E}\left[W \vect{AZZ}^{\T} \vect{A}^{\T}\right]=\mathbb{E}[W] \A \mathbb{E}\left[\vect{ZZ}^{\T}\right] \vect{A}^{\T}=\mathbb{E}[W] \Sigma \stackrel{(\text { in general) }}{\neq} \mSigma=\operatorname{Cov}(\vect{Y})
+$
+    \item If $\mathbb{E} W<\infty$, then $\operatorname{corr}(\vect{X})=\operatorname{corr}(\vect{Y})$
+\end{itemize}
+
+\subsubsection*{Lemma (Independence in normal variance mixtures)}
+Let $\vect{X}=\mu+\sqrt{W} \vect{Z}$ with $\mathbb{E} W<\infty$ (uncorrelated normal variance mixture).
+Then
+$
+X_{i} \text { and } X_{j} \text { are independent } \Leftrightarrow W \text { is a.s. constant }\left(\text { i.e. } \vect{X} \sim \N_{d}\right)
+$
+
+
+
+
+\begin{itemize}[leftmargin=*]
+    \item \melon{Recall}: cf of $\X \sim \N_{d}(\mmu, \mSigma)$ is $\phi_{\X}(\u)=\exp \left(i \u^{\T} \mmu-\frac{1}{2} \u^{\T} \mSigma \u\right)$
+    \item $(\X \mid W=w) \sim \N_{d}(\mmu, w \mSigma)$
+
+    \item The \green{characteristic function} of a multivariate normal variance mixture is
+$
+\phi_{\vect{X}}(\vect{u})=\mathbb{E}\left[\mathbb{E}\left[\exp \left(i \vect{u}^{\T} \mmu+i \vect{u}^{\T} \sqrt{W} \vect{AZ}\right) \mid W\right]\right]=\exp \left(i \vect{u}^{\T} \mmu\right) \mathbb{E} \exp \left(-W \frac{1}{2} \vect{u}^{\T} \mSigma \vect{u}\right)
+$
+\end{itemize}
+
+
+
+
+
+\subsubsection*{Laplace–Stieltjes tranform}
+The Laplace-Stieltjes transform of $F_{W}$ is $\hat{F}_{W}(\theta)=\mathbb{E}\left[e^{-\theta W}\right]=\int_{0}^{\infty} e^{-\theta w} d F_{W}(w)$.
+
+Therefore
+$
+\phi_{\vect{X}}(u)=\exp \left(i \vect{u}^{\T} \mmu\right) \hat{F}_{W}\left(\frac{1}{2} \vect{u}^{\T} \mSigma \vect{u}\right)
+$
+
+\melon{Notation}: $\vect{X} \sim \M_{d}\left(\mmu, \mSigma, \hat{F}_{W}\right)$ for a $d$-dimensional multivariate normal variance mixture
+
+
+
+\subsubsection*{Density} 
+If $\mSigma$ is PD and $\mathbb{P}[W=0]=0$, the density of $\X$ is
+$$
+\begin{aligned}
+& f_{\X}(\x)=\int_{0}^{\infty} f_{\X \mid W}(x \mid w) d F_{W}(w) \\
+=& \int_{0}^{\infty} \frac{1}{(2 \pi w)^{\frac{d}{2}} |\mSigma|^{\frac{1}{2}}} \exp \left(-\frac{(\x-\mmu)^{\T} \mSigma^{-1}(\x-\mmu)}{2 w}\right) d F_{W}(w)
+\end{aligned}
+$$
+\begin{itemize}[leftmargin=*]
+    \item Only depends on $\x$ through $(\x-\mmu)^{\T} \mSigma^{-1}(\x-\mmu)$
+    \item If $\mSigma$ is diagonal and $\mathbb{E W}<\infty$, the components of $\X$ are uncorrelated (as $\operatorname{Cov}(\X)=\mathbb{E}[W] \mSigma)$ but not independent unless $W$ is constant a.s.
+\end{itemize}
+
+
+
+
+
+
+
+\subsubsection*{Affine transformations}
+\begin{itemize}[leftmargin=*]
+    \item For $\X \sim \M_{d}\left(\mmu, \mSigma, \hat{F}_{W}\right)$ and $\Y=\b+\B \X$, where $\b \in \mathbb{R}^{k}$ and $\B \in \mathbb{R}^{k \times d}$, one has
+$
+\Y \sim \M_{k}\left(\b+\B \mmu, \B \mSigma \B^{\T}, \hat{F}_{W}\right)
+$
+
+Indeed, if $\X=\mmu+\sqrt{W} \A \Z$, then $\b+\B \X=\b+\B \mmu+\sqrt{W} \B \A \Z$
+    \item Particularly, $\v^{\T} \X \sim \M_{1}\left(\v^{\T} \mmu, \v^{\T} \mSigma \v, \hat{F}_{W}\right)$, $\v \in \mathbb{R}^{d}$
+\end{itemize}
+
+
+
+
+
+
+
+\subsubsection*{Sampling / Simulation Algorithm of $\X=\mmu+\sqrt{W} \A \Z \sim \M_{d}\left(\mmu, \mSigma, \hat{F}_{W}\right)$}
+\begin{enumerate}[label = (\arabic*), leftmargin=*]
+    \item Generate $\Z \sim \N_{d}\left(0, \I_{d}\right)$
+    \item Generate $W \sim F_{W}$, independent of $\Z$. e.g. $W=F_{W}^{-1}(U)$ for $U \sim \operatorname{Unif}(0,1)$
+    \item Compute a Cholesky decomposition $\mSigma=\A \A^{\T}$
+    \item Return $\X=\mmu+\sqrt{W} \A \Z$
+\end{enumerate}
+
+
+
+
+
+
+
+\subsection*{Examples of multivariate normal mixtures}
+\begin{itemize}[leftmargin=*]
+    \item \navy{Multivariate normal}: $W \equiv 1$
+    \item \navy{Two point mixture}:
+$
+W= \begin{cases}w_{1} & \text { with prob } p \\ w_{2} & \text { with prob } 1-p\end{cases}
+$
+can be used to model \melon{an ordinary and a stress regime}
+    \item \navy{$k$ point mixture}:
+$$
+W=\left\{\begin{array}{cc}
+w_{1} & \text { with prob } p_{1} \\
+\vdots & \vdots \\
+w_{k} & \text { with prob } p_{k}
+\end{array}\right.
+$$
+\end{itemize}
+
+
+\subsection*{Multivariate $t$-distribution}
+Multivariate $t$-distribution is also an example of multivariate normal mixtures.
+
+Set $W=\nu / V$ for $V \sim \chi_{\nu}^{2}$, \melon{or equivalently}, $W=1 / G$ for $G \sim \Gamma(\nu / 2, \nu / 2)$. 
+
+$W$ has an \green{inverse Gamma distribution}.
+\begin{itemize}[leftmargin=*]
+    \item \green{Density} of the multivariate $t$-distribution is
+$$
+f_{\X}(\x)=\frac{\Gamma(\frac{\nu+d}{2})}{\Gamma(\frac{\nu}{2})(\nu \pi)^{\frac{d}{2}}|\mSigma|^{\frac{1}{2}}}\left(1+\frac{(\x-\mmu)^{\T} \mSigma^{-1}(\x-\mmu)}{\nu}\right)^{-\frac{\nu+d}{2}}
+$$
+
+where $\mmu \in \mathbb{R}^{d}, \mSigma \in \mathbb{R}^{d \times d}$ is PD and $\nu>0$ is the degrees of freedom.
+
+\melon{Notation}: $\X \sim t_{d}(\nu, \mmu, \mSigma)$
+    \item $t_{d}(\nu, \mmu, \mSigma)$ has heavier marginal and joint tails than $\N_{d}(\mmu, \mSigma)$
+    \item If $\nu>2$, then $\mathbb{E}[W]=\frac{\nu}{(\nu-2)}$, and so, $\operatorname{Cov}(\X)=\frac{\nu}{(\nu-2)} \mSigma$. For finite variances/correlations, $\nu>2$ is required. For finite mean, $\nu>1$ is required.
+\end{itemize}
+
+
+
+
+
+
+
+\subsection*{Multivariate normal mean-variance mixtures}
+A $d$-dim random vec $\vect{X}$ has a \green{(multivariate) normal mean-variance mixture distribution} if
+$
+\X \stackrel{(d)}{=} m(W)+\sqrt{W} \A \Z,
+$
+where $\Z \sim \N_{k}\left(0, \I_{k}\right)$; $\A \in \mathbb{R}^{d \times k}$; $W \geq 0$ is a RV ind of $\Z$; $m: \mathbb{R}_{+} \rightarrow \mathbb{R}^{d}$ is a measurable function.
+\begin{itemize}[leftmargin=*]
+    \item Normal mean-var mixtures can add \melon{skewness}
+    \item Denote $\mSigma=\A \A^{\T}$ and observe that $(\X \mid W=w) \sim \N_{d}(m(w), w \mSigma)$
+    \item In general, they are \red{no longer elliptical}
+\end{itemize}
+
+\navy{Example}: Suppose $m(W)=\mmu+\vect{\gamma} W$ for $\mu, \gamma \in \mathbb{R}^{d}$.
+
+Since $\mathbb{E}[\X \mid W]=\mmu+\vect{\gamma} W$ and $\operatorname{Cov}(\X \mid W)=W \mSigma$, one has $\mathbb{E} \X &=\mathbb{E}[\mathbb{E}[\X \mid W]]=\mmu+\vect{\gamma} \mathbb{E}[W]$ if $\mathbb{E} W<\infty$; $\operatorname{Cov}(\X) &=\operatorname{Cov}(\mathbb{E}[\X \mid W])+\mathbb{E}[\operatorname{Cov}(\X \mid W)]=\operatorname{Var}(W) \vect{\gamma} \vect{\gamma}^{\T}+\mathbb{E}[W] \mSigma$ if $\mathbb{E} W^{2}<\infty$.
+
+If $W$ has a \green{GIG (generalized inverse Gaussian)} distribution, that is, it has density
+$$
+f(x)=\frac{(a / b)^{p / 2}}{2 K_{p}(\sqrt{a b})} x^{(p-1)} e^{-(a x+b / x) / 2}, \quad x>0 
+$$
+
+for parameters $a, b>0$ and $p \in \mathbb{R}$.
+
+Then $X$ has a \green{generalized hyperbolic distribution}. $K_{p}$ is a modified Bessel function of the second kind.
+
+In the special case $\vect{\gamma}=\vect{0}$, one obtains an (elliptical) normal variance mixture.
+
+
+
+
+
+
+\pink{6.3 Spherical and elliptical distributions}
+\begin{itemize}[leftmargin=*]
+    \item $M_{d}\left(\mu, \Sigma, \hat{F}_{W}\right)$ (e.g. multivariate $t$, generalized hyperbolic) are better models than $\N_{d}(\mu, \Sigma)$ for \melon{daily/weekly log-returns of stocks}.
+    \item The more general \green{skewed normal mean-variance mixture distributions} offer only a modest improvement.
+    \item Elliptical distributions are a generalization of $M_{d}\left(\mu, \Sigma, \hat{F}_{W}\right)$.
+\end{itemize}
+
+
+
+\subsection*{Spherical distributions}
+A $d$-dim random vec $\Y$ has a \green{spherical distribution} if for every orthogonal $\U \in \mathbb{R}^{d \times d}$ (i.e. $\U^{\T} \U=\U \U^{\T}=\I_{d}$ ), one has $\Y \stackrel{(d)}{=}\U \Y$ (\melon{distributional invariance under rotations and reflections}).
+
+
+
+\subsubsection*{Thm: Characterization of spherical distributions}
+Denote $\|\u\|=\sqrt{u_{1}^{2}+\cdots+u_{d}^{2}}$. Then the following are \red{equivalent}:
+(1) $\Y$ is spherical; 
+(2) For every $\a \in \mathbb{R}^{d}, \a^{\T} \Y \stackrel{(d)}{=}\|\a\| Y_{1}$;
+(3) There exists a \green{characteristic generator} $\psi: \mathbb{R}_{+} \rightarrow \mathbb{R}$ such that $\phi_{\Y}(\u)=\psi\left(\|\u\|^{2}\right), \u \in \mathbb{R}^{d}$
+
+\melon{Notation}: $\Y \sim \mathcal{S}_{d}(\psi)$
+
+\subsubsection*{Additivity}
+Let $\Y_{i} \sim \S_{d}\left(\psi_{i}\right), i=1, \ldots, n$, be ind spherically distributed random vecs and $\alpha_{1}, \ldots, \alpha_{n} \in \mathbb{R}$. If $\Z=\sum_{i=1}^{n} \alpha_{i} \Y_{i}$, then $\Z \sim \S_{d}(\psi)$ for $\psi(x)=\prod_{i=1}^{n} \psi_{i}\left(\alpha_{i}^{2} x\right)$.
+
+
+
+\subsubsection*{Thm: Stochastic representation}
+$\Y \sim \S_{d}(\psi) \Leftrightarrow \Y \stackrel{(d)}{=} R \vect{S}$ for $\vect{S} \sim U\left(\x \in \mathbb{R}^{d}:\|\x\|=1\right)$ and an independent radial part $R \geq 0$.
+
+If $\Y$ has a density $f_{\Y}$, it must be of the form $f_{\Y}(\y)=g\left(\|\y\|^{2}\right)$ for a function $g: \mathbb{R}_{+} \rightarrow \mathbb{R}_{+}$,  referred to as \green{density generator}.
+
+
+
+\subsubsection*{Corollary}
+If $\Y \sim \S_{d}(\psi)$ and $\mathbb{P}[\Y=0]=0$, then
+$
+\left(\|\Y\|, \frac{\Y}{\|\Y\|}\right) \stackrel{(d)}{=}\left(\|R \vect{S}\|, \frac{R \vect{S}}{\|R \vect{S}\|}\right) \stackrel{(d)}{=}(R, \vect{S})
+$. 
+
+In particular, $\|\Y\|$ and $\Y /\|\Y\|$ are independent.
+
+
+
+
+
+\subsubsection*{Examples}
+\begin{itemize}[leftmargin=*]
+    \item $\Y \sim \M_{d}\left(0, \I_{d}, \hat{F}_{W}\right)$ is spherical. 
+    
+    Indeed, since $\Y \stackrel{(d)}{=} \sqrt{W} \Z$, one has
+$
+\phi_{\Y}(\u)=\mathbb{E}\left[\mathbb{E}\left[\exp \left(i \sqrt{W} \u^{\T} \Z\right) \mid W\right]\right]=\mathbb{E}\left[\exp \left(-W\|\u\|^{2} / 2\right)\right]=\hat{F}_{W}\left(\|\u\|^{2} / 2\right)
+$
+
+So $\Y \sim \S_{d}(\psi)$ for $\psi(x)=\hat{F}_{W}(x / 2)$
+    \item For $\Y \sim \N_{d}\left(0, \I_{d}\right), \psi(x)=\exp (-x / 2)$. By the Corollary above, \melon{simulating} $\vect{S} \sim U\left(\x \in \mathbb{R}^{d}:\|\x\|=1\right)$ can thus be done through $\vect{S}=\Y /\|\Y\|$.
+    
+    Also, $R^{2}=\Y^{\T} \Y \sim \chi_{d}^{2}$. So (1) $\mathbb{E}[R] \mathbb{E}[\vect{S}]=\mathbb{E} \Y=\vect{0} \rightsquigarrow \mathbb{E} \vect{S}=\vect{0}$ and (2) $d \operatorname{Cov}(\vect{S})=\mathbb{E}\left[R^{2}\right] \operatorname{Cov}(\vect{S})=\operatorname{Cov}(\Y)=\I_{d} \rightsquigarrow \operatorname{Cov}(\vect{S})=\I_{d} / d$
+    
+    \item For $\Y \sim \S_{d}(\psi)$ with $\mathbb{E}\left[R^{2}\right]<\infty$, one has
+$
+\operatorname{Cov}(\Y)=\mathbb{E}\left[R^{2}\right] \operatorname{Cov}(\vect{S})=\frac{\mathbb{E}\left[R^{2}\right]}{d} \I_{d}
+$, and $\operatorname{corr}(\Y)=\I_{d}$
+
+    \item For $\X=\mmu+\A \Y$ with $\mathbb{E}\left[R^{2}\right]<\infty$ and Cholesky factor $\A$ of a covariance matrix $\mSigma$, one has
+$
+\operatorname{Cov}(\X)=\mathbb{E}\left[\A \Y \Y^{\T} \A^{\T}\right]=\A \operatorname{Cov}(\Y) \A^{\T}=\frac{\mathbb{E}\left[R^{2}\right]}{d} \mSigma
+$ and $\operatorname{corr}(\X)=\vect{P}$ (corr matrix corresponding to $\mSigma$)
+\end{itemize}
+
+
+
+
+\subsection*{Example: $t$-distribution}
+For $\Y \sim t_{d}\left(\nu, 0, \I_{d}\right)$, one has $R^{2}=\Y^{\T} \Y=W \Z^{\T} \Z$ for $ W=\nu / V, V \sim \chi_{\nu}^{2}, \Z \sim \N_{d}\left(0, \I_{d}\right) $. 
+So
+$
+\frac{R^{2}}{d}=\frac{\Z^{\T} \Z / d}{(\nu / W) / \nu}=\frac{\chi_{d}^{2} / d}{\chi_{\nu}^{2} / \nu} \sim F(d, \nu)
+$ (\green{$F$-distribution}).
+Therefore, $\mathbb{E}[W]=\mathbb{E}\left[R^{2}\right] / \mathbb{E}\left[\Z^{\T} \Z\right]=\mathbb{E}\left[R^{2}\right] / d=\nu /(\nu-2)$ (if $\nu>2$).
+
+It follows that $\X \sim t_{d}(\nu, \mmu, \mSigma)$ has $\operatorname{Cov}(\X)=\frac{\nu}{\nu-2} \mSigma$ and $\operatorname{corr}(\X)=\vect{P}$.
+
+One can use a \green{Q-Q-plot} of the order statistics of $R^{2} / d=\|\Y\|^{2} / d$ versus the theoretical quantiles of a (hypothesized) $F(d, \nu)$-distribution to check the goodness-of-fit of a hypothesized $t$-distribution.
+
+
+
+
+
+\subsection*{Elliptical distributions}
+A $d$-dim random vec $\X$ has an \green{elliptical distribution} if
+$
+\X \stackrel{(d)}{=} \mmu+\A \Y
+$
+for $\mmu \in \mathbb{R}^{d}, \A \in \mathbb{R}^{d \times k}$ and $\Y \in \S_{k}(\psi)$
+\green{location vector}: $\mmu$, \green{scale matrix}: $\mSigma=\A \A^{\T}$
+
+\begin{itemize}[leftmargin=*]
+    \item Elliptical random vec has \melon{stochastic representation} $\X \stackrel{(d)}{=} \mmu+R \A \vect{S}$, where $R=\|\Y\|$ and $\vect{S}=\Y /\|\Y\|$
+    \item The \green{characteristic func} of an elliptical random vec is
+$\phi_{\X}(\u) &=\mathbb{E} \exp \left(i \u^{\T} \X\right)=e^{i \u^{\T} \mmu} \mathbb{E} \exp \left(i \u^{\T} \A \Y\right)=e^{i u^{T}} \mu \mathbb{E} \exp \left(i\left(\A^{\T} \u\right)^{\T} \Y\right) \\
+&=e^{i \u^{\T} \mmu} \psi\left(\u^{\T} \A \A^{\T} \u\right)=e^{i \u^{\T} \mmu}  \psi\left(\u^{\T} \mSigma \u\right)$
+
+\melon{Notation}: $E_{d}(\mmu, \mSigma, \psi)$. Note that $E_{d}(\mmu, \mSigma, \psi)=E_{d}(\mmu, c \mSigma, \psi(\cdot / c))$
+    
+    \item If $\mSigma$ is PD with Cholesky factor $\A$, then $\X \sim E_{d}(\mmu, \mSigma, \psi)$ \red{iff} $\Y=\A^{-1}(\X-\mmu) \sim S_{d}(\psi)$, in which case,
+$
+\left(\sqrt{(\X-\mmu)^{\T} \mSigma^{-1}(\X-\mmu)}, \frac{\A^{-1}(\X-\mmu)}{\sqrt{(\X-\mmu)^{\T} \mSigma^{-1}(\X-\mmu)}}\right) \stackrel{(d)}{=}(R, \vect{S})
+$, which can be used for \melon{testing elliptical symmetry}.
+    \item \red{Normal variance mixture distributions are all elliptical} since
+$
+\X \stackrel{(d)}{=} \mu+\sqrt{W} \A \Z=\mmu+\sqrt{W}\|\Z\| \A \frac{\Z}{\|\Z\|}=\mmu+R \A \vect{S}
+$
+for $R=\sqrt{W}\|\Z\|$ and $\vect{S}=\Z /\|\Z\|$, where $R$ and $\vect{S}$ are \red{ind}.
+\end{itemize}
+
+
+
+
+
+
+
+
+
+\subsection*{Properties of elliptical distributions}
+\begin{itemize}[leftmargin=*]
+    \item \navy{Density}:
+Let $\A \A^{\T}=\mSigma$ be PD and $\Y \sim \S_{d}(\psi)$ have density generator $g$. Then by the \melon{Density Transformation Theorem}, $\X=\mmu+\A \Y$ has density
+$$
+f_{\X}(\x)=\frac{1}{\sqrt{\operatorname{det} \mSigma}} g\left((\x-\mmu)^{\T} \mSigma^{-1}(\x-\mmu)\right)
+$$
+
+It depends on $\x$ only through $(\x-\mmu)^{\T} \mSigma^{-1}(\x-\mmu)$.
+
+In particular, the level sets are \melon{ellipsoids} (hence the name \melon{elliptical})
+
+    \item \navy{Affine transformations}: $\X \sim E_{d}(\mmu, \mSigma, \psi)$ has a representation of the form $\mmu+\A \Y$ for $\A \A^{\T}=\mSigma$ and $\Y \sim S_{k}(\psi)$. So for $\b \in \mathbb{R}^{m}$ and $\B \in \mathbb{R}^{m \times d}$, one has
+$
+\b+\B \X=\b+\B(\mmu+\A \Y) \sim E_{m}\left(\b+\B \mmu, \B \A \A^{\T} \B^{\T}, \psi\right)=E_{m}\left(\b+\B \mmu, \B \mSigma \B^{\T}, \psi\right)
+$
+
+In particular, $\a^{\T} \X \sim E_{1}\left(\a^{\T} \mmu, \a^{\T} \mSigma \a, \psi\right)$
+
+By taking $\a=\vect{e}_{j}$, then all marginal distributions are of the same type.
+
+    \item \navy{Marginals}: If $\X=\left(\Y_{1}, \Y_{2}\right) \sim E_{d}(\mmu, \mSigma, \psi)$, then $\Y_{1} \sim E_{k}\left(\mmu_{1}, \mSigma_{11}, \psi\right)$ and $\Y_{2} \sim E_{d-k}\left(\mmu_{2}, \mSigma_{22}, \psi\right)$
+    
+    
+    \item \navy{Conditional distributions} of elliptical distributions are elliptical.
+    
+    \item \navy{Quadratic forms}: $(\X-\mmu)^{\T} \mSigma^{-1}(\X-\mmu)=R^{2}$
+    \begin{itemize}[leftmargin=*]
+        \item If $\X \sim \N_{d}(\mmu, \mSigma)$, then $R^{2} \sim \chi_{d}^{2}$
+        \item If $\X \sim t_{d}(\nu, \mmu, \mSigma)$, then $R^{2} / d \sim F(d, \nu)$
+    \end{itemize}
+    
+    \item \navy{Convolutions}: If $\X \sim E_{d}(\mmu, \mSigma, \psi)$ and $\Y \sim E_{d}(\tilde{\mmu}, c \mSigma, \tilde{\psi})$ are ind, then $a \X+b \Y$ is elliptical.
+\end{itemize}
+
+
+
+
+
+
+\subsection*{Proposition (Subadditivity of VaR in elliptical models)}
+Let $L_{i}=\v_{i}^{\T} \X, \v_{i} \in \mathbb{R}^{d}, i=1, \ldots, n$, where $\X \sim E_{d}(\mmu, \mSigma, \psi)$. 
+
+Then
+$
+\displaystyle \operatorname{VaR}_{\alpha}\left(\sum_{i=1}^{n} L_{i}\right) \leq \sum_{i=1}^{n} \operatorname{VaR}_{\alpha}\left(L_{i}\right) \text { for all } \alpha \in(\frac{1}{2},1)
+$. In particular,
+$
+\displaystyle \operatorname{VaR}_{\alpha}\left(\sum_{i=1}^{d} X_{i}\right) \leq \sum_{i=1}^{d} \operatorname{VaR}_{\alpha}\left(X_{i}\right) \text { for all } \alpha \in(\frac{1}{2},1)
+$
+
+
+
+
+\navy{Proof}: Consider a RV of the form $L=\v^{\T} \X \stackrel{(d)}{=} \v^{\T} \mmu+\v^{\T} \A \Y$, where $\A \A^{\T}=\mSigma$ and $\Y \in \S_{k}(\psi)$.
+
+Since $\v^{\T} \A \Y \stackrel{(d)}{=}\left\|\A^{\T} \v\right\| Y_{1}$, one has $L \stackrel{(d)}{=} \v^{\T} \mmu+\left\|\A^{\T} \v\right\| Y_{1}$, and therefore,
+$
+\operatorname{VaR}_{\alpha}(L)=\v^{\T} \mmu+\left\|\A^{\T} \v\right\| \operatorname{VaR}_{\alpha}\left(Y_{1}\right)
+$.
+
+
+Since $Y_{1}$ is symmetric, one has $\operatorname{VaR}_{\alpha}\left(Y_{1}\right) \geq 0$ for $\alpha \in(1 / 2,1)$, and hence,
+$$
+\begin{aligned}
+&\operatorname{VaR}_{\alpha}\left(\sum_{i=1}^{n} L_{i}\right)=\sum_{i=1}^{n} \v_{i}^{\T} \mmu+\left\|\sum_{i=1}^{n} \A_{i}^{\T} \v \right\| \operatorname{VaR}_{\alpha}\left(Y_{1}\right) \\
+\leq &\sum_{i=1}^{n} \v_{i}^{\T} \mmu+\left\|\A_{i}^{\T} \v\right\| \operatorname{VaR}_{\alpha}\left(Y_{1}\right)=\sum_{i=1}^{n} \operatorname{VaR}_{\alpha}\left(L_{i}\right)
+\end{aligned}
+$$
+
+
+
+
+\pink{6.4 Dimension Reduction Techniques}
+\subsection*{Factor models}
+\melon{Idea}: Explain the variability of a $d$-dimensional vector $X$ of risk factor changes with of a few underlying factors.
+
+\melon{Def}: $\X$ follows a \green{$p$-factor model} if $\X=\a+\B \vect{F}+\vect{\varepsilon}$, where
+\begin{enumerate}[label = (\arabic*), leftmargin=*]
+    \item $\a \in \mathbb{R}^{d}$ and $\B \in \mathbb{R}^{d \times p}$ is a matrix of factor loadings
+    \item $\vect{F}=\left(F_{1}, \ldots, F_{p}\right)$ is a random vec of underlying factors with $p<d$ and $\vect{\Theta}:=\operatorname{Cov}(\vect{F})$ (\green{systematic risk})
+    \item $\vect{\varepsilon}=\left(\varepsilon_{1}, \ldots, \varepsilon_{d}\right)$ is the random vec of idiosyncratic error terms with $\mathbb{E}[\vect{\varepsilon}]=\vect{0}$, $\vect{\Upsilon}:=\operatorname{Cov}(\vect{\varepsilon})$ is diagonal and $\operatorname{Cov}(\vect{F}, \vect{\varepsilon})=\vect{0}$ (\green{idiosyncratic risk})
+\end{enumerate}
+
+
+
+
+\begin{itemize}[leftmargin=*]
+    \item \melon{Goal}: Identify or estimate $(\a, \B)$ or $\vect{F}=\left(F_{1}, \ldots, F_{p}\right)$.
+    \item Factor models imply that $\mSigma:=\operatorname{Cov}(\X)=\B \vect{\Theta} \B^{\T}+\vect{\Upsilon}$
+    \item For $\B^{*}=\B \vect{\Theta}^{1 / 2}$ and $\F^{*}=\mTheta^{-1 / 2}(\F-\mathbb{E}[\F])$, one has
+$
+\X=\mmu+\B^{*} \F^{*}+\mvarepsilon$, where $\mmu=\mathbb{E}[\X]
+$
+    \item One has $\mSigma=\B^{*}\left(\B^{*}\right)^{\T}+\mUpsilon$, and conversely, if $\operatorname{Cov}(\X)=\B^{*}\left(\B^{*}\right)^{\T}+\mUpsilon$ for some $\B^{*} \in \mathbb{R}^{d \times p}$ with $\operatorname{rank}\left(\B^{*}\right)=p<d$ and diagonal matrix $\mUpsilon$, then $\X$ has a factor-model representation for a $p$-dimensional $\F$ and a $d$-dimenstional $\mvarepsilon$
+\end{itemize}
+
+
+
+
+
+
+
+
+\subsection*{Statistical Estimation Strategies}
+Consider $\X_{t}=\a+\B \vect{F}_{t}+\vect{\varepsilon}_{t},\ t=1, \ldots, n$.
+
+\red{Three} types of factor models are commonly used:
+\begin{enumerate}[label = (\arabic*), leftmargin=*]
+    \item \navy{Macroeconomic factor models}:
+It is assumed that $\vect{F}_{t}, t=1, \ldots, n$, are observable. Estimation of $\a$ and $\B$ is accomplished by time series regression
+    \item \navy{Fundamental factor models}:
+It is assumed that $\a$ and $\B$ are known but the factors $\vect{F}_{t}$ are unobserved and have to be estimated from $\X_{t}, t=1, \ldots, n$, using cross-sectional regression at each $t$.
+    \item \navy{Statistical factor models}:
+It is assumed that neither $(\a, \B)$ nor the factors $\vect{F}_{t}$ are observed (both have to be estimated from $\X_{t}, t=1, \ldots, n$). The factors can be found with principal component analysis.
+\end{enumerate}
+
+
+
+
+
+
+\subsection*{Estimating Macroeconomic Factor Models}
+\subsubsection*{Univariate Regression}
+\begin{itemize}[leftmargin=*]
+    \item Consider the (univariate) \green{time series regression model}
+$$
+\X_{t, j}=\a_{j}+\b_{j}^{\T} \vect{F}_{t}+ \vect{\varepsilon}_{t, j}, \quad t=1, \ldots, n
+$$
+    \item The components $\vect{F}_{t, 1}, \ldots, \vect{F}_{t, p}$ are assumed to be observable changes in macroeconomic factors, such as index returns, interest rates, inflation, GDP growth, unemployment rate, ...
+    \item To justify the use of \melon{ordinary least-squares (OLS)} to derive statistical properties of the method it is usually assumed that, conditional on the factors, the errors $\varepsilon_{1, j}, \ldots, \varepsilon_{n, j}$ form a \green{white noise process} (i.e. are identically distributed and serially uncorrelated)
+    \item $\hat{\a}_{j}$ estimates $\a_{j}, \hat{\b}_{j}$ estimates the $j$-th row of $\B$
+    \item Models can also be estimated simultaneously using \green{multivariate regression}.
+\end{itemize}
+
+
+
+
+
+\subsection*{Estimating fundamental factor models}
+\begin{itemize}[leftmargin=*]
+    \item Consider the \green{cross-sectional regression model} $\X_{t}=\B \vect{F}_{t}+\vect{\varepsilon}_{t}$ ($\B$ is assumed to be known; $\vect{F}_{t}$ to be estimated; $\operatorname{Cov}(\vect{\varepsilon})=\vect{\Upsilon}$)
+    
+Note that $\a$ can be absorbed into $\vect{F}_{t}$.
+
+To obtain precision in estimating $\vect{F}_{t}$, one needs $p \ll d$
+    \item E.g. it is assumed that stock returns of companies in the same country/industry are affected by a common factor
+    \item First estimate $\vect{F}_{t}$ via OLS by $\hat{\vect{F}}_{t}^{\text {OLS }}=\left(\B^{\T} \B\right)^{-1} \B^{\T} \X_{t}$.
+This is the best linear unbiased estimator if $\operatorname{Cov}\left(\vect{\varepsilon}_{t}\right)=\sigma^{2} \I_{d}$ for some $\sigma>0$
+    \item However, if $\operatorname{Cov}\left(\vect{\varepsilon}_{t}\right)=\vect{\Upsilon}$ for a general $d \times d$ diagonal matrix $\Upsilon$, it is possible to obtain linear unbiased estimates with smaller squared errors via \green{generalized least squares (GLS)}
+    \item To do that, estimate $\vect{\Upsilon}$ by $\hat{\vect{\Upsilon}}$ via the diagonal of the sample covariance matrix of the residuals $\hat{\vect{\varepsilon}}_{t}=\X_{t}-\B \hat{\vect{F}}_{t}^{\mathrm{OLS}},\ t=1, \ldots, n$
+    \item Then estimate $\vect{F}_{t}$ by $\hat{\vect{F}}_{t}=\left(\B^{\T} \hat{\vect{\Upsilon}}^{-1} \B\right)^{-1} \B^{\T} \hat{\vect{\Upsilon}}^{-1} \X_{t}$
+\end{itemize}
+
+
+
+
+
+
+\subsection*{Estimating statistical factor models with principal component analysis (PCA)}
+\begin{itemize}[leftmargin=*]
+    \item \melon{Goal}: Reduce the dimensionality of highly correlated data by finding a small number of uncorrelated linear combinations which account for most of the variance in the data; this can be used for finding factors
+    \item \melon{Key}: Every symmetric matrix $\vect{M}$ admits a spectral decomposition $\vect{M}=\vect{U} \vect{\Lambda} \vect{U}^{\T}$, where (1) $\vect{\Lambda} =\operatorname{diag}\left(\lambda_{1}, \ldots, \lambda_{d}\right)$ is the diagonal matrix of eigenvalues of $\vect{M}$, which w.l.o.g. are ordered so that $\lambda_{1} \geq \lambda_{2} \geq \cdots \geq \lambda_{d}$, and
+(2) $\vect{U}$ is an orthogonal matrix whose columns are eigenvectors of $\vect{M}$ of length 1.
+    \item Let $\mSigma=\vect{U} \vect{\Lambda} \vect{U}^{\T}$ with $\vect{\Lambda}=\operatorname{diag}\left(\lambda_{1}, \ldots, \lambda_{d}\right)$ such that $\lambda_{1} \geq \lambda_{2} \geq \cdots \geq \lambda_{d} \geq 0$ and $\Y=\vect{U}^{\T}(\X-\mmu)$ the \green{principle component transform}
+$Y_{j}=\u_{j}^{\T}(\X-\mmu)$ is the $j$-th principle component of $\X$ (where $\u_{j}$ is the $j$-th column of $\vect{U}$)
+    \item One has $\mathbb{E} \Y=\0$ and $\operatorname{Cov}(\Y)=\mathbb{E}\left[\Y \Y^{\T}\right]=\vect{U}^{\T} \mSigma \vect{U}=\vect{\Lambda}$, so the principal components are uncorrelated and $\operatorname{Var}\left(Y_{j}\right)=\lambda_{j}$.
+    
+The principal components are thus ordered by decreasing variance.
+
+    \item One can show (1) The first principal component is that normalized linear combination of $\X$ which has maximal variance among all such combinations, i.e. $\operatorname{Var}\left(\u_{1}^{\T} \X\right)=\max \left\{\operatorname{Var}\left(\u^{\T} \X\right): \u^{\T} \u=1\right\}$; (2) For $j=2, \ldots, d$, the $j$-th principal component is that normalized linear combination of $\X$ which has maximal variance among all such linear combinations which are orthogonal to (and hence uncorrelated with) the first $j-1$ principal components.
+    \item $\sum_{j=1}^{d} \operatorname{Var}\left(Y_{j}\right)=\sum_{j=1}^{d} \lambda_{j}=\sum_{j=1}^{d} \operatorname{Var}\left(X_{j}\right)$. So $\sum_{j=1}^{k} \lambda_{j} / \sum_{j=1}^{d} \lambda_{j}$ can be interpreted as the fraction of total variance explained by the first $k$ principal components
+\end{itemize}
+
+
+
+
+
+\subsection*{Principal components as factors}
+\begin{itemize}[leftmargin=*]
+    \item Inverting the principal component transform $\Y=\U^{\T}(\X-\mmu)$, one obtains
+$$
+\X=\mmu+\U \Y=\mmu+\U^{\prime} \Y^{\prime}+\U^{\prime \prime} \Y^{\prime \prime}=: \mu+\U^{\prime} \Y^{\prime}+\vect{\varepsilon}
+$$
+where $\Y^{\prime} \in \mathbb{R}^{k}$ contains the first $k$ principal components. This is reminiscent of the basic factor model.
+    \item Although $\varepsilon_{1}, \ldots, \varepsilon_{d}$ will tend to have small variances, the assumptions of the factor model are generally violated (since they need not have a diagonal covariance matrix and need not be uncorrelated with $\Y^{\prime}$ ). Nevertheless, principal components are often interpreted as factors.
+    \item The same can be applied to the sample covariance matrix to obtain the \green{sample principal components}.
+\end{itemize}

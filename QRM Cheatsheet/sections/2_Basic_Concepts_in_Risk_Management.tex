@@ -1,0 +1,691 @@
+\section{Basic Concepts in Risk Management}
+\pink{2.1 Risk management for a financial firm}
+\subsection*{Empirical Distribution Function}
+Let $x_{1}, \ldots, x_{n}$ be independent realizations of a random variable $X$. The corresponding empirical distribution function $\hat{F}_{X}: \mathbb{R} \rightarrow[0,1]$ is given by the step function
+$$
+\hat{F}_{X}(x)=\frac{1}{n} \sum_{i=1}^{n} 1_{\left\{x_{i} \leq x\right\}}, \quad x \in \mathbb{R},
+$$
+where $1_{\{\cdot\}}$ is the indicator function.
+
+
+
+\subsection*{Asset, liabilities and the balance sheet}
+\green{Balance sheet eq}: Assets = Liabilities + Equity.
+
+If equity $\geq 0$, the company is solvent, otherwise insolvent.
+
+
+\green{Valuation} of the items on the balance sheet is a non-trivial task:
+\begin{itemize}[leftmargin=*]
+    \item \green{Amortized cost accounting}:
+Values a position at book value at its inception and then updates it over time.
+    \item \green{Fair value accounting}: 
+Tries to value assets and liabilities at market prices. This can be challenging for illiquid assets or liabilities.
+\end{itemize}
+There is a tendency in the industry to move towards \green{fair value accounting}.
+
+
+
+
+\subsection*{Risks faced by a financial firm}
+\begin{itemize}[leftmargin=*]
+    \item \melon{Decrease} in the value of the investments on the asset side of the balance sheet
+(e.g. losses from defaults of loans or securities trading)
+    \item \melon{Dry up of funding liquidity} Rates for short-term funding can increase suddenly.
+    \item \melon{Maturity mismatch} (especially for banks, large parts of the assets are relatively illiquid
+(longterm) whereas large parts of the liabilities are rather short-term obligations. This can lead
+to a default of a solvent bank or a bank run).
+    \item The \melon{prime risk for an insurance company} is insolvency (risk that claims of policy holders
+cannot be met). On the asset side, risks are similar to those of a bank. On the liability side, the
+main risk is that reserves are insufficient to cover future claim payments. Note that the
+liabilities of a life insurer are of a long-term nature and exposed to different sources of risk
+(e.g. interest rate risk or longevity risk).
+    \item So risk is found on \melon{both sides of the balance sheet} and thus RM should not focus on the asset
+side alone
+\end{itemize}
+
+
+
+
+
+\pink{2.2 Modeling value and value change}
+\subsection*{Different notions of capital}
+\begin{itemize}[leftmargin=*]
+    \item \green{Equity capital}
+    \begin{itemize}[leftmargin=*]
+        \item Value of assets - liabilities
+        \item Measures the firm’s value to its shareholders
+        \item Contains initial capital invested in the firm and \melon{retained earnings} (accumulated earnings not paid
+out to shareholders).
+    \end{itemize}
+    
+
+
+    \item \green{Regulatory capital}
+    \begin{itemize}[leftmargin=*]
+        \item Capital required according to regulatory rules
+        \item For European insurance firms: SCR and MCR
+        \item A regulatory framework also specifies the capital quality. One distinguishes \melon{Tier 1 capital} (best
+quality of capital such as retained earnings, common stock, non-redeemable preferred stock),
+\melon{Tier 2 capital} (lower quality of capital such as undisclosed reserves, revaluation reserves, hybrid
+instruments and subordinated term debt) and \melon{Tier 3 capital} (tertiary capital; e.g. undisclosed
+reserves and debt of lower quality than in tier 2)
+    \end{itemize}
+
+
+
+        \item \green{Economic capital}
+    \begin{itemize}[leftmargin=*]
+        \item Capital required to control the probability of becoming insolvent (typically over one year)
+        \item Internal assessment of risk capital
+        \item Aims at a holistic view (assets and liabilities) and to work with fair values of balance sheet items.
+    \end{itemize}
+
+\end{itemize}
+
+
+
+\subsection*{Risk Mappings}
+\begin{itemize}[leftmargin=*]
+    \item Consider a \green{portfolio} of assets and liabilities with \green{time-$t$ value $V_{t}$}
+    \item $\Delta t$ is a time increment (used as time unit); For small $\Delta t$, we usually assume,
+    \begin{itemize}[leftmargin=*]
+        \item the portfolio composition remains unchanged over $\Delta t$
+        \item there are no intermediate payments during $\Delta t$
+    \end{itemize}
+    \item \green{Value change}: $\Delta V_{t+1}=V_{t+1}-V_{t}$
+    \item \green{One-period-ahead loss}: $L_{t+1}=-\Delta V_{t+1}$
+    \item The \green{loss distribution} is the distribution of $L=L_{t+1}$; that is, the \green{measure} $\mu_{L}$ on $\mathbb{R}$ given by
+    $\mu_{L}=L^{\#} \mathbb{P}=\mathbb{P} \circ L^{-1} \quad \text { (push-forward) }$
+    
+    \item \green{Loss distribution} is fully specified by the \green{cdf} $F_{L}: \mathbb{R} \rightarrow[0,1]$, $F_{L}(x)=\mathbb{P}[L \leq x]$. It satisfies
+    \begin{enumerate}[label = (\arabic*), leftmargin=*]
+        \item \melon{Normalization}$\displaystyle\lim _{x \rightarrow-\infty} F_{L}(x)=0$,$\displaystyle\lim _{x \rightarrow \infty} F_{L}(x)=1$
+        \item \melon{Right-continuity}$F_{L}\left(x_{n}\right) \downarrow F_{L}(x)$ for $x_{n} \downarrow x \in \mathbb{R}$
+        \item \melon{Monotonicity} $\quad F_{L}(a) \leq F_{L}(b)$ for $a \leq b$
+    \end{enumerate}
+    \item \green{Carathéodory’s extension theorem}: Every func $F: \mathbb{R} \rightarrow[0,1]$ satisfying (1)-(3) is a cdf of a RV $L$
+    \item If $F_{L}$ is absolutely continuous wrt the Lebesgue measure, there exists a \green{measurable func} $f_{L}: \mathbb{R} \rightarrow \mathbb{R}_{+}$ s.t. $F_{L}(x)=\int_{-\infty}^{x} f_{L}(y) d y$, $f_{L}$ is called \green{pdf}, or simply \green{density}, of $L$.
+    \item Often consider the \green{profit-and-loss (P\&L) dist}, which is the dist of $\Delta V_{t+1}=-L_{t+1}$.
+    \item For longer time intervals, one sometimes considers the discounted P\&L $\Delta V_{t+1}=\frac{V_{t+1}}{1+r}-V_{t},$ where $r$ is \green{risk-free interest rate}.
+    \item $V_{t}$ is often modeled as a function of time and a vector $\vect{Z}_{t}=\left(Z_{t}^{1}, \ldots, Z_{t}^{d}\right)$ of \green{risk factors} $ V_{t}=f\left(t, \vect{Z}_{t}\right)$ for some measurable mapping $f: \mathbb{R}_{+} \times \mathbb{R}^{d} \rightarrow \mathbb{R}$
+    \item \green{Changes in risk factors}: $\vect{X}_{t+1}=\vect{Z}_{t+1}-\vect{Z}_{t}$
+    \item $L_{t+1}$ can be written in terms of $L_{t}$ and $X_{t+1}$ as
+$$
+\begin{aligned}
+L_{t+1}&=-V_{t+1}+V_{t}=-f\left(t+1, \vect{Z}_{t+1}\right)+f\left(t, \vect{Z}_{t}\right)\\
+&=-f\left(t+1, \vect{Z}_{t}+\vect{X}_{t+1}\right)+f\left(t, \vect{Z}_{t}\right)
+\end{aligned}
+$$
+    \item We differentiate between the \green{unconditional distribution} of $L_{t+1}$ and its \green{conditional distribution} given $\mathcal{F}_{t}$, describing the information available at time $t$. The two cdf's are
+$
+\mathbb{P}\left[L_{t+1} \leq x\right]$ and $\mathbb{P}\left[L_{t+1} \leq x \mid \mathcal{F}_{t}\right]
+$
+    \item Usually, $\vect{Z}_{t}$ is assumed to be known at time $t$.
+\end{itemize}
+
+
+
+
+
+\subsection*{Assume $\vect{Z}_{t}$ is known and $\vect{X}_{t+1}$ is random}
+\begin{itemize}[leftmargin=*]
+    \item If $f$ is differentiable, one obtains by \green{first-order Taylor approximation},
+$
+    f\left(t+1, \vect{Z}_{t}+\vect{X}_{t+1}\right) \approx f\left(t, \vect{Z}_{t}\right)+f_{t}\left(t, \vect{Z}_{t}\right)+\sum_{j=1}^{d} f_{z^{j}}\left(t, \vect{Z}_{t}\right) X_{t+1}^{j}
+$
+    \item Then $L_{t+1}$ can be approximated by the \green{linearized loss}
+$
+L_{t+1}^{\Delta}=-f_{t}\left(t, \vect{Z}_{t}\right)-\sum_{j=1}^{d} f_{z^{j}}\left(t, \vect{Z}_{t}\right) X_{t+1}^{j}
+$
+
+For \red{given} $Z_{t}$, it is a \red{linear} func of $X_{t+1}^{1}, \ldots, X_{t+1}^{d}$:
+$
+L_{t+1}^{\Delta}=-c_{t}-\vect{b}_{t}^{\top} \vect{X}_{t+1}
+$
+    \item The approx is best for small risk-factor changes.
+\end{itemize}
+
+
+
+
+
+
+\subsection*{Stock Portfolio}
+\begin{itemize}[leftmargin=*]
+    \item Consider $d$ stocks with time-$t$ values $S_{t}^{1}, \ldots, S_{t}^{d}$
+    \item Numbers of stocks held at time $t: \lambda^{1}, \ldots, \lambda^{d}$
+    \item Portfolio value: $V_{t}=\sum_{j=1}^{d} \lambda^{j} S_{t}^{j}=\sum_{j=1}^{d} \lambda^{j} e^{Z_{t}^{j}}$ for the \green{log-prices} $Z_{t}^{j}=\log S_{t}^{j}$
+    \item \green{One-period-ahead loss}:
+    $$
+    \begin{aligned}
+        L_{t+1}&=-\sum_{j=1}^{d} \lambda^{j}\left(e^{Z_{t}^{j}+X_{t+1}^{j}}-e^{Z_{t}^{j}}\right) \\
+        &=-\sum_{j=1}^{d} \lambda^{j} S_{t}^{j}\left(e^{X_{t+1}^{j}}-1\right)=-\sum_{j=1}^{d} w_{t}^{j}\left(e^{X_{t+1}^{j}}-1\right)
+    \end{aligned}
+    $$
+    \item \green{Linear approximation}: $e^{X_{t+1}^{t}}-1 \approx X_{t+1}^{j}$
+    \item \green{Linearized loss}: $L_{t+1}^{\Delta}=-\displaystyle\sum_{j=1}^{d} w_{t}^{j} X_{t+1}^{j}=-\vect{w}_{t}^{\top} \vect{X}_{t+1}$
+    \item \green{Cond mean vec}: $\vect{\mu} := \mathbb{E}_{t} \vect{X}_{t+1}=\mathbb{E}\left[\vect{X}_{t+1} \mid \mathcal{F}_{t}\right]$
+    \item \green{Conditional Cov Matrix}:
+    $
+        \vect{\Sigma}_t := \operatorname{Cov}_{t} \vect{X}_{t+1} 
+$
+
+where $\operatorname{Cov}_{t}\left(X_{t+1}^{i}, X_{t+1}^{j}\right)$
+
+$=\mathbb{E}_{t}\left[\left(X_{t+1}^{i}-\mathbb{E}_{t} X_{t+1}^{i}\right)\left(X_{t+1}^{j}-\mathbb{E}_{t} X_{t+1}^{j}\right)\right]$
+    \item Then the \green{conditional expectation} and \green{conditional variance} of $L_{t+1}^{\Delta}$ are
+$$
+\begin{aligned}
+\mathbb{E}_{t} L_{t+1}^{\Delta}&=-\mathbb{E}_{t}\left(\vect{w}_{t}^{T} \vect{X}_{t+1}\right)=-\vect{w}_{t}^{T} \vect{\mu}_{t} \\ \operatorname{Var}_{t}\left(L_{t+1}^{\Delta}\right)&=\operatorname{Var}_{t}\left(\vect{w}_{t}^{T} \vect{X}_{t+1}\right)=\vect{w}_{t}^{T} \vect{\Sigma}_{t} \vect{w}_{t}
+\end{aligned}
+$$
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+\subsection*{European Call Option}
+\begin{itemize}[leftmargin=*]
+    \item Consider a \green{European call} on a non-dividend paying \green{stock} $S_{t}$ w/ \green{maturity} $T$ and \green{strike price} $K$.
+    \item The Black-Scholes price of the option is
+$
+C^{B S}\left(t, S_{t}, r, \sigma, K, T\right)=S_{t} \Phi\left(d_{1}\right)-K e^{-r(T-t)} \Phi\left(d_{2}\right)
+$
+    \begin{itemize}[leftmargin=*]
+        \item $t$ is time in \red{years}
+        \item $\Phi$ is the standard normal cdf
+        \item $r$ is continuously compounded risk-free interest
+        \item $\sigma$ is the annualized volatility of $S$
+        \item $d_{1}=\frac{\log \left(S_{t} / K\right)+\left(r+\sigma^{2} / 2\right)(T-t)}{\sigma \sqrt{T-t}}$
+        \item $d_{2}=d_{1}-\sigma \sqrt{T-t}$
+    \end{itemize}
+    \item In the Black-Scholes model, it is assumed that \green{interest rates} and \green{volatilities} are \red{constant}. But in reality they tend to \red{fluctuate} over time.
+    \item We therefore add them to our vector of \green{risk factors}
+$
+\vect{Z}_{t}=\left(\log S_{t}, r_{t}, \sigma_{t}\right)
+$
+and obtain the corresponding vector of \green{risk-factor changes}
+$
+\vect{X}_{t+1}=\left(\log \left(S_{t+1} / S_{t}\right), r_{t+1}-r_{t}, \sigma_{t+1}-\sigma_{t}\right)
+$
+    \item If we are interested in \green{daily losses}, we measure time in units of $\Delta t=1 / 250$ (250 is apx num of business days of one year). Then
+    \begin{itemize}[leftmargin=*]
+        \item $V_{t}=f\left(t, \vect{Z}_{t}\right)=C^{B S}\left(t \Delta t, S_{t}, r_{t}, \sigma_{t}, K, T\right)$
+        \item $f_{t}\left(t, \vect{Z}_{t}\right)=C_{t}^{B S}\left(t \Delta t, S_{t}, r_{t}, \sigma_{t}, K, T\right) \Delta t$
+    \end{itemize}
+    \item \green{Linearized loss}
+$$
+\begin{aligned}
+&L_{t+1}^{\Delta}\\
+=&-f_{t}\left(t, \vect{Z}_{t}\right)-\sum_{j=1}^{3} f_{z^{j}}\left(t, \vect{Z}_{t}\right) X_{t+1}^{j} \\
+=&-\left(C_{t}^{B S} \Delta t+C_{S}^{B S} S_{t} X_{t+1}^{1}+C_{r}^{B S} X_{t+1}^{2}+C_{\sigma}^{B S} X_{t+1}^{3}\right)
+\end{aligned}
+$$
+
+$ C_{t}^{B S}=$ \melon{theta}, $C_{S}^{B S}=$ \melon{delta}, $C_{r}^{B S}=$ \melon{rho}, $C_{\sigma}^{B S}=$ \melon{vega}
+
+    \item For portfolios of derivatives, the \green{linear approximation} $L_{t+1}^{\Delta}$ is not always good
+    \item Higher order Taylor approximations can be used. E.g. \green{delta-gamma approximation} (second order approximation)
+\end{itemize}
+
+
+
+
+
+
+\subsection*{Valuation Methods}
+\subsubsection*{Fair Value Accounting}
+\begin{enumerate}[leftmargin=*]
+    \item \navy{Mark-to-market}: The fair value of an investment is determined from quoted prices for the
+same instrument.
+    \item \navy{Mark-to-model with objective inputs}: The fair value of an instrument is determined using
+quoted prices in active markets for similar instruments or by using valuation
+techniques/models with inputs based on observable market data.
+    \item \navy{Mark-to-model with subjective inputs}: The fair value of an instrument is determined using
+valuation techniques/models for which some inputs are not observable in the market (e.g.
+default risk of portfolios of loans to companies for which no CDS spreads are available)
+\end{enumerate}
+\subsubsection*{Risk-neutral Valuation}
+\begin{itemize}[leftmargin=*]
+    \item Widely used for pricing financial products, e.g. derivatives
+    \item Value of a financial instrument today $=$ expected discounted values of future cash flows, where the expectation is taken w.r.t. the/a \green{risk-neutral pricing measure} $\mathbb{Q}$ (also called \green{equivalent martingale measure (EMM)}; it turns discounted prices into martingales, so fair bets) as opposed to the \green{real world/physical measure} $\mathbb{P}$
+    \item Risk-neutral valuation at time $t$ of a random \green{payoff} $H$ at $T$ is done via the risk-neutral pricing rule
+$$
+V_{t}^{H}=\mathbb{E}_{t}^{\mathbb{Q}}\left[e^{-r(T-t)} H\right], \quad t<T
+$$
+where $\mathbb{E}_{t}^{\mathbb{Q}}$ denotes expectation w.r.t. $\mathbb{Q}$ given the information up to and including time $t$
+    \item $\mathbb{P}$ is estimated from \melon{historical data}; $\mathbb{Q}$ is calibrated to \melon{market prices}
+\end{itemize}
+
+
+
+
+
+
+
+\subsection*{European Call Option - Continued}
+\begin{itemize}[leftmargin=*]
+    \item Suppose that options with a particular \green{strike} $K^{*}$ and \green{maturity} $T^{*}$ are not traded, but options with different strikes and maturities on the same stock are.
+
+    \item Under $\mathbb{P}$, the stock price $\left(S_{t}\right)$ is assumed to follow a \green{geometric Brownian motion (GBM)} (the so-called Black-Scholes model) with dynamics
+$$
+\begin{aligned}
+&d S_{t}=\mu S_{t} d t+\sigma S_{t} d W_{t} \\
+\leftrightarrow \quad &S_{t}=S_{0} \exp \left(\mu t+\sigma W_{t}-\frac{1}{2} \sigma^{2} t\right)
+\end{aligned}
+$$
+for constants $\mu \in \mathbb{R}$ (\green{drift}), $\sigma>0$ (\green{volatility}) and and a \green{standard Brownian motion} $\left(W_{t}\right)$.
+    \item The model is \green{complete} $\Leftrightarrow$ there exists a unique \green{EMM} $\mathbb{Q}$
+    \item Under $\mathbb{Q}, e^{-r t} S_{t}$ is a \green{martingale} and $S_{t}$ follows a GBM with \green{drift} $r$ and \green{volatility} $\sigma$
+    \item The European call option payoff is $H=\left(S_{T}-K\right)^{+}=\max \left\{S_{T}-K, 0\right\}$ and the risk-neutral valuation formula can be shown to be
+$
+\mathbb{E}_{t}^{\mathbb{Q}} e^{-r(T-t)}\left(S_{T}-K\right)^{+}=C^{B S}\left(t, S_{t}, r, \sigma, K, T\right)
+$
+    \item The \green{risk-less interest rate} $r$ is given by the market. But it is difficult to predict the \green{volatility} $\sigma$ 
+    \item One typically uses quoted prices $C^{B S}\left(t, S_{t}, r, \sigma, K, T\right)$ for different $K$ and $T$ to infer the $\sigma$ used to price the option corresponding to $K^{*}$ and $T^{*}$ (\green{implied volatility})
+\end{itemize}
+
+
+
+
+
+
+
+
+
+\subsection*{Different ways of generating loss distributions}
+\subsubsection*{1. Analytical method}
+Model $f$ and $\vect{X}_{t}, t=0,1, \ldots$ such that the conditional distribution of the \green{loss} $L_{t+1}$ or \green{linearized loss} $L_{t+1}^{\Delta}$ given $\mathcal{F}_{t}$ can be derived in closed form.
+
+\melon{Example}: $f$ is differentiable and $\vect{X}_{t}, t=0,1, \ldots$ are iid $\mathcal{N}_{d}(\vect{\mu}, \vect{\Sigma})$
+Then, for given $\vect{Z}_{t}$,
+$$
+\begin{aligned}
+L_{t+1}^{\Delta}&=-f_{t}\left(t, \vect{Z}_{t}\right)-\sum_{j=1}^{d} f_{z_j}\left(t, \vect{X}_{t}\right) X_{t+1}^{j} \\
+&=-c_{t}-\vect{b}_{t}^{\top} \vect{X}_{t+1} \sim \N\left(-c_{t}-\vect{b}_{t}^{\top} \vect{\mu}, \vect{b}_{t}^{\top} \vect{\Sigma} \vect{b}_{t}\right)
+\end{aligned}
+$$
+
+\melon{Advantage}: easy to implement
+
+\melon{Drawback}: Normal distributions are not always a good description of financial data. $\vect{X}_{t+1}$ is often asymmetric and leptokurtic (the pdf has a thinner body, heavier tails than a normal pdf)
+
+\subsubsection*{2. Historical simulation}
+Approximate the distribution of $L_{t+1}$ by the \green{edf (empirical distribution function)}
+$
+\hat{F}_{L}(x)=\frac{1}{n} \sum_{i=1}^{n} 1_{\left\{l_{t-i+1} \leq x\right\}},
+$
+where $l_{t-n+1}, \ldots, l_{t}$ are the last $n$ realized losses.
+
+\melon{Advantages}: easy to implement, no modeling assumptions, no estimation required
+
+\melon{Drawbacks}: Sufficient data for all risk-factors required, makes predictions based on past data.
+
+\subsubsection*{3. Monte Carlo simulation}
+Build a model for $L_{t+1}$ and simulate from it.
+
+Use simulations $l_{1}, \ldots, l_{n}$ to generate the \green{simulated distribution function}
+$
+\hat{F}_{L}(x)=\frac{1}{n} \sum_{i=1}^{n} 1_{\left\{l_{i} \leq x\right\}}
+$
+
+\melon{Advantages}: quite general, doesn't need many assumptions
+
+\melon{Drawbacks}:  One needs a good model for $L_{t+1}$.  It can be computationally costly to simulate a high-dimensional vector of risk factors.
+
+So called \green{economic scenario generators} (i.e. economically motivated dynamic models for the evolution and interaction of risk factors) used in insurance also fall into the category of Monte Carlo methods.
+
+
+
+
+
+
+\pink{2.3 Risk measurement}
+\subsection*{Risk measurement}
+\begin{itemize}[leftmargin=*]
+    \item A \green{risk measure} assigns to a random loss $L$ a real number $\rho(L)$ measuring the \green{riskiness} of $L$
+    \item In a regulatory framework, the number is often interpreted as the amount of \melon{buffer capital} needed to compensate for the risk of $L$
+    \item Some reasons for using risk measures are:
+    \begin{itemize}[leftmargin=*]
+    \item To determine the amount of capital to hold as a buffer against unexpected future losses on a portfolio (in order to satisfy a regulator/manager concerned with the institution's solvency).
+    \item As a tool for limiting the amount of risk of a business unit (e.g. by requiring that the daily $95 \%$ Value-at-Risk of a trader's position should not exceed a given bound).
+    \item To determine the riskiness (and thus \melon{fair premium}) of an insurance contract.
+    \end{itemize}
+\end{itemize}
+
+
+
+
+
+\subsection*{Different approaches to risk measurement}
+\subsubsection*{1. Notional-amount approach}
+\begin{itemize}[leftmargin=*]
+    \item \green{risk of a portfolio} = \green{sum of the notional values} of the securities times their \green{riskiness factor}
+    \item oldest approach
+    \item standardized approaches of Basel II (e.g. OpRisk) still use it
+    \item \melon{Advantages}: simplicity
+    \item \melon{Drawbacks}:
+    \begin{itemize}[leftmargin=*]
+    \item No differentiation between long and short positions, and no netting: the risk of a long position in
+corporate bonds hedged by an offsetting position in credit default swaps is counted as twice the risk
+of the unhedged bond position.
+    \item No diversification benefits: risk of a portfolio of loans to many companies = risk of a portfolio
+where the whole amount is lent to a single company.
+    \item Problems for portfolios of derivatives: notional amount of the underlying can widely differ from the
+economic value of the derivative position.
+\end{itemize}
+\end{itemize}
+
+\subsubsection*{2. Scenario-based risk measures}
+\begin{itemize}[leftmargin=*]
+    \item Typically considered in \green{stress testing}
+    \item One considers possible future risk-factor changes (scenarios; e.g. a $20 \%$ drop in a market index)
+    \item The \green{stressed loss} corresponding to a collection $x_{1}, \ldots, x_{n}$ of risk factor changes with corresponding weights $w_{1}, \ldots, w_{n}$ is
+$
+\displaystyle \max _{1 \leq i \leq n} w_{i} L\left(x_{i}\right)
+$
+    \item Mathematical Interpretation
+    \begin{itemize}[leftmargin=*]
+        \item Assume $L(0)=0$ (OK for small $\Delta t)$ and $w_{i} \in(0,1]$
+        \item $w_{i} L\left(x_{i}\right)=w_{i} L\left(x_{i}\right)+\left(1-w_{i}\right) L(0)=\mathbb{E}^{\mathbb{P}_{i}} L(\vect{X})$, where $\vect{X} \sim \mathbb{P}_{i}=w_{i} \delta_{x_{i}}+\left(1-w_{i}\right) \delta_{0}$ $\left(\delta_{x}\right.$ Dirac measure at $\left.x\right)$ is a probability measure on $\mathbb{R}^{d}$
+        \item Then
+$
+\displaystyle \max _{1 \leq i \leq n} w_{i} L\left(x_{i}\right)
+$
+
+$=\max \left\{\mathbb{E}^{\mathbb{P}} L(\vect{X}): \vect{X} \sim \mathbb{P} \in\left\{\mathbb{P}_{1}, \ldots, \mathbb{P}_{n}\right\}\right\}$
+can be seen as a \green{worst case expected loss} \melon{(related to coherent risk measures)}
+    \end{itemize}
+    \item \melon{Advantages}: Easy to implement; Useful complementary information to risk measures based on loss distributions.
+    \item \melon{Drawbacks}:  how does one determine the scenarios and the weights?
+\end{itemize}
+
+
+\subsubsection*{3. Risk measures based on loss distributions}
+Many modern risk measures are characteristics of the underlying (conditional or unconditional) loss dist over some predetermined time horizon $\Delta t$
+
+\melon{Advantage}: 
+\begin{itemize}[leftmargin=*]
+    \item The concept of a loss distribution makes sense on all levels (from single portfolios to the overall position of a financial institution).
+    \item If estimated properly, loss distributions reflect netting and diversification effects.
+\end{itemize}
+
+\melon{Drawbacks}:
+\begin{itemize}[leftmargin=*]
+    \item Estimates of loss distributions are typically based on past data
+    \item It is difficult to estimate loss distributions accurately (especially for large portfolios). $\rightsquigarrow$ Risk measures should be complemented by information from scenarios (forward-looking)
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection*{Quantiles}
+Let $L$ be a RV with cdf $F_{L}(x)=\mathbb{P}[L \leq x]$ (\melon{non-decreasing and right-continuous}). Let $\alpha \in(0,1)$.
+
+(1) \green{$\alpha$-quantile} is any $q \in \mathbb{R}$ s.t. $\mathbb{P}[L<q] \leq \alpha \leq \mathbb{P}[L \leq q]$
+
+(2) \green{Left- $\alpha$-quantile}: $q_{L}^{-}(\alpha)=\sup \left\{x \in \mathbb{R}: F_{L}(x)<\alpha\right\}=\min \left\{x \in \mathbb{R}: F_{L}(x) \geq \alpha\right\}$
+
+(3) \green{Right- $\alpha$-quantile}: $q_{L}^{+}(\alpha)=\sup \left\{x \in \mathbb{R}: F_{L}(x) \leq \alpha\right\}=\inf \left\{x \in \mathbb{R}: F_{L}(x)>\alpha\right\}$
+
+\begin{itemize}[leftmargin=*]
+    \item $q_{L}^{-}(\alpha)$ and $q_{L}^{+}(\alpha)$ are both $\alpha$-quantiles
+    \item $q_{L}^{-}(\alpha)$ is non-decreasing and left-continuous in $\alpha$
+    \item $q_{L}^{+}(\alpha)$ is non-decreasing \& right-continuous in $\alpha$
+\end{itemize}
+
+Let $\alpha \mapsto q(\alpha)$ be an arbitrary quantile-function of $L$, and fix $x \in \mathbb{R}$.
+\begin{itemize}[leftmargin=*]
+    \item Then $\alpha<F_{L}(x) \Rightarrow q(\alpha) \leq x$,$q(\alpha) \leq x \Rightarrow \alpha \leq F_{L}(x)$
+    \item So $\left\{\alpha \in(0,1): \alpha<F_{L}(x)\right\} \subseteq\{\alpha \in(0,1): q(\alpha) \leq x\} \subseteq\left\{\alpha \in(0,1): \alpha \leq F_{L}(x)\right\}$ and
+    \item $\eta[\alpha \in(0,1): q(\alpha) \leq x]=F_{L}(x)$, where $\eta$ is the Lebesgue measure on $(0,1)$
+\end{itemize}
+This shows that $\alpha \mapsto q(\alpha)$ has the same distribution under $\eta$ as $L$ under $\mathbb{P}$.
+
+
+
+
+
+\subsection*{Value-at-Risk and Expected Shortfall}
+\green{Value-at-Risk at level $\alpha$}: $\operatorname{VaR}_{\alpha}(L)=q_{L}^{-}(\alpha)=\min \{x \in \mathbb{R}: \mathbb{P}[L-x \leq 0] \geq \alpha\}$
+
+\green{Expected Shortfall at level $\alpha$}: $\mathrm{ES}_{\alpha}(L)=\mathbb{E}\left[L \mid L \geq \operatorname{VaR}_{\alpha}(L)\right]$
+\begin{itemize}[leftmargin=*]
+    \item $\operatorname{VaR}_{\alpha}$ is defined on $L^{0}(\mathbb{P})$ (all random variables)
+    \item $\operatorname{VaR}_{\alpha}(L)$ is non-decreasing in $\alpha$
+    \item $\operatorname{VaR}_{\alpha}(L) \geq \operatorname{VaR}_{\alpha}\left(L^{\prime}\right)$ if $L \geq L^{\prime}$ $\mathbb{P}$-almost surely, that is, $\mathbb{P}\left[L \geq L^{\prime}\right]=\mathbb{P}\left[\left\{\omega \in \Omega: L(\omega) \geq L^{\prime}(\omega)\right\}\right]=1$
+    \item \red{Linearity}: $\operatorname{VaR}_{\alpha}(a+b L)=a+b \operatorname{VaR}_{\alpha}(L)$ for $a \in \mathbb{R}$ and $b \in(0, \infty)$
+    \item $\mathrm{ES}_{\alpha}$ is defined on $L^{1}(\mathbb{P})$
+    \item $\mathrm{ES}_{\alpha}(L)$ is non-decreasing in $\alpha$
+    \item \red{Linearity}: $\mathrm{ES}_{\alpha}(a+b L)=a+b \mathrm{ES}_{\alpha}(L)$ for $a \in \mathbb{R}$ and $b \in(0, \infty)$
+    \item $\operatorname{VaR}_{\alpha}(L) \leq \operatorname{ES}_{\alpha}(L)$
+    \item $\operatorname{VaR}_{\alpha}$ does not see what happens in the tail (\green{frequency measure})
+    \item $\mathrm{ES}_{\alpha}$ looks into the tail (\green{severity measure}), but is more difficult to estimate and backtest than $\operatorname{VaR}_{\alpha}$ (larger sample size required)
+    \item $\operatorname{VaR}$ may give \red{incentives to concentrate risk}!
+\end{itemize}
+
+
+
+
+
+
+
+
+
+\subsubsection*{4. Coherent risk measures}
+Let $\mathcal{L}$ be a vector space of random variables $L$ on a probability space $(\Omega, \mathcal{F}, \mathbb{P})$ (modeling uncertain losses); e.g. $\mathcal{L}=L^{p}(\mathbb{P})$ for some $p \in\{0\} \cup[1, \infty]$.
+
+A mapping $\rho: \mathcal{L} \rightarrow \mathbb{R}$ is a \green{coherent risk measure} if it satifies
+
+$(\mathrm{M})$ Monotonicity: $\rho\left(L_{1}\right) \leq \rho\left(L_{2}\right)$ for $L_{1} \leq L_{2}$ $\mathbb{P}$-almost surely (i.e. $\mathbb{P}\left[L_{1} \leq L_{2}\right]=1$)
+
+$(\mathrm{T})$ Translation property: $\rho(L+m)=\rho(L)+m$ for $m \in \mathbb{R}$
+
+$(\mathrm{S})$ Subadditivity: $\rho\left(L_{1}+L_{2}\right) \leq \rho\left(L_{1}\right)+\rho\left(L_{2}\right)$
+
+$(\mathrm{P})$ Positive homogeneity: $\rho(\lambda L)=\lambda \rho(L)$ for $\lambda \in \mathbb{R}_{+}$
+
+and a \green{convex risk measure} if it satisfies $(\mathrm{M}),(\mathrm{T})$ together with
+
+$(\mathrm{C})$ Convexity: $\rho\left(\lambda L_{1}+(1-\lambda) L_{2}\right) \leq \lambda \rho\left(L_{1}\right)+(1-\lambda) \rho\left(L_{2}\right)$ for all $0<\lambda<1$
+
+Note that under $(\mathrm{P})$, one has $(\mathrm{S}) \Leftrightarrow(\mathrm{C})$. So every \red{coherent risk measure is also convex}.
+
+Sometimes risk measures are defined for the \green{P\&L} - $L$ instead of the \green{loss} $L$.
+
+$\operatorname{VaR}_{\alpha}$ and $\mathrm{ES}_{\alpha}$ are distribution-based (only depend on the distribution of $L$ under $\mathbb{P}$).
+
+$\operatorname{VaR}_{\alpha}$ is distribution-based and satisfies $(\mathrm{M}),(\mathrm{T}),(\mathrm{P})$. On the other hand, it does not satisfy $(\mathrm{S})$, and as a consequence, also not $(\mathrm{C})$
+
+
+
+
+
+
+
+\subsection*{Worst Expected Losses}
+Let $\mathcal{P}$ be an arbitrary non-empty set of probability measures $\mathbb{Q} \ll \mathbb{P}$. Then $
+\displaystyle \rho_{\mathcal{P}}(L)=\sup _{\mathbb{Q} \in \mathcal{P}} \mathbb{E}^{\mathbb{Q}} L
+$ is a coherent risk measure.
+
+Can be regard as a generalized form of the \green{stress test risk measures}.
+
+Note that, in general, $\rho_{\mathcal{P}}$ is not a functional of the distribution of $L$ under $\mathbb{P}$.
+
+
+\begin{itemize}[leftmargin=*]
+    \item $\mathrm{VaR}_{\alpha}$ and $\mathrm{ES}_{\alpha}$ are distribution-based (only depend on the distribution of $L$ under $\mathbb{P}$
+    \item $\operatorname{VaR}_{\alpha}$ satisfies $(\mathrm{M}),(\mathrm{T}),(\mathrm{P})$ but does not satisfy $(\mathrm{S})$, and as a consequence, also not $(\mathrm{C})$.
+\end{itemize}
+
+
+
+
+\subsection*{Average-Value-at-Risk}
+\begin{itemize}[leftmargin=*]
+    \item For $L \in L^{1}(\mathbb{P})$, define
+$
+\operatorname{AVaR}_{\alpha}(L):=\frac{1}{1-\alpha} \int_{\alpha}^{1} \operatorname{VaR}_{u}(L) d u=\frac{1}{1-\alpha} \int_{\alpha}^{1} q_{L}^{-}(u) d u
+$.
+
+    \item Like $\operatorname{VaR}_{\alpha}$ and $\mathrm{ES}_{\alpha}, \mathrm{AVaR}_{\alpha}$ is \green{distribution-based} and satisfies $(\mathrm{M}),(\mathrm{T}),(\mathrm{P})$.
+
+    \item If $\mathbb{P}\left[L \geq q_{L}^{-}(\alpha)\right]=1-\alpha$ (in particular, if $F_{L}$ is continuous), then $\operatorname{AVaR}_{\alpha}(L)=\operatorname{ES}_{\alpha}(L)$.
+    
+    \melon{Proof}: Under the Lebesgue measure $\eta, q_{L}^{-}$is distributed like $L$ under $\mathbb{P}$ If $\mathbb{P}\left[L \geq q_{L}^{-}(\alpha)\right]=1-\alpha$, then, since $\mathrm{ES}_{\alpha}$ is distribution-based,
+$$
+\mathrm{ES}_{\alpha}[L]=\mathrm{ES}_{\alpha}^{\eta}\left[q_{L}^{-}\right]=\frac{1}{1-\alpha} \int_{\alpha}^{1} q_{L}^{-}(u) d u
+$$
+\end{itemize}
+
+\navy{Thm}: Let $L \in L^{1}(\mathbb{P})$ and $\alpha \in(0,1)$. Then
+$$
+\begin{aligned}
+&\operatorname{AVaR}_{\alpha}(L) =\min _{s \in \mathbb{R}}\left(\frac{\mathbb{E}(L-s)^{+}}{1-\alpha}+s\right)  && \text{(1)}\\
+=&\max _{\mathbb{Q} \in \mathcal{P}_{\alpha}} \mathbb{E}^{\mathbb{Q}} L \quad \text {for} \quad \mathcal{P}_{\alpha}=\left\{\mathbb{Q}:\left\|\frac{d \mathbb{Q}}{d \mathbb{P}}\right\|_{\infty} \leq \frac{1}{1-\alpha}\right\} && \text{(2)}
+\end{aligned}
+$$
+
+Moreover, the min in (1) is attained by any $\alpha$-quantile $q$ of $L$, and the max in (2) by any $\mathbb{Q}$ with
+
+$$
+\frac{d \mathbb{Q}}{d \mathbb{P}}=\frac{1}{1-\alpha} 1_{\{L>q\}}+\kappa 1_{\{L=q\}} .
+$$
+
+for an $\alpha$-quantile $q$ and $\kappa \geq 0$ so that $\mathbb{Q}$ is a probability measure.
+\begin{itemize}[leftmargin=*]
+    \item The right side of (1) is called \green{CVaR (conditional value at risk)}
+    \item (2) is a \green{worst expected loss} (or robust representation). It shows that $\mathrm{AVaR}_{\alpha}$ is \red{coherent}.
+\end{itemize}
+
+\navy{Proof}: Any quantile function $q$ of $L$ has the same distribution under $\eta$ as $L$ under $\mathbb{P}$. So
+$$
+\begin{aligned}
+& \operatorname{AVaR}_{\alpha}(L)=\frac{1}{1-\alpha} \int_{\alpha}^{1} q(u) d u \\
+=&\frac{1}{1-\alpha} \int_{\alpha}^{1}(q(u)-q(\alpha)) d u+q(\alpha) \\
+=& \frac{\mathbb{E}^{\eta}(q-q(\alpha))^{+}}{1-\alpha}+q(\alpha)=\frac{\mathbb{E}^{\mathbb{P}}(L-q(\alpha))^{+}}{1-\alpha}+q(\alpha)
+\end{aligned}
+$$
+For $\mathbb{Q}$ with $\frac{d \mathbb{Q}}{d \mathbb{P}} \leq \frac{1}{1-\alpha}$ and $s \in \mathbb{R}$
+$$
+\mathbb{E}^{\mathbb{Q}} L=\mathbb{E}^{\mathbb{Q}}(L-s)+s \leq \frac{\mathbb{E}^{\mathbb{P}}(L-s)^{+}}{1-\alpha}+s
+$$
+
+On the other hand, for any $\alpha$-quantile $q_{\alpha}$, if
+$$
+\frac{d \mathbb{Q}}{d \mathbb{P}}=\frac{1}{1-\alpha} 1_{\left\{L>q_{\alpha}\right\}}+\kappa 1_{\left\{L=q_{\alpha}\right\}},
+$$
+then
+$
+\mathbb{E}^{\mathbb{Q}} L=\mathbb{E}^{\mathbb{Q}}\left(L-q_{\alpha}\right)+q_{\alpha}=\frac{\mathbb{E}^{\mathbb{P}}\left(L-q_{\alpha}\right)^{+}}{1-\alpha}+q_{\alpha}
+$
+
+
+
+
+
+
+\subsection*{ES and AVaR are almost the same}
+Let $L \in L^{1}(\mathbb{P})$ and $\alpha \in(0,1)$. We defined
+\begin{enumerate}[leftmargin=*]
+    \item \green{Expected Shortfall}: $\operatorname{ES}_{\alpha}(L):=\mathbb{E}\left[L \mid L \geq \operatorname{VaR}_{\alpha}(L)\right]$
+    \item \green{Average-VaR}: $\operatorname{AVaR}_{\alpha}(L):=\frac{1}{1-\alpha} \int_{\alpha}^{1} \operatorname{VaR}_{u}(L) d u$
+\end{enumerate}
+
+\begin{itemize}[leftmargin=*]
+    \item $\operatorname{ES}_{\alpha}(L) \leq \operatorname{AVaR}_{\alpha}(L)$
+    \item $\mathrm{ES}_{\alpha}(L)=\operatorname{AVaR}_{\alpha}(L)$ \melon{if $L$ has a continuous cdf}
+\end{itemize}
+
+\green{Expected Shortall, Average VaR, Conditional VaR or Tail VaR} are the same thing. 
+
+
+
+
+
+\subsection*{VaR and AVaR for comonotonic random variables}
+Two RVs $L_{1}$ and $L_{2}$ on a probability space $(\Omega, \mathcal{F}, \mathbb{P})$ are \green{comonotonic} if $L_{1}=l_{1}(Z)$ and $L_{2}=l_{2}(Z)$ for non-decreasing functions $l_{1}, l_{2}$ and a random variable $Z$ (\green{perfect dependence})
+
+If $L_{1}$ and $L_{2}$ are comonotonic, then $\operatorname{VaR}_{\alpha}\left(L_{1}+L_{2}\right)=\operatorname{VaR}_{\alpha}\left(L_{1}\right)+\operatorname{VaR}_{\alpha}\left(L_{2}\right)$
+
+\navy{Proof}: $L_{i}$ has the same distribution as $l_{i}\left(q_{Z}^{-}\right)$, and
+
+$L_{1}+L_{2}$ has the same distribution as $l_{1}\left(q_{Z}^{-}\right)+l_{2}\left(q_{Z}^{-}\right)$
+
+$\Rightarrow q_{L_{i}}^{-}$is the left-continuous version of $l_{i}\left(q_{Z}^{-}\right)$, and
+
+$q_{L_{1}+L_{2}}^{-}$is the left-continuous version of $l_{1}\left(q_{Z}^{-}\right)+l_{2}\left(q_{Z}^{-}\right)$
+$\Rightarrow q_{L_{1}+L_{2}}^{-}(\alpha)=q_{L_{1}}^{-}(\alpha)+q_{L_{2}}^{-}(\alpha)$ for all $\alpha \in(0,1)$.
+
+
+and as a consequence, $\operatorname{AVaR}_{\alpha}\left(L_{1}+L_{2}\right)=\operatorname{AVaR}_{\alpha}\left(L_{1}\right)+\operatorname{AVaR}_{\alpha}\left(L_{2}\right)$
+
+\navy{Proof}:
+$$
+\begin{aligned}
+&\operatorname{AVaR}_{\alpha}\left(L_{1}+L_{2}\right)=\frac{1}{1-\alpha} \int_{\alpha}^{1} \operatorname{VaR}_{u}\left(L_{1}+L_{2}\right) d u \\
+=& \frac{1}{1-\alpha} \int_{\alpha}^{1} \operatorname{VaR}_{u}\left(L_{1}\right) d u+\frac{1}{1-\alpha} \int_{\alpha}^{1} \operatorname{VaR}_{u}\left(L_{2}\right) d u \\
+=&\operatorname{AVaR}_{\alpha}\left(L_{1}\right)+\operatorname{AVaR}_{\alpha}\left(L_{2}\right)
+\end{aligned}
+$$
+
+
+
+
+\subsection*{Entropic Risk Measure}
+Let $L$ be a RV and $\lambda>0$ such that $\mathbb{E}\left[e^{\lambda L}\right]<\infty$
+$$
+\operatorname{Ent}_{\lambda}(L):=\frac{1}{\lambda} \log \mathbb{E}\left[e^{\lambda L}\right]
+$$
+\begin{itemize}[leftmargin=*]
+    \item Clearly, Ent ${ }_{\lambda}$ is distribution-based and satisfies $(M)$ and $(T)$, but not $(P)$
+    \item One has
+$
+\operatorname{Ent}_{\lambda}(L)=\max _{\mathbb{Q} \ll \mathbb{P}}\left(\mathbb{E}^{\mathbb{Q}}[L]-\frac{1}{\lambda} H(\mathbb{Q}, \mathbb{P})\right),
+$  for the relative entropy $H(\mathbb{Q}, \mathbb{P}):=\mathbb{E}^{\mathbb{Q}} \log \left(\frac{d \mathbb{Q}}{d \mathbb{P}}\right)$, and the max is attained for
+$
+\frac{d \mathbb{Q}}{d \mathbb{P}}=\frac{e^{\lambda L}}{\mathbb{E}\left[e^{\lambda L}\right]}
+$
+
+This shows that $\operatorname{Ent}_{\lambda}$ is \red{convex}!
+\end{itemize}
+
+\navy{Proof}: Define $\mathbb{Q}^{L}$ by
+$
+\frac{d \mathbb{Q}^{L}}{d \mathbb{P}}:=\frac{e^{\lambda L}}{\mathbb{E}\left[e^{\lambda L}\right]} .
+$
+
+Since $x \mapsto x \log x$ is strictly convex, one obtains from Jensen's inequality,
+$$
+\begin{aligned}
+&\mathbb{E}^{\mathbb{Q}} \log \frac{d \mathbb{Q}}{d \mathbb{P}}=\mathbb{E}^{\mathbb{P}}\left(\frac{d \mathbb{Q}}{d \mathbb{P}} \log \frac{d \mathbb{Q}}{d \mathbb{P}}\right) \\
+\geq& \mathbb{E}^{\mathbb{P}}\left(\frac{d \mathbb{Q}}{d \mathbb{P}}\right) \log \mathbb{E}^{\mathbb{P}}\left(\frac{d \mathbb{Q}}{d \mathbb{P}}\right)=1 \times \log (1)=0
+\end{aligned}
+$$
+
+for all $\mathbb{Q} \ll \mathbb{P}$ with equality iff $\mathbb{Q}=\mathbb{P}$. Therefore,
+$
+H(\mathbb{Q}, \mathbb{P})=\mathbb{E}^{\mathbb{Q}} \log \frac{d \mathbb{Q}}{d \mathbb{P}}=\mathbb{E}^{\mathbb{Q}} \log \frac{d \mathbb{Q}}{d \mathbb{Q}^{L}}+\mathbb{E}^{\mathbb{Q}} \log \frac{d \mathbb{Q}^{L}}{d \mathbb{P}}
+\geq \mathbb{E}^{\mathbb{Q}} \log \frac{d \mathbb{Q}^{L}}{d \mathbb{P}}=\lambda \mathbb{E}^{\mathbb{Q}}[L]-\log \mathbb{E}^{\mathbb{P}}\left[e^{\lambda L}\right]
+$
+with equality iff $\mathbb{Q}=\mathbb{Q}^{L}$. Hence,
+$$
+\frac{1}{\lambda} \log \mathbb{E}^{\mathbb{P}}\left[e^{\lambda L}\right]=\max _{\mathbb{Q} \ll \mathbb{P}}\left(\mathbb{E}^{\mathbb{Q}}[L]-\frac{1}{\lambda} H(\mathbb{Q}, \mathbb{P})\right)
+$$

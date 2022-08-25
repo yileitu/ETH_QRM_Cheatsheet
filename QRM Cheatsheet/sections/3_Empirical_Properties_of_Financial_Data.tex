@@ -1,0 +1,192 @@
+\section{Empirical Properties of Financial Data}
+\pink{3.1 Stylized facts of financial return series}
+\begin{itemize}[leftmargin=*]
+    \item \green{Stylized facts} are a collection of empirical observations and inferences drawn of such, which apply to many time series of risk-factor changes (e.g. log-returns of equities, indices, exchange rates, commodity prices).
+    \item Stylized facts often apply to daily log-returns (also to intra-daily, weekly, monthly). Tick-by-tick (high-frequency) data have their own stylized facts (not discussed here) and annual return (low-frequency) data are more difficult to investigate (data sparsity; non-stationarity).
+    \item Consider discrete-time risk-factor changes $X_{t}=Z_{t}-Z_{t-1}$, e.g. $Z_{t}=\log S_{t}$, in which case
+$$
+X_{t}=\log \left(S_{t} / S_{t-1}\right) \approx S_{t} / S_{t-1}-1=\left(S_{t}-S_{t-1}\right) / S_{t-1}
+$$
+
+the former is called \green{(log-)return}, the latter \green{(classical) return}.
+\end{itemize}
+
+
+
+
+
+\subsection*{Autocorrelation function (ACF)}
+$\rho_{h}=\operatorname{corr}\left(X_{0}, X_{h}\right)$ for $h \in \mathbb{Z}$
+
+Non-zero ACF at lag 1 would imply a tendency for a return to be followed by a return of equal sign; Not the case $\rightsquigarrow$ sign of the next return cannot be predicted.
+
+iid data would imply $\rho_{X}(h)=\rho_{|X|}(h)=1_{\{h=0\}}$. Not the case $\rightsquigarrow$ $\left(X_{t}\right)$ is not a random walk
+
+
+
+
+
+\subsection*{Testing univariate distributions}
+\begin{itemize}[leftmargin=*]
+    \item Let $x_{1}, \ldots, x_{n}$ be realizations of iid random variables $X_{1}, \ldots, X_{n}$ with cdf $F$
+    \item \green{Empirical distribution function (edf)}
+$$
+\hat{F}_{n}(x):=\frac{1}{n} \sum_{i=1}^{n} 1_{\left\{x_{i} \leq x\right\}}
+$$
+    \item \green{Law of Large Numbers}:
+$$
+\text { For all } x \in \mathbb{R}, \quad \hat{F}_{n}(x) \rightarrow F(x) \quad \mathbb{P} \text {-almost surely }
+$$
+    \item \green{Glivenko-Cantelli Theorem}:
+$$
+\sup _{x \in \mathbb{R}}\left|\hat{F}_{n}(x)-F(x)\right| \rightarrow 0 \quad \mathbb{P} \text {-almost surely }
+$$
+\end{itemize}
+
+
+
+
+
+\subsubsection*{Standard statistical tests for general cdf $F$}
+For \red{general univariate} cdf $F$:
+\begin{itemize}[leftmargin=*]
+    \item \melon{Kolmogorov-Smirnov test}: $\quad T_{n}=\sup _{x \in \mathbb{R}}\left|\hat{F}_{n}(x)-F(x)\right|$
+    \item \melon{Cramér-von Mises test}: $T_{n}=n \int_{\mathbb{R}}\left[\hat{F}_{n}(x)-F(x)\right]^{2} d F(x)$
+    \item \melon{Anderson-Darling test}:
+$$
+T_{n}=n \int_{\mathbb{R}} \frac{\left[\hat{F}_{n}(x)-F(x)\right]^{2}}{F(x)(1-F(x))} d F(x)
+$$
+\end{itemize}
+For \red{normal} $F \sim \N\left(\mu, \sigma^{2}\right)$:
+
+\melon{Jarque-Bera test}: Let $\hat{\beta}_{n}$ and $\hat{\kappa}_{n}$ be sample versions of the 
+(1) \green{skewness}: $\beta=\frac{\mathbb{E}(X-\mu)^{3}}{\sigma^{3}} \quad$ and 
+
+(2) \green{kurtosis}: $\kappa=\frac{\mathbb{E}(X-\mu)^{4}}{\sigma^{4}}$
+
+
+Then under the null-hypothesis, for large $n$,
+$\frac{n}{6}\left(\hat{\beta}_{n}^{2}+\frac{\left(\hat{\kappa}_{n}-3\right)^{2}}{4}\right) \sim \chi_{2}^{2} \quad$
+
+Note:
+\begin{itemize}[leftmargin=*]
+    \item Financial data is not symmetric, but neg-skewed.
+    \item For normal dist, skewness = 0, kurtosis = 3
+\end{itemize}
+
+
+
+
+
+\subsubsection*{Graphical tests}
+Denote by $x_{(1)} \leq \ldots \leq x_{(n)}$ the \green{ordered sample} and note that
+$$
+\hat{F}_{n}(x):=\frac{1}{n} \sum_{i=1}^{n} 1_{\left\{x_{i} \leq x\right\}}=\frac{1}{n} \sum_{i=1}^{n} 1_{\left\{x_{(i)} \leq x\right\}}
+$$
+\begin{itemize}[leftmargin=*]
+    \item \green{P-P plot}
+$$
+\begin{aligned}
+    &\left(p_{i}, F\left(x_{(i)}\right)\right), \quad i=1, \ldots, n, \\
+    \text { where } \quad &p_{i}=\frac{i-1 / 2}{n} \approx \frac{i}{n} \approx \hat{F}_{n}\left(x_{(i)}\right)
+\end{aligned}
+$$
+
+If $\hat{F}_{n} \approx F$, the points are close to the diagonal.
+    \item \green{Q-Q plot}
+$$
+\begin{aligned}
+    &\left(q\left(p_{i}\right), x_{(i)}\right), \quad i=1, \ldots, n, \\
+    \quad \text { where } \quad &u \mapsto q(u) \text { is a quantile function of } F
+\end{aligned}
+$$
+
+Again, if $\hat{F}_{n} \approx F$, the points are close to the diag.
+    \item Typically, \red{tail differences are better visible in a Q-Q plot} than in a P-P plot. So, Q-Q plot are more widely used.
+\end{itemize}
+
+
+
+\subsection*{Q-Q Plot}
+    \begin{itemize}[leftmargin=*]
+    \item If $\hat{F}_{n} \approx N(0,1)$, points are close to the diagonal
+    \item If $\hat{F}_{n} \approx N\left(\mu, \sigma^{2}\right)$, points are close to the line $y=\mu+\sigma x$
+    \item S-shape hints at heavier tails than those of a normal distribution
+    \item Daily returns typically have kurtosis $\kappa>3$
+    
+\green{leptokurtic}: narrower center, heavier tails than $N\left(\mu, \sigma^{2}\right)$, for which $\kappa=3$
+    \item They typically have power-like tails
+\end{itemize}
+
+
+
+
+\subsection*{Longer time-interval return series}
+\begin{itemize}[leftmargin=*]
+    \item By going from daily to weekly, monthly, quarterly and yearly data, these effects become less pronounced (returns look more iid, less heavy-tailed)
+    \item The (\red{non-overlapping)} $h$-period log-return at $t \in\{h, 2 h, \ldots, n h\}$ is
+$$
+\begin{aligned}
+    X_{t}^{(h)}&=\log \left(\frac{S_{t}}{S_{t-h}}\right)=\log \left(\frac{S_{t}}{S_{t-1}} \frac{S_{t-1}}{S_{t-2}} \cdots \frac{S_{t-h+1}}{S_{t-h}}\right) \\
+    &=\sum_{i=0}^{h-1} X_{t-i}
+\end{aligned}
+$$
+
+A \green{Central Limit Theorem (CLT)} effect takes place (less heavy-tailed, less evidence of serial correlation)
+    \item Problem: for larger $h$, less data is available
+    \item Possible remedy: Consider \green{overlapping returns}
+$
+\left\{X_{t}^{(h)}: t \in\{h, h+k, h+2 k, \ldots, h+n k\}\right\} \text { for } 1 \leq k<h
+$
+$\leadsto$ more data, but \green{serially dependent} now
+\end{itemize}
+
+
+
+
+
+
+
+\subsection*{Summary: Stylized Facts about Univariate Financial Return Series}
+\begin{enumerate}[label = (U\arabic*), leftmargin=*]
+    \item Return series are not iid although they show little serial correlation
+    \item Series of absolute or squared returns show profound serial correlation
+    \item Conditional expected returns are close to zero
+    \item Volatility (conditional standard deviation) appears to vary over time
+    \item Extreme returns appear in clusters
+    \item Return series are leptokurtic or heavy-tailed (power-like tail)
+\end{enumerate}
+
+
+
+
+\pink{3.2 Multivariate stylized facts}
+\subsection*{Correlation between different assets}
+Consider $d$-dimensional vectors of log-return data $X_{1}, \ldots, X_{n}$
+\begin{itemize}[leftmargin=*]
+    \item By (U1), the returns of $\operatorname{stock} A$ at times $t$ and $t+h$ show little correlation
+    \item The same applies to the returns of $\operatorname{stock} A$ at time $t$ and stock $B$ at time $t+h$
+    \item Returns of two different stocks on the same day may be correlated due to common underlying factors (\green{contemporaneous dependence})
+    \item Contemporaneous correlations of returns vary over time (difficult to detect whether changes are continuous or constant within regimes)
+fit different models for changing correlation, then make a formal comparison
+    \item Periods of high/low volatility are typically common to more than one stock $\rightsquigarrow$ Returns of large magnitude of stock $A$ may be followed by returns of large magnitude of stocks $A$ and $B$
+\end{itemize}
+
+
+
+\subsection*{Tail Dependence}
+\begin{itemize}[leftmargin=*]
+    \item The normal distribution cannot replicate \melon{tail dependence}
+    \item The $t_{3}$ distribution can produce \melon{joint large gains/losses} but in a \melon{symmetric way}.
+\end{itemize}
+
+
+
+\subsection*{Summary: Stylized Facts about Multivariate Financial Return Series}
+\begin{enumerate}[label = (M\arabic*), leftmargin=*]
+    \item Multivariate return series show little evidence of cross-correlation, except for contemporaneous returns (i.e. at the same time t)
+    \item Multivariate series of absolute returns show profound cross-correlation
+    \item Correlations between contemporaneous returns vary over time
+    \item Extreme returns in one series often coincide with extreme returns in several other series (e.g. tail dependence)
+
+\end{enumerate}

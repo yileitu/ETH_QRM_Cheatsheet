@@ -1,0 +1,1335 @@
+\section{Copulas and Dependence}
+\pink{7.1 Copulas}
+
+
+\subsection*{Advantages}
+\begin{itemize}[leftmargin=*]
+    \item Most natural in a static distributional context
+(no time dependence; apply, e.g. to residuals of an ARMA-GARCH model)
+    \item Copulas allow one to understand and study dependence independently of the margins (first part of Sklar's theorem)
+    \item Copulas allow for a bottom-up approach to multivariate model building by combining marginal distributions with a given dependence structure (second part of Sklar's theorem)
+\end{itemize}
+
+
+\subsection*{Definition (Copula)}
+A \green{copula} $C$ is a multivariate cdf with $\operatorname{Unif}(0,1)$ margins.
+
+\subsubsection*{Characterization}
+A mapping $C:[0,1]^{d} \rightarrow[0,1]$ is a copula \red{iff}
+\begin{enumerate}[label = (\arabic*), leftmargin=*]
+    \item $C$ is \green{grounded}, that is, $C\left(u_{1}, \ldots, u_{d}\right)=0$ if $u_{j}=0$ for at least one $j \in\{1, \ldots, d\}$
+    \item $C$ has \green{standard uniform} one-dim marginals, that is, $C\left(1, \ldots, 1, u_{j}, 1, \ldots, 1\right)=u_{j}$ for all $u_{j} \in[0,1]$ and $j \in\{1, \ldots, d\}$
+    \item $C$ is \green{$d$-monotone}, that is, for all $a, b \in[0,1]^{d}$ such that $a \leq b$,
+$
+\displaystyle \Delta_{(a, b]} C=\sum_{i \in\{0,1\}^{d}}(-1)^{\sum_{j=1}^{d} i_{j}} C\left(a_{1}^{i_{1}} b_{1}^{1-i_{1}}, \ldots, a_{d}^{i_{d}} b_{d}^{1-i_{d}}\right) \geq 0
+$
+\end{enumerate}
+
+\navy{Proof}: It is clear that a copula satisfies (1)-(3).
+
+On the other hand, if a function $C:[0,1]^{d} \rightarrow[0,1]$ satisfies (1)-(3), then for $a, b \in[0,1]^{d}$,
+$
+\begin{aligned}
+ & |C(b)-C(a)| \\
+\leq& \sum_{j=1}^{d}\left|C\left(b_{1}, \ldots, b_{j}, a_{j+1}, \ldots, a_{d}\right)-C\left(b_{1}, \ldots, b_{j-1}, a_{j}, \ldots, a_{d}\right)\right|\\
+\leq& \sum_{j=1}^{d}\left|C\left(1, \ldots, 1, b_{j}, 1, \ldots, 1\right)-C\left(1, \ldots, 1, a_{j}, 1, \ldots, 1\right)\right|\\
+=& \sum_{j=1}^{d}\left|b_{j}-a_{j}\right|
+\end{aligned}
+$
+
+First $\leq$ by $\Delta$-inequality; Second $\leq$ by $d$-monotonicity; Third $=$ by uniform marginals.
+
+In particular, $C$ is continuous, and hence, fulfills all the properties of a $d$-dimensional cdf with uniform marginals
+
+
+
+
+
+
+\subsection*{Lemma (Quantile transformation)}
+Let $q:(0,1) \rightarrow \mathbb{R}$ be a quantile func of a RV $X$ and $U \sim \operatorname{Unif}(0,1)$ 
+
+(that is, $\mathbb{P}[X<q(u)] \leq u \leq \mathbb{P}[X \leq q(u)]$ for all $u \in(0,1)$).
+
+Then $q(U)$ has the same dist as $X$.
+
+\navy{Proof}: $q(u) \leq x$ implies $u \leq F_{X}(x)$ and $u<F_{X}(x)$ implies $q(u) \leq x$. It follows that $\mathbb{P}[q(U) \leq x]=\mathbb{P}\left[U \leq F_{X}(x)\right]=F_{X}(x)$.
+
+
+
+
+
+
+\subsection*{Lemma (Probability transformation)}
+Let $X$ be a RV with continuous cdf $F_{X}$. Then $F_{X}(X) \sim \operatorname{Unif}(0,1)$.
+
+\navy{Proof}: Let $q$ be a quantile function of $X$. Since $F_{X}$ is continuous, one has
+$$
+\mathbb{P}\left[F_{X}(X) \leq u\right]=\mathbb{P}[X \leq q(u)]=F_{X}(q(u))=u
+$$
+for all $u \in(0,1)$.
+
+\melon{Note} that if $F_{X}$ \red{not continuous}, its image is contained in $[0,1] \backslash I$ for a non-empty interval $I$. So $F_{X}(X)$ cannot be $\operatorname{Unif}(0,1)$.
+
+
+
+
+\subsection*{Sklar’s Thm}
+\begin{enumerate}[label = (\arabic*), leftmargin=*]
+    \item For any $d$-dimensional cdf $F$ with marginals $F_{1}, \ldots, F_{d}$, there exists a copula $C$ such that
+$
+F\left(x_{1}, \ldots, x_{d}\right)=C\left(F_{1}\left(x_{1}\right), \ldots, F_{d}\left(x_{d}\right)\right), x \in \mathbb{R}^{d}
+$ \red{(*)}.
+
+If $F_{1}, \ldots, F_{d}$ are continuous, then $C$ is \red{unique} and given by
+$
+C\left(u_{1}, \ldots, u_{d}\right)=F\left(q_{1}\left(u_{1}\right), \ldots, q_{d}\left(u_{d}\right)\right), u \in(0,1)^{d}
+$ where $q_{1}, \ldots, q_{d}$ are (arbitrary) quantile functions of $F_{1}, \ldots F_{d}$.
+    \item Conversely, given a $d$-dimensional copula $C$ and one-dimensional cdf's $F_{1}, \ldots, F_{d}$, \red{(*)} defines a $d$-dim cdf with one-dim marginals $F_{1}, \ldots, F_{d}$.
+\end{enumerate}
+
+
+\subsubsection*{Proof of Sklar’s Thm}
+\begin{enumerate}[label = (\arabic*), leftmargin=*]
+    \item For simplicity, we assume for the proof of this direction that $F_{1}, \ldots, F_{d}$ are continuous. 
+    
+    Let $\X \sim F$ and set $U_{j}=F_{j}\left(X_{j}\right) \sim \operatorname{Unif}(0,1), j=1, \ldots, d$. So the cdf $C$ of $U$ is a copula. 
+    
+    Moreover, let $q_{1}, \ldots, q_{d}$ be quantile functions of $X_{1}, \ldots, X_{d}$.
+    
+    Then $X_{j} \stackrel{\text { a.s. }}{=} q_{j}\left(F_{j}\left(X_{j}\right)\right)=q_{j}\left(U_{j}\right)$, therefore,
+$$
+\begin{aligned}
+F(\x) &=\mathbb{P}\left[X_{j} \leq x_{j}, j=1, \ldots, d\right] \\
+&=\mathbb{P}\left[q_{j}\left(U_{j}\right) \leq x_{j}, j=1, \ldots, d\right] \\
+&=\mathbb{P}\left[U_{j} \leq F_{j}\left(x_{j}\right), j=1, \ldots, d\right] \\
+&=C\left(F_{1}\left(x_{1}\right), \ldots, F_{d}\left(x_{d}\right)\right), \quad \x \in \mathbb{R}^{d}
+\end{aligned}
+$$
+
+Hence, \red{(*)} holds.
+
+In addition, since $F_{j}$ is continuous, one has $F_{j}\left(q_{j}\left(u_{j}\right)\right)=u_{j}$ for all $u_{j} \in(0,1)$. So
+$$
+\begin{aligned}
+C\left(u_{1}, \ldots, u_{d}\right) &=C\left(F_{1}\left(q_{1}\left(u_{1}\right)\right), \ldots, F_{d}\left(q_{d}\left(u_{d}\right)\right)\right) \\
+&=F\left(q_{1}\left(u_{1}\right), \ldots, q_{d}\left(u_{d}\right)\right), \u \in(0,1)^{d}
+\end{aligned}
+$$
+    \item Let $U \sim C$, and let $q_{1}, \ldots, q_{d}$ be quantile functions of $F_{1}, \ldots, F_{d}$.
+    
+Define $\X=\left(q_{1}\left(U_{1}\right), \ldots, q_{d}\left(U_{d}\right)\right)$. Then
+$$
+\begin{aligned}
+\mathbb{P}[\X \leq \x] &=\mathbb{P}\left[q_{j}\left(U_{j}\right) \leq x_{j}, j=1, \ldots, d\right] \\
+&=\mathbb{P}\left[U_{j} \leq F_{j}\left(x_{j}\right), j=1, \ldots, d\right] \\
+&=C\left(F_{1}\left(x_{1}\right), \ldots, F_{d}\left(x_{d}\right)\right), \quad \x \in \mathbb{R}^{d}
+\end{aligned}
+$$
+
+So $F\left(x_{1}, \ldots, x_{d}\right)=C\left(F_{1}\left(x_{1}\right), \ldots, F_{d}\left(x_{d}\right)\right)$ is the cdf of $X$, and the marginals of $F$ are $F_{1}, \ldots, F_{d}$
+\end{enumerate}
+
+
+
+\subsubsection*{Example: Bivariate Bernoulli distribution}
+Let $\left(X_{1}, X_{2}\right)$ follow a bivariate Bernoulli distribution with $\mathbb{P}\left[X_{1}=k, X_{2}=l\right]=1 / 4, k, l \in\{0,1\}$. Then $\mathbb{P}\left[X_{j}=k\right]=1 / 2, k=0,1$, and $\operatorname{Im}\left(F_{j}\right)=\{0,1 / 2,1\}, j=1,2$.
+
+Any copula with $C(1 / 2,1 / 2)=1 / 4$ satisfies
+$
+F\left(x_{1}, x_{2}\right)=C\left(F_{1}\left(x_{1}\right), F_{2}\left(x_{2}\right)\right), \quad\left(x_{1}, x_{2}\right) \in \mathbb{R}^{2}
+$;
+
+e.g. the \green{independence copula} $C\left(u_{1}, u_{2}\right)=u_{1} u_{2}$ or the \green{diagonal copula} $\min \left\{u_{1}, u_{2},\left(u_{1}^{2}+u_{2}^{2}\right) / 2\right\}$
+
+\begin{itemize}[leftmargin=*]
+    \item $\X$ (or $F$) with margins $F_{1}, \ldots, F_{d}$ has copula $C$ if $F(\x)=C\left(F_{1}\left(x_{1}\right), \ldots, F_{d}\left(x_{d}\right)\right)$
+    \item A \green{copula model} for $\X$ means $F(\x)=C\left(F_{1}\left(x_{1}\right), \ldots, F_{d}\left(x_{d}\right)\right)$ for some (parametric) copula $C$ and (parametric) marginals $F_{1}, \ldots, F_{d}$.
+\end{itemize}
+
+
+
+
+
+\subsubsection*{Corollary}
+Let $\X$ be a random vec such that all $X_{j}$ have continuous cdf $F_{j}, j=1, \ldots, d$.
+Then $\X$ has copula $C \Leftrightarrow\left(F_{1}\left(X_{1}\right), \ldots, F_{d}\left(X_{d}\right)\right)$ has cdf $C$
+
+
+
+
+
+\subsection*{Thm (Invariance principle)}
+Let $\X$ be a random vec with continuous margins $F_{1}, \ldots, F_{d}$ and copula $C$. If $T_{j}: \operatorname{Im}\left(X_{j}\right) \rightarrow \mathbb{R}$, $j=1, \ldots, d$, are strictly increasing, then $\left(T_{1}\left(X_{1}\right), \ldots, T_{d}\left(X_{d}\right)\right)$ also has copula $C$.
+
+\navy{Proof}: Since $T_{j}$ is strictly increasing, $T_{j}\left(X_{j}\right)$ is continuously distributed. So for $x \in \operatorname{Im}\left(T_{j}\right)$, $F_{T_{j}\left(X_{j}\right)}(x)=\mathbb{P}\left[T_{j}\left(X_{j}\right) \leq x\right]=\mathbb{P}\left[X_{j} \leq T_{j}^{-1}(x)\right]=F_{j}\left(T_{j}^{-1}(x)\right)$, where $T_{j}^{-1}$ is the generalized inverse. 
+
+Hence,
+$\mathbb{P}\left[F_{T_{j}\left(X_{j}\right)}\left(T_{j}\left(X_{j}\right)\right) \leq u_{j}\text{ for all } j\right]=\mathbb{P}\left[F_{j}\left(T_{j}^{-1}\left(T_{j}\left(X_{j}\right)\right)\right) \leq u_{j} \text{ for all } j\right]=\mathbb{P}\left[F_{j}\left(X_{j}\right) \leq u_{j}\text{ for all } j\right]=C(\u)$
+
+
+
+
+
+\subsection*{Interpretation of Sklar’s Thm and the Invariance Principle}
+\begin{itemize}[leftmargin=*]
+    \item Part 1 of Sklar's theorem allows one to \melon{decompose any cdf $F$ into its margins and a copula}. This, together with the invariance principle, allows one to study dependence independently of the margins via the \melon{margin-free} $U=\left(F_{1}\left(X_{1}\right), \ldots, F_{d}\left(X_{d}\right)\right)$ instead of $X=\left(X_{1}, \ldots, X_{d}\right)$ (they both have the same copula!). This is interesting for statistical applications, e.g. parameter estimation or goodness-of-fit tests
+    \item Part 2 allows one to \melon{construct flexible multivariate distributions} for particular applications
+\end{itemize}
+
+
+
+
+
+\subsection*{Fréchet–Hoeffding bounds}
+\begin{enumerate}[label = (\arabic*), leftmargin=*]
+    \item For any d-dimensional copula $C$,
+$$
+W(u) \leq C(u) \leq M(u), u \in[0,1]^{d}
+$$
+where $W(u)=\left(\sum_{j=1}^{d} u_{j}-d+1\right)^{+}$and $M(u)=\min _{1 \leq j \leq d} u_{j}$
+    \item $W$ is a copula \red{iif} $d=2$
+    \item $M$ is a copula for all $d \geq 2$
+    
+\end{enumerate}
+
+
+
+\navy{Proof}: 
+$C(u) \leq C\left(1, \ldots, 1, u_{j}, 1, \ldots, 1\right)=u_{j}$ for all $j$. So $C(u) \leq M(u), u \in[0,1]^{d}$.
+
+If $U \sim \operatorname{Unif}(0,1)$, then $\mathbb{P}\left[U \leq u_{1}, \ldots, U \leq u_{d}\right]=\min _{j} u_{j}$. So $(U, \ldots, U)$ has copula $M$.
+
+$1-C(u)=C(1, \ldots, 1)-C(u) \leq \sum_{j=1}^{d}\left(1-u_{j}\right)=d-\sum_{j=1}^{d} u_{j}$. So $C(u) \geq W(u)$.
+
+For $d=2,(U, 1-U)$ has cdf $W$.
+
+For $d \geq 3, W$ violates $d$-monotonicity. So it cannot be a copula.
+
+
+
+\begin{itemize}[leftmargin=*]
+    \item The Fréchet-Hoeffding bounds correspond to \green{perfect dependence} (\red{negative for $W$; positive for $M$})
+    \item The Fréchet-Hoeffding bounds lead to bounds for any cdf $F: \mathbb{R}^{d} \rightarrow[0,1]$:
+$$
+\begin{aligned}
+&\left(\sum_{j=1}^{d} F_{j}\left(x_{j}\right)-d+1\right)^{+}\\
+\leq& F(\x)=C\left(F_{1}\left(x_{1}\right), \ldots, F_{d}\left(x_{d}\right)\right)\\
+\leq& \min _{1 \leq j \leq d} F_{j}\left(x_{j}\right)
+\end{aligned}
+$$
+
+
+    \item The Fréchet-Hoeffding bound $M$ is the \green{comonotonicity copula}. It is the cdf of $(U, \ldots, U)$.
+If the copula of $\left(X_{1}, \ldots, X_{d}\right)$ is $M$, then $\left(X_{1}, \ldots, X_{d}\right) \stackrel{(d)}{=}\left(q_{1}(U), \ldots, q_{d}(U)\right)$
+for $U \sim \operatorname{Unif}(0,1)$ and quantile functions $q_{j}$ of $F_{j}$.
+We say $X_{1}, \ldots, X_{d}$ are \green{comonotonic} or \green{perfectly positively dependent}.
+    \item For $d=2$, the Fréchet-Hoeffding bound $W$ is the \green{counter-monotonicity copula}.
+It is the cdf of $(U, 1-U)$. If the copula of $\left(X_{1}, X_{2}\right)$ is $W$, then $\left(X_{1}, X_{2}\right) \stackrel{(d)}{=}\left(q_{1}(U), q_{2}(1-U)\right)$ for $U \sim \operatorname{Unif}(0,1)$ and quantile functions $q_{j}$ of $F_{j}$.
+We say $X_{1}$ and $X_{2}$ are \green{counter-monotonic} or \green{perfectly neg dep}.
+\end{itemize}
+
+
+
+
+
+
+
+
+\subsection*{cdf’s with densities have copulas with densities}
+\begin{itemize}[leftmargin=*]
+    \item Let $F$ be a $d$-dimensional cdf with density $f$ and copula $C$.
+    \item Then
+$F\left(x_{1}, \ldots, x_{d}\right)=C\left(F_{1}\left(x_{1}\right), \ldots, F_{d}\left(x_{d}\right)\right) \quad$ and so $\quad C\left(u_{1}, \ldots, u_{d}\right)=F\left(q_{1}\left(u_{1}\right), \ldots, q_{d}\left(u_{d}\right)\right)$, 
+where $q_{j}$ are \green{quantile functions} of $F_{j}$
+    \item $$
+q_{j}^{\prime}\left(u_{j}\right)=\frac{1}{F_{j}^{\prime}\left(q_{j}\left(u_{j}\right)\right)}=\frac{1}{f_{j}\left(q_{j}\left(u_{j}\right)\right)}
+$$
+for almost all $u_{j} \in[0,1]$.
+    \item Therefore, $C$ has a density $c$, given by
+$$
+\begin{aligned}
+c(\u) &=\frac{\partial}{\partial u_{1}} \ldots \frac{\partial}{\partial u_{d}} C\left(u_{1}, \ldots, u_{d}\right) \\
+&=\frac{\partial}{\partial x_{1}} \ldots \frac{\partial}{\partial x_{d}} F\left(q_{1}\left(u_{1}\right), \ldots, q_{d}\left(u_{d}\right)\right) \prod_{j=1}^{d} q_{j}^{\prime}\left(u_{j}\right) \\
+&=\frac{f\left(q_{1}\left(u_{1}\right), \ldots, q_{d}\left(u_{d}\right)\right)}{\displaystyle \prod_{j=1}^{d} f_{j}\left(q_{j}\left(u_{j}\right)\right)}
+\end{aligned}
+$$
+where $f_{j}$ is the density of $F_{j}$.
+\end{itemize}
+
+
+
+
+
+\subsection*{Examples of Copulas}
+\subsubsection*{(i) Fundamental Copulas}
+\begin{itemize}[leftmargin=*]
+    \item $\Pi(\u)=\prod_{j=1}^{d} u_{j}$ is the \green{independence copula} since
+$F(\x)=\Pi\left(F_{1}\left(x_{1}\right), \ldots, F_{d}\left(x_{d}\right)\right)$ implies $F(\x)=\prod_{j=1}^{d} F_{j}\left(x_{j}\right)$. So $X_{1}, \ldots, X_{d}$ are ind if copula is $\Pi$.
+    \item The Fréchet–Hoeffding bound $M$ is the \green{comonotonicity copula}.
+    \item For $d=2$, the Fréchet-Hoeffding bound $W$ is the \green{counter-monotonicity copula}.
+\end{itemize}
+
+
+
+
+
+\subsubsection*{(ii) Implicit Copulas}
+Elliptical copulas are implicit copulas arising from elliptical distributions via Sklar's theorem. The two most prominent parametric families in this class are \green{Gauss copulas} and \green{t-copulas}.
+
+\melon{Gauss copulas}
+\begin{itemize}[leftmargin=*]
+    \item Let $\X \sim \N_{d}(\0, \vect{P})$, where $\vect{P}$ is a $d \times d$ correlation matrix.
+    
+The corresponding Gauss copula is $
+C_{\vect{P}}^{G a}(\u) =\Phi_{\vect{P}}\left(\Phi^{-1}\left(u_{1}\right), \ldots, \Phi^{-1}\left(u_{d}\right)\right)$, where $\Phi$ is the cdf of $\N(0,1)$ and $\Phi_{\vect{P}}$ the cdf of $\N_{d}(0, \vect{P})$
+    \item If $\vect{P}=\vect{I}_{d}$, then $C=\Pi$ (\green{independence copula})
+    \item If $\vect{P}=\vect{11}^{\T}$, then $C=M$ (\green{comonotonicity copula})
+    \item If $d=2$ and $\rho=\vect{P}_{12}=-1$, then $C=W$ (\green{counter-monotonicity copula})
+    \item The density $c_{\vect{P}}^{G a}$ of $C_{\vect{P}}^{G a}$ is given by
+$$
+\begin{aligned}
+c_{\vect{P}}^{G a}(\u)&=\frac{\varphi_{\vect{P}}\left(\Phi^{-1}\left(u_{1}\right), \ldots, \Phi^{-1}\left(u_{d}\right)\right)}{\prod_{j=1}^{d} \varphi\left(\Phi^{-1}\left(u_{j}\right)\right)} \\
+&=\frac{1}{\sqrt{\operatorname{det} \vect{P}}} \exp \left(-\frac{1}{2} \x^{\T}\left(\vect{P}^{-1}-\vect{I}_{d}\right) \x\right)
+\end{aligned}
+$$
+where $\x=\left(\Phi^{-1}\left(u_{1}\right), \ldots, \Phi^{-1}\left(u_{d}\right)\right)$
+\end{itemize}
+
+
+
+
+
+
+
+
+\melon{$t$-copulas}
+\begin{itemize}[leftmargin=*]
+    \item Let $\X \sim t_{d}(\nu, \0, \vect{P})$ for a parameter $\nu>0$ and correlation matrix $\vect{P}$.
+The corresponding $t$-copula is
+$
+C_{\nu, \vect{P}}^{t}(\u) =t_{\nu, \vect{P}}\left(t_{\nu}^{-1}\left(u_{1}\right), \ldots, t_{\nu}^{-1}\left(u_{d}\right)\right)
+$, where $t_{\nu, \vect{P}}$ is the cdf of $t_{d}(\nu, \0, \vect{P})$ and $t_{\nu}$ the cdf of the univariate $t_{\nu}$-distribution.
+    \item If $\vect{P}=\1\1^{\T}$, then $C=M$ (\green{comonotonicity copula})
+    \item If $d=2$ and $\vect{P}_{12}=-1$, then $C=W$ (\green{counter-monotonicity copula})
+    \item However, if $\vect{P}=\I_{d}$, it does not follow that $C=\Pi$ (unless $\nu=\infty$, in which case $C_{\nu, \vect{P}}^{t}=C_{\vect{P}}^{Ga}$)
+    \item The density $c_{\mu, P}^{t}$ of $C_{\nu, P}^{t}$ is given by
+$$
+\begin{aligned}
+&c_{\nu, P}^{t}(\u)= \\
+&\frac{\Gamma(\frac{\nu+d}{2})}{\Gamma(\frac{\nu}{2}) \sqrt{\operatorname{det} \vect{P}}}\left(\frac{\Gamma(\frac{\nu}{2})}{\Gamma(\frac{\nu+1}{2})}\right)^{d} \frac{\left(1+\x^{\T} \vect{P}^{-1} \x / \nu\right)^{-(\nu+d) / 2}}{\prod_{j=1}^{d}\left(1+x_{j}^{2} / \nu\right)^{-(\nu+1) / 2}}
+\end{aligned}
+$$
+for $\x=\left(t_{\nu}^{-1}\left(u_{1}\right), \ldots, t_{\nu}^{-1}\left(u_{d}\right)\right)$
+\end{itemize}
+
+
+
+\subsubsection*{Advantages and drawbacks of elliptical copulas}
+\melon{Advantages}: Flexible class for modeling dependencies; Densities available;  Sampling (typically) simple.
+
+\melon{Drawbacks}: Typically, $C$ is not explicit;  Radially symmetric (so the same
+lower/upper tail behavior)
+
+
+
+
+
+
+
+
+
+\subsubsection*{(iii) Explicit Copulas}
+\begin{itemize}[leftmargin=*]
+    \item \green{Archimedean copulas} are copulas of the form
+$
+C(\u)=\psi\left(\psi^{-1}\left(u_{1}\right)+\cdots+\psi^{-1}\left(u_{d}\right)\right), \u \in[0,1]^{d}
+$, for a \green{generator} $\psi:[0, \infty) \rightarrow[0,1]$ satisfying (1) $\psi(0)=1$, (2) $\lim _{x \rightarrow \infty} \psi(x)=0$, (3) $\psi$ is continuous, non-increasing and strictly decreasing on $[0, \inf \{x: \psi(x)=0\}]$
+    \item We denote the set of all generators by $\Psi$
+    \item If $\psi(x)>0$ for all $x \in[0, \infty)$, we call $\psi$ strict
+    \item We set $\psi^{-1}(0)=\inf \{x: \psi(x)=0\}$
+\end{itemize}
+
+
+\green{Clayton copula}: $\psi(x)=(1+x)^{-1 / \theta}$ for a parameter $\theta \in(0, \infty)$, 
+$
+C_{\theta}^{C}(\u)=\left(u_{1}^{-\theta}+\cdots+u_{d}^{-\theta}-d+1\right)^{-1 / \theta}
+$. 
+
+For $\theta \downarrow 0, C \rightarrow \Pi$; For $\theta \uparrow \infty, C \rightarrow M$.
+
+\green{Gumbel copula}: $\psi(x)=\exp \left(-x^{1 / \theta}\right)$ for a parameter $\theta \in[1, \infty)$, $
+C_{\theta}^{G u}(\u)=\exp \left(-\left(\left(-\log u_{1}\right)^{\theta}+\cdots+\left(-\log u_{d}\right)^{\theta}\right)^{1 / \theta}\right)
+$. 
+
+For $\theta=1, C=\Pi$; For $\theta \rightarrow \infty, C \rightarrow M$.
+
+
+
+
+
+
+\subsubsection*{Advantages and drawbacks of Archimedean copulas}
+\melon{Advantages}:
+\begin{itemize}[leftmargin=*]
+    \item Typically explicit (if $\psi^{-1}$ is available)
+    \item Useful in calculations: Properties can typically be expressed in terms of $\psi$
+    \item Densities of various examples available
+    \item Sampling often simple
+    \item Not restricted to radial symmetry
+\end{itemize}
+
+\melon{Drawbacks:}:
+\begin{itemize}[leftmargin=*]
+    \item All margins of the same dimension are
+equal (exchangeability)
+    \item Often used only with a small number of
+parameters (some extensions available)
+\end{itemize}
+
+
+
+
+
+
+
+\subsection*{Meta distributions}
+\begin{itemize}[leftmargin=*]
+    \item \green{Fréchet class}: Class of all cdf's $F$ with given marginals $F_{1}, \ldots, F_{d}$.
+
+    \item \green{Meta-$C$ models}: All cdf's $F$ with the same given copula $C$.
+    
+    \item \melon{Example}: A meta-Gauss model consists of cdf's $F$ with a given Gauss copula $C_{P}^{G a}$ and some marginals $F_{1}, \ldots, F_{d}$
+
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection*{Sampling implicit copulas}
+\begin{enumerate}[label = (\arabic*), leftmargin=*]
+    \item Sample $\X \sim F$, where $F$ is a cdf with continuous margins $F_{1}, \ldots, F_{d}$
+    \item Return $\U=\left(F_{1}\left(X_{1}\right), \ldots, F_{d}\left(X_{d}\right)\right)$ (\green{probability transformation})
+\end{enumerate}
+
+\subsubsection*{Examples}
+\begin{itemize}[leftmargin=*]
+    \item Sampling Gauss copulas $C_{P}^{G a}$: 
+(1) Sample $\X \sim \N_{d}(0, \vect{P})$, $\X \stackrel{(d)}{=} \A \Z$ for $\A \A^{\T}=\vect{P}, \Z \sim \N_{d}\left(0, \I_{d}\right)$; 
+(2) Return $\U=\left(\Phi\left(X_{1}\right), \ldots, \Phi\left(X_{d}\right)\right)$
+    \item Sampling $t$-copulas $C_{\nu, P}^{t}$: 
+(1) Sample $\X \sim t_{d}(\nu, \0, \vect{P})$, $\X \stackrel{(d)}{=} \sqrt{W} \A \Z$ for $W=1 / G, G \sim \operatorname{Gamma}(\nu / 2, \nu / 2)$; 
+(2) Return $\U=\left(t_{\nu}\left(X_{1}\right), \ldots, t_{\nu}\left(X_{d}\right)\right)$
+
+\end{itemize}
+
+
+
+
+
+
+
+\subsection*{Sampling meta distributions}
+\begin{enumerate}[label = (\arabic*), leftmargin=*]
+    \item Sample $\U \sim C$
+    \item Return $\X=\left(q_{1}\left(U_{1}\right), \ldots, q_{d}\left(U_{d}\right)\right)$, where $q_{j}$ are quantile funcs of $F_{j}$ (\green{quantile transformation})
+\end{enumerate}
+
+
+
+
+
+
+
+
+\subsection*{Survival copulas}
+\begin{itemize}[leftmargin=*]
+    \item If $\U \sim C$, then $1-\U \sim \hat{C}$. $\hat{C}$ is the \green{survival copula} of $C$.
+    \item $\hat{C}$ can be expressed as
+$$
+\begin{aligned}
+&\hat{C}(\u)= \\
+&\sum_{J \subseteq\{1, \ldots, d\}}(-1)^{|J|} C\left(\left(1-u_{1}\right)^{I_{J}(1)}, \ldots,\left(1-u_{d}\right)^{I_{J}(d)}\right)
+\end{aligned}
+$$
+in terms of its corresponding copula
+(essentially an application of the \green{Poincaré-Sylvester sieve formula}).
+
+For $d=2$,
+$$
+\begin{aligned}
+&\hat{C}\left(u_{1}, u_{2}\right) \\ =& 1-\left(1-u_{1}\right)-\left(1-u_{2}\right)+C\left(1-u_{1}, 1-u_{2}\right) \\
+=& -1+u_{1}+u_{2}+C\left(1-u_{1}, 1-u_{2}\right)
+\end{aligned}
+$$
+    \item If $C$ has a density $c$, density of $\hat{C}$ is $\hat{c}(u)=c(1-u)$
+    \item If $\hat{C}=C, C$ is called \green{radially symmetric}. 
+    
+    \melon{Note}: $\Pi, M$ and $W$ are all radially symmetric.
+    \item If $X_{j}$ is \green{symmetrically distributed} around $a_{j}, j \in\{1, \ldots, d\}$, then $\X$ is radially symmetric around $a$ if and only if $C=\hat{C}$
+    \item \green{Sklar's thm} can also be formulated for survival funcs. In this case,
+$
+\bar{F}(\x)=\hat{C}\left(\bar{F}_{1}\left(x_{1}\right), \ldots, \bar{F}_{d}\left(x_{d}\right)\right),
+$ where $\bar{F}(\x)=\mathbb{P}[\X>\x]$ and $\bar{F}_{j}(x)=\mathbb{P}\left[X_{j}>x\right]$. 
+
+\red{Survival copulas combine marginal survival functions with joint survival functions}.
+
+\melon{Note} that $\hat{C}$ is a cdf, but $\bar{F}$ and $\bar{F}_{1}, \ldots, \bar{F}_{d}$ are not!
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+\subsection*{Copula densities}
+\begin{itemize}[leftmargin=*]
+    \item By Sklar's theorem, $F(\x)=C\left(F_{1}\left(x_{1}\right), \ldots, F_{d}\left(x_{d}\right)\right)$. So if all $F_{j}$ have densities $f_{j}$ and $C$ has a density $c$, then $F$ has a density of the form
+    
+$$
+\begin{aligned}
+f(\x)&=\frac{\partial}{\partial u_{1}} \cdots \frac{\partial}{\partial u_{d}} C\left(F_{1}\left(x_{1}\right), \ldots, F_{d}\left(x_{d}\right)\right) \prod_{j=1}^{d} F_{j}^{\prime}\left(x_{j}\right)\\
+&=c\left(F_{1}\left(x_{1}\right), \ldots, F_{d}\left(x_{d}\right)\right) \prod_{j=1}^{d} f_{j}\left(x_{j}\right) 
+\end{aligned}
+$$
+
+This gives the following formula for $c$ :
+$$
+c(\u)=\frac{f\left(q_{1}\left(u_{1}\right), \ldots, q_{d}\left(u_{d}\right)\right)}{f_{1}\left(q_{1}\left(u_{1}\right)\right) \cdots f_{d}\left(q_{d}\left(u_{d}\right)\right)} .
+$$
+    \item Moreover, it follows that the log-density splits into
+$
+\log f(\x)=\log c\left(F_{1}\left(x_{1}\right), \ldots, F_{d}\left(x_{d}\right)\right)+\sum_{j=1}^{d} \log f_{j}\left(x_{j}\right)$, which allows for a two-stage estimation (marginal and copula parameters).
+\end{itemize}
+
+
+
+
+
+
+
+
+
+\subsection*{Exchangeability}
+\begin{itemize}[leftmargin=*]
+    \item $\X$ is \green{exchangeable} if $\left(X_{1}, \ldots, X_{d}\right) \stackrel{(d)}{=}\left(X_{\pi(1)}, \ldots, X_{\pi(d)}\right)$ for any permutation $(\pi(1), \ldots, \pi(d))$ of $(1, \ldots, d)$
+    \item A copula $C$ is \green{exchangeable} if it is the cdf of an exchangeable $U$ with $\operatorname{Unif}(0,1)$ margins. This holds \red{iff} $C\left(u_{1}, \ldots, u_{d}\right)=C\left(u_{\pi(1)}, \ldots, u_{\pi(d)}\right)$ for all possible permutations of $(1, \ldots, d)$, that is, if $C$ is symmetric.
+    \item Exchangeable/symmetric copulas are useful for \melon{modeling homogeneous portfolios}.
+    \item \navy{Examples}: Archimedean copulas; Elliptical copulas (such as Gauss/t) for equicorrelated $\vect{P}$, i.e. $\vect{P}=\rho \vect{11}^{\T}+(1-\rho) \vect{I}_{d}$ for $\rho \geq-1 /(d-1)$
+\end{itemize}
+
+
+
+
+
+
+\pink{7.2 Dependence concepts and measures}
+
+\green{Dependence measures} are scalar measures which summarize the dependence in terms of a single number.
+
+\melon{Examples}: Linear correlation; Rank correlation (Kendall’s tau, Spearman’s rho); Tail dependence
+
+
+\subsection*{Perfect Dependence}
+$X_{1}, \ldots, X_{d}$ are \melon{comonotone} if $\left(X_{1}, \ldots, X_{d}\right)$ has copula $M$. $X_{1}, X_{2}$ are \melon{counter-monotone} if $\left(X_{1}, X_{2}\right)$ has copula $W$.
+
+\subsubsection*{Proposition (Perfect dependence)}: Let $\X=\left(X_{1}, \ldots, X_{d}\right)$ be a random vector, $q_{1}, \ldots, q_{d}$ quantile functions of the marginals and $U \sim \operatorname{Unif}(0,1)$. Then
+(1) $\X$ has \green{comonotonicity copula} $M \Leftrightarrow X \stackrel{(d)}{=}\left(q_{1}(U), \ldots, q_{d}(U)\right)$.
+
+
+(2) $d=2$ and $\X$ has \green{counter-monotonicity copula} $W \Leftrightarrow \X \stackrel{(d)}{=}\left(q_{1}(U), q_{2}(1-U)\right)$.
+
+\navy{Proof}: 
+\begin{enumerate}[label = (\arabic*), leftmargin=*]
+    \item $\mathbb{P}\left[q_{1}(U) \leq x_{1}, \ldots, q_{d}(U) \leq x_{d}\right]=\mathbb{P}\left[U \leq F_{1}\left(x_{1}\right), \ldots, U \leq F_{d}\left(x_{d}\right)\right]$
+$=\min _{1 \leq j \leq d} F_{j}\left(x_{j}\right)=M\left(F_{1}\left(x_{1}\right), \ldots, F_{d}\left(x_{d}\right)\right)$
+
+So $X$ has copula $M \Leftrightarrow X \stackrel{(d)}{=}\left(q_{1}(U), \ldots, q_{d}(U)\right)$
+    \item $\mathbb{P}\left[q_{1}(U) \leq x_{1}, q_{2}(1-U) \leq x_{2}\right]=\mathbb{P}\left[U \leq F_{1}\left(x_{1}\right), 1-U \leq F_{2}\left(x_{2}\right)\right]$
+$=\mathbb{P}\left[1-F_{2}\left(x_{2}\right) \leq U \leq F_{1}\left(x_{1}\right)\right]=\left(F_{1}\left(x_{1}\right)+F_{2}\left(x_{2}\right)-1\right)^{+}=W\left(F_{1}\left(x_{1}\right), F_{2}\left(x_{2}\right)\right)$
+
+So $\left(X_{1}, X_{2}\right)$ has copula $W \quad \Leftrightarrow \quad\left(X_{1}, X_{2}\right) \stackrel{(d)}{=}\left(q_{1}(U), q_{2}(1-U)\right)$
+\end{enumerate}
+
+
+
+
+
+
+\subsubsection*{Proposition (Comonotone additivity)}
+Let $X_{j} \sim F_{j}, j=1, \ldots, d$, be comonotone. Then
+$
+\operatorname{VaR}_{\alpha}\left(X_{1}+\cdots+X_{d}\right)=\operatorname{VaR}_{\alpha}\left(X_{1}\right)+\cdots+\operatorname{VaR}_{\alpha}\left(X_{d}\right)$ for all $ \alpha \in(0,1)
+$, and as a consequence,
+$
+\operatorname{AVaR}_{\alpha}\left(X_{1}+\cdots+X_{d}\right)=\operatorname{AVaR}_{\alpha}\left(X_{1}\right)+\cdots+\operatorname{AVaR}_{\alpha}\left(X_{d}\right)$ for all $ \alpha \in(0,1)$.
+
+\navy{Proof}: $\X$ has the same distribution as $\left(q_{1}(U), \ldots, q_{d}(U)\right)$, where $U \sim \operatorname{Unif}(0,1)$ and $q_{1}, \ldots, q_{d}$ are left-continuous quantile functions of $X_{1}, \ldots, X_{d}$.
+
+
+So $X_{1}+\cdots+X_{d}$ has the same distribution as $q_{1}(U)+\cdots+q_{d}(U)$.
+
+
+It follows that
+$
+\operatorname{VaR}_{\alpha}\left(X_{1}+\cdots+X_{d}\right)=q_{1}(\alpha)+\cdots+q_{d}(\alpha)=\operatorname{VaR}_{\alpha}\left(X_{1}\right)+\cdots+\operatorname{VaR}_{\alpha}\left(X_{d}\right)
+$
+
+and
+$
+\operatorname{AVaR}_{\alpha}\left(X_{1}+\cdots+X_{d}\right)=\frac{1}{1-\alpha} \int_{\alpha}^{1} \sum_{j=1}^{d} \operatorname{VaR}_{u}\left(X_{j}\right) d u=\sum_{j=1}^{d} \operatorname{AVaR}_{\alpha}\left(X_{j}\right)
+$
+
+
+
+
+
+\subsection*{Linear Correlation}
+\navy{Def}: For two RVs $X_{1}$ and $X_{2}$ satisfying $\mathbb{E}\left[X_{j}^{2}\right]<\infty$ and $\operatorname{Var}\left(X_{j}\right)>0, j=1,2$, the \green{(linear or Pearson's) correlation coefficient} $\rho$ is defined by
+$
+\rho\left(X_{1}, X_{2}\right)=\frac{\operatorname{Cov}\left(X_{1}, X_{2}\right)}{\sqrt{\operatorname{Var}\left(X_{1}\right) \operatorname{Var}\left(X_{2}\right)}} =\frac{\mathbb{E}\left[\left(X_{1}-\mathbb{E} X_{1}\right)\left(X_{2}-\mathbb{E} X_{2}\right)\right]}{\sqrt{\left.\mathbb{E}\left[\left(X_{1}-\mathbb{E} X_{1}\right)^{2}\right] \mathbb{E}\left[\left(X_{2}-\mathbb{E} X_{2}\right]\right)^{2}\right]}}
+$.
+
+
+\subsubsection*{Proposition (Hoeffding’s identity)}
+Let $X_{j} \sim F_{j}, j=1,2$, be two RVs with joint cdf $F$ that $\mathbb{E}\left[X_{j}^{2}\right]<\infty, j=1,2$. Then
+$$
+\operatorname{Cov}\left(X_{1}, X_{2}\right)=\iint_{\mathbb{R}^{2}}\left[F\left(x_{1}, x_{2}\right)-F_{1}\left(x_{1}\right) F_{2}\left(x_{2}\right)\right] d x_{1} d x_{2}
+$$.
+
+\navy{Proof}: Let $\left(X_{1}^{\prime}, X_{2}^{\prime}\right)$ be an independent copy of $\left(X_{1}, X_{2}\right)$. Then
+$$
+\begin{aligned}
+& 2 \operatorname{Cov}\left(X_{1}, X_{2}\right) \\
+=&\mathbb{E}\left[\left(X_{1}-\mathbb{E} X_{1}\right)\left(X_{2}-\mathbb{E} X_{2}\right)\right] \\
+&\quad +\mathbb{E}\left[\left(X_{1}^{\prime}-\mathbb{E} X_{1}^{\prime}\right)\left(X_{2}^{\prime}-\mathbb{E} X_{2}^{\prime}\right)\right] \\
+= & \mathbb{E}\left[\left(\left(X_{1}-\mathbb{E} X_{1}\right)-\left(X_{1}^{\prime}-\mathbb{E} X_{1}^{\prime}\right)\right) \\
+& \quad\left(\left(X_{2}-\mathbb{E} X_{2}\right)-\left(X_{2}^{\prime}-\mathbb{E} X_{2}^{\prime}\right)\right)\right] \\
+= & \mathbb{E}\left[\left(X_{1}-X_{1}^{\prime}\right)\left(X_{2}-X_{2}^{\prime}\right)\right] \\
+= & \mathbb{E}\left[\int_{\mathbb{R}} \int_{\mathbb{R}}\left(1_{\left\{X_{1}^{\prime} \leq x_{1}\right\}}-1_{\left\{X_{1} \leq x_{1}\right\}}\right) \\
+&\quad \left(1_{\left\{X_{2}^{\prime} \leq x_{2}\right\}}-1_{\left\{X_{2} \leq x_{2}\right\}}\right) d x_{1} d x_{2}\right] \\
+= & \int_{\mathbb{R}} \int_{\mathbb{R}} \mathbb{E}\left[\left(1_{\left\{X_{1}^{\prime} \leq x_{1}\right\}}-1_{\left\{X_{1} \leq x_{1}\right\}}\right)\left(1_{\left\{X_{2}^{\prime} \leq x_{2}\right\}}-1_{\left\{X_{2} \leq x_{2}\right\}}\right)\right] d x_{1} d x_{2} \\
+= & 2 \int_{\mathbb{R}} \int_{\mathbb{R}}\left[F\left(x_{1}, x_{2}\right)-F_{1}\left(x_{1}\right) F_{2}\left(x_{2}\right)\right] d x_{1} d x_{2}
+\end{aligned}
+$$
+
+
+
+
+
+\subsection*{Properties and Drawbacks of Linear Correlation}
+Let $X_{1}$ and $X_{2}$ be two random variables such that $\mathbb{E}\left[X_{j}^{2}\right]<\infty$ and $\operatorname{Var}\left(X_{j}\right)>0, j=1,2$.
+
+\begin{itemize}[leftmargin=*]
+    \item Note that $\rho$ depends on the marginal distributions! In particular, second moments have to exist which is not the case, e.g. for $X_{1}, X_{2} \sim F(x)=\left(1-x^{-2}\right)^{+}$
+    \item $|\rho| \leq 1$. Furthermore, $|\rho|=1$ if and only if there exist constants $a \in \mathbb{R} \backslash\{0\}, b \in \mathbb{R}$ such that $X_{2}=a X_{1}+b$ a.s. This does not cover other strong functional dependence such as e.g. $X_{2}=X_{1}^{2}$
+    \item If $X_{1}$ and $X_{2}$ are independent, then $\rho=0$. However, the converse is not true in general!
+    \item $\rho$ is invariant under strictly increasing linear transformations but not invariant under strictly increasing transformations in general! For instance, if $\left(X_{1}, X_{2}\right) \sim \N_{2}(0, \vect{P})$ for a $2 \times 2$-correlation matrix $\vect{P}$ with $P_{12}=\rho$, then
+$
+\rho\left(X_{1}, X_{2}\right)=\rho$ but $\rho\left(F_{1}\left(X_{1}\right), F_{2}\left(X_{2}\right)\right)=\frac{6}{\pi} \arcsin (\rho / 2)
+$
+\end{itemize}
+
+
+
+
+
+
+\subsection*{Correlation Fallacies}
+\navy{Fallacy 1}: \textbf{$F_{1}, F_{2}$ and $\rho$ uniquely determine $F$}.
+
+This is true for bivariate elliptical distributions, but wrong in general.
+
+
+Example is as follows (\red{uncorrelated $\nRightarrow$ independent})
+\begin{itemize}[leftmargin=*]
+    \item Consider the two risks $X_{1}=Z, X_{2}=Z V$
+where $V, Z$ are independent with $Z \sim \N(0,1)$ and $\mathbb{P}[V=-1]=\mathbb{P}[V=1]=1 / 2$.
+
+Then $X_{1}, X_{2} \sim \N(0,1)$ and $\rho\left(X_{1}, X_{2}\right)=\operatorname{Cov}\left(X_{1}, X_{2}\right)=\mathbb{E}\left[X_{1} X_{2}\right] \stackrel{\text { ind. }}{=} \mathbb{E}[V] \mathbb{E}\left[Z^{2}\right]=0$, but $X_{1}$ and $X_{2}$ are not independent. Indeed, 
+$\left|X_{1}\right|=\left|X_{2}\right|=|Z|$ and so $ \operatorname{Cov}\left(\left|X_{1}\right|,\left|X_{2}\right|\right)=\operatorname{Var}(|Z|)>0
+$.
+
+
+In particular, $\left(X_{1}, X_{2}\right)$ is not bivariate normal.
+
+    \item Consider $\left(X_{1}^{\prime}, X_{2}^{\prime}\right) \sim \N_{2}\left(0, \I_{2}\right)$. Both $\left(X_{1}^{\prime}, X_{2}^{\prime}\right)$ and $\left(X_{1}, X_{2}\right)$ have $\N(0,1)$ margins and $\rho=0$, but the copula of $\left(X_{1}^{\prime}, X_{2}^{\prime}\right)$ is $\Pi$ and the copula of $\left(X_{1}, X_{2}\right)$ is $C(u)=W(u) / 2+M(u) / 2$.
+    
+    $V$ switches between perfectly positive and negative dependence!
+\end{itemize}
+
+
+\navy{Fallacy 2}: \textbf{For given marginal cdf's $F_{1}, F_{2}$, any $\rho \in[-1,1]$ is attainable.}
+
+This is true for elliptically distributed $\left(X_{1}, X_{2}\right)$ with $\mathbb{E}\left[R^{2}\right]<\infty$ (as then $\operatorname{Corr}\left(X_{1}, X_{2}\right)=\vect{P}$), but wrong in general:
+\begin{itemize}[leftmargin=*]
+    \item If $F_{1}$ and $F_{2}$ are not of the same type (i.e., affine transformations of each other), then $\rho\left(X_{1}, X_{2}\right)=1$ is not attainable.
+    
+Recall that $|\rho|=1$ \red{iff} there exist constants $a \in \mathbb{R} \backslash\{0\}, b \in \mathbb{R}$ such that $X_{2}=a X_{1}+b$ a.s.
+    \item Hoeffding's identity
+$$
+\begin{aligned}
+&\operatorname{Cov}\left(X_{1}, X_{2}\right) \\
+=&\iint_{\mathbb{R}^{2}}\left[F\left(x_{1}, x_{2}\right)-F_{1}\left(x_{1}\right) F_{2}\left(x_{2}\right)\right] d x_{1} d x_{2} \\
+=&\iint_{\mathbb{R}^{2}}\left[C\left(F_{1}\left(x_{1}\right), F_{2}\left(x_{2}\right)\right)-F_{1}\left(x_{1}\right) F_{2}\left(x_{2}\right)\right] d x_{1} d x_{2}
+\end{aligned}
+$$
+implies bounds on attainable $\rho$: $\rho \in\left[\rho_{\min }, \rho_{\max }\right]$ ($\rho_{\min}$ is attained for $C=W$, $\rho_{\max}$ for $C=M$).
+\end{itemize}
+
+
+\navy{Fallacy 3}: \textbf{$\rho$ maximal (i.e. $C=M$) $\Rightarrow \operatorname{VaR}_{\alpha}\left(X_{1}+X_{2}\right)$ maximal}.
+
+\begin{itemize}[leftmargin=*]
+    \item This is true if $\left(X_{1}, X_{2}\right)$ is \melon{elliptically distributed}. Since in this case, $\mathrm{VaR}_{\alpha}$ is subadditive and $\rho=1$ implies that $X_{1}, X_{2}$ are comonotone. Moreover, $\operatorname{VaR}_{\alpha}$ is always comonotone additive.
+    \item Any super-additivity example $\operatorname{VaR}_{\alpha}\left(X_{1}+X_{2}\right)>\operatorname{VaR}_{\alpha}\left(X_{1}\right)+\operatorname{VaR}_{\alpha}\left(X_{2}\right)$ (the right-hand side is $\operatorname{VaR}_{\alpha}\left(X_{1}+X_{2}\right)$ under comonotonicity, which gives maximal correlation) serves as a counterexample.
+\end{itemize}
+
+
+
+
+
+
+\subsection*{Rank Correlation}
+Rank correlation coefficients are: (1) always defined; (2) invariant under strictly increasing transformations of the marginals (hence only depend on the underlying copula)
+
+\subsubsection*{Def (Kendall’s tau)}
+Let $X_{j} \sim F_{j}$ with continuous $F_{j}, j=1,2$, and $\left(X_{1}^{\prime}, X_{2}^{\prime}\right)$ an independent copy of $\left(X_{1}, X_{2}\right)$. 
+
+\green{Kendall's tau} is defined by
+$$
+\begin{aligned}
+\rho_{\tau}:=&\mathbb{E}\left[\operatorname{sign}\left(\left(X_{1}-X_{1}^{\prime}\right)\left(X_{2}-X_{2}^{\prime}\right)\right)\right] \\
+=& \mathbb{P}\left[\left(X_{1}-X_{1}^{\prime}\right)\left(X_{2}-X_{2}^{\prime}\right)>0\right] \\
+& \quad -\mathbb{P}\left[\left(X_{1}-X_{1}^{\prime}\right)\left(X_{2}-X_{2}^{\prime}\right)<0\right]
+\end{aligned}
+$$
+
+where $\operatorname{sign}(x)=1_{(0, \infty)}(x)-1_{(-\infty, 0)}(x)$.
+
+
+By definition, Kendall’s tau is the probability of \green{concordance} minus the probability of \green{discordance}.
+
+
+An estimator of $\rho_{\tau}$ is provided by the sample version of Kendall's tau
+$$
+\displaystyle r_{\tau}(n)=\frac{1}{{n \choose 2}} \sum_{1 \leq i_{1}<i_{2} \leq n} \operatorname{sign}\left(\left(X_{i_{1}, 1}-X_{i_{2}, 1}\right)\left(X_{i_{1}, 2}-X_{i_{2}, 2}\right)\right)
+$$
+where $\left(X_{1,1}, X_{1,2}\right) \ldots,\left(X_{n, 1}, X_{n, 2}\right)$ are $n$ independent realizations of $\left(X_{1}, X_{2}\right)$.
+
+
+\subsubsection*{Proposition (Formula for Kendall's tau)}
+Assume $\left(X_{1}, X_{2}\right)$ has copula $C$ and continuous marginals $F_{1}$ and $F_{2}$. 
+
+Then
+$\rho_{\tau}=4 \iint_{[0,1]^{2}} C\left(u_{1}, u_{2}\right) d C\left(u_{1}, u_{2}\right)-1=4 \mathbb{E} C\left(U_{1}, U_{2}\right)-1$ where $\left(U_{1}, U_{2}\right) \sim C$.
+
+
+In particular, $\rho_{\tau}$ only depends on the copula $C$ of $\left(X_{1}, X_{2}\right)$.
+
+\navy{Proof}: Let $\left(X_{1}^{\prime}, X_{2}^{\prime}\right)$ be an independent copy of $\left(X_{1}, X_{2}\right)$ and denote $U_{j}=F_{j}\left(X_{j}\right), U_{j}^{\prime}=F_{j}\left(X_{j}^{\prime}\right)$.
+
+Then $U \sim U^{\prime} \sim C$, and
+$$
+\begin{aligned}
+& \rho_{\tau}\\
+=&\mathbb{P}\left[\left(X_{1}-X_{1}^{\prime}\right)\left(X_{2}-X_{2}^{\prime}\right)>0\right] \\
+& \quad -\mathbb{P}\left[\left(X_{1}-X_{1}^{\prime}\right)\left(X_{2}-X_{2}^{\prime}\right)<0\right] \\
+=& 2 \mathbb{P}\left[\left(X_{1}-X_{1}^{\prime}\right)\left(X_{2}-X_{2}^{\prime}\right)>0\right]-1 \\
+=& 4 \mathbb{P}\left[X_{1}<X_{1}^{\prime}, X_{2}<X_{2}^{\prime}\right]-1 \\
+=& 4 \mathbb{P}\left[U_{1}<U_{1}^{\prime}, U_{2}<U_{2}^{\prime}\right]-1 \\
+=& 4 \iint_{[0,1]^{2}} \mathbb{P}\left[U_{1}<u_{1}, U_{2}<u_{2}\right] d C\left(u_{1}, u_{2}\right)-1\\
+=& 4 \iint_{[0,1]^{2}} C\left(u_{1}, u_{2}\right) d C\left(u_{1}, u_{2}\right)-1
+\end{aligned}
+$$
+
+
+
+
+\begin{itemize}[leftmargin=*]
+    \item For $C=\Pi$ :
+$$
+\rho_{\tau}=4 \iint_{[0,1]^{2}} u_{1} u_{2} d u_{1} d u_{2}-1=0
+$$
+$\rightsquigarrow$ if $X_{1}$ and $X_{2}$ are independent, then $\rho_{\tau}=0$
+    \item For $C=M$ :
+$$
+\begin{aligned}
+\rho_{\tau}&=4 \iint_{[0,1]^{2}} M\left(u_{1}, u_{2}\right) d M\left(u_{1}, u_{2}\right)-1 \\
+&=4 \mathbb{E}[U \wedge U]-1=4 \mathbb{E}[U]-1=2-1=1
+\end{aligned}
+$$
+$\rightsquigarrow$ the upper bound 1 is attained for any pair of continuous marginals $F_{1}, F_{2}$
+    \item For $C=W$ :
+$$
+\begin{aligned}
+\rho_{\tau}&=4 \iint_{[0,1]^{2}} W\left(u_{1}, u_{2}\right) d W\left(u_{1}, u_{2}\right)-1 \\
+&=4 \mathbb{E}\left[(U+(1-U)-1)^{+}\right]-1=-1
+\end{aligned}
+$$
+$\rightsquigarrow$ the lower bound $-1$ is attained for any pair of continuous marginals $F_{1}, F_{2}$
+\end{itemize}
+
+
+
+
+
+
+\subsubsection*{Def (Spearman’s rho)}
+Assume $\left(X_{1}, X_{2}\right)$ has continuous marginals $F_{1}$ and $F_{2}$. Then \green{Spearman's rho} is defined by $\rho_{S}=\rho\left(F_{1}\left(X_{1}\right), F_{2}\left(X_{2}\right)\right)$.
+
+An estimator $r_{\mathrm{S}}(n)$ is given by the \green{sample correlation} of
+$ \left(\operatorname{rk}\left(X_{1,1}\right), \operatorname{rk}\left(X_{1,2}\right)\right), \ldots,\left(\operatorname{rk}\left(X_{n, 1}\right), \operatorname{rk}\left(X_{n, 2}\right)\right)$ where $\left(X_{1,1}, X_{1,2}\right) \ldots,\left(X_{n, 1}, X_{n, 2}\right)$ are $n$ independent realizations of $\left(X_{1}, X_{2}\right)$ and $\operatorname{rk}\left(X_{i, j}\right)$ is the rank of $X_{i, j}$ among $X_{1, j}, \ldots, X_{n, j}$.
+
+
+
+
+
+\subsubsection*{Proposition (Formula for Spearman’s rho)}
+Assume $\left(X_{1}, X_{2}\right)$ has copula $C$ and continuous marginals $F_{1}$ and $F_{2}$. 
+
+Then
+$ \rho_{\mathrm{S}}=12 \iint_{[0,1]^{2}} C\left(u_{1}, u_{2}\right) d u_{1} d u_{2}-3=12 \mathbb{E} C\left(U_{1}, U_{2}\right)-3$ where $\left(U_{1}, U_{2}\right) \sim \Pi$. 
+
+In particular, $\rho_{\mathrm{S}}$ only depends on the copula $C$ of $\left(X_{1}, X_{2}\right)$.
+
+\navy{Proof}:
+$$
+\begin{aligned}
+\rho_{\mathrm{S}}\left(X_{1}, X_{2}\right)&=\rho\left(F_{1}\left(X_{1}\right), F_{2}\left(X_{2}\right)\right) \\
+&=\frac{\operatorname{Cov}\left(F_{1}\left(X_{1}\right), F_{2}\left(X_{2}\right)\right)}{\sqrt{\operatorname{Var}\left(F_{1}\left(X_{1}\right)\right) \operatorname{Var}\left(F_{2}\left(X_{2}\right)\right)}}\\
+&= \frac{\iint_{[0,1]^{2}}\left(C\left(u_{1}, u_{2}\right)-u_{1} u_{2}\right) d u_{1} d u_{2}}{\operatorname{Var}(U)} \\
+&=12 \iint_{[0,1]^{2}}\left(C\left(u_{1}, u_{2}\right)-u_{1} u_{2}\right) d u_{1} d u_{2}\\
+&=12 \int_{[0,1]^{2}} C\left(u_{1}, u_{2}\right) d u_{1} d u_{2}-3
+\end{aligned}
+$$
+
+\begin{itemize}[leftmargin=*]
+    \item For $C=\Pi$: $\rho_{\tau}=\rho_{\mathrm{S}}=0$
+$\rightsquigarrow$ if $X_{1}$ and $X_{2}$ are independent, then $\rho_{\tau}=\rho_{\mathrm{S}}=0$
+
+    \item For $C=M$:
+$
+\rho_{\tau}=\rho_{\mathrm{S}}=1
+$
+$\rightsquigarrow$ the upper bound $1$ is attained for any pair of cont marginals $F_{1}, F_{2}$
+
+    \item For $C=W$:
+$
+\rho_{\tau}=\rho_{\mathrm{S}}=-1
+$
+$\rightsquigarrow$ the lower bound $-1$ is attained for any pair of cont marginals $F_{1}, F_{2}$
+
+    \item For $\kappa=\rho_{\tau}$ and $\kappa=\rho_{\mathrm{S}}$, one has $\kappa=\pm 1$ if and only if $X_{1}, X_{2}$ are co-/counter-monotonic
+    \item Fallacy $1\left(F_{1}, F_{2}, \rho\right.$ uniquely determine $\left.F\right)$ is not solved by replacing $\rho$ with rank correlation coefficient $\kappa$ (it is easy to construct different copulas with the same Kendall's tau, e.g. via Archimedean copulas)
+    \item Fallacy 2 (for given continuous $F_{1}, F_{2}$, any $\rho \in[-1,1]$ is attainable) is solved. Set
+$
+F\left(x_{1}, x_{2}\right)=\lambda W\left(F_{1}\left(x_{1}\right), F_{2}\left(x_{2}\right)\right)+(1-\lambda) M\left(F_{1}\left(x_{1}\right), F_{2}\left(x_{2}\right)\right)
+$.
+
+This is a model with $\rho_{\tau}=\rho_{\mathrm{S}}=1-2 \lambda$ (choose $\lambda \in[0,1]$ as desired)
+    \item Fallacy 3 ( $\kappa$ maximal $\Rightarrow \operatorname{VaR}_{\alpha}\left(X_{1}+X_{2}\right)$ maximal) is also not solved by rank correlation ( $\kappa=1$ corresponds to $C=M$, but this copula does not necessarily provide the largest $\operatorname{VaR}_{\alpha}\left(X_{1}+X_{2}\right)$; see the super-additivity examples)
+    \item Also, in general, $\kappa=0$ does not imply independence
+    \item Nevertheless, rank correlations are useful to summarize dependence, to compare different dependence structures as well as for copula parameter calibration/estimation
+
+\end{itemize}
+
+
+
+
+
+
+
+
+
+\subsection*{Coefficients of Tail Dependence}
+\melon{Goal}: Measure extremal dependence, that is, dependence in the joint tails.
+
+\subsubsection*{Def (Coefficients of tail dependence)} 
+Let $\left(X_{1}, X_{2}\right)$ be a random vec with continuous marginals $F_{1}$ and $F_{2}$. Provided that the limits exist, the \green{lower tail dependence coefficient} $\lambda_{l}$ and \green{upper tail dependence coefficient} $\lambda_{u}$ of $\left(X_{1}, X_{2}\right)$ are defined by
+$\lambda_{l} =\lim _{\alpha \downarrow 0} \mathbb{P}\left[X_{2} \leq q_{X_{2}}^{-}(\alpha) \mid X_{1} \leq q_{X_{1}}^{-}(\alpha)\right] $, $\lambda_{u} =\lim _{\alpha \uparrow 1} \mathbb{P}\left[X_{2}>q_{X_{2}}^{-}(\alpha) \mid X_{1}>q_{X_{1}}^{-}(\alpha)\right]$.
+
+\melon{Note}: as limits of (conditional) probabilities, $\lambda_{l}$ and $\lambda_{u}$ are in $[0,1]$
+
+\subsubsection*{Def (Tail dependence and independence)}
+If $\lambda_{l}>0\left(\lambda_{u}>0\right),\left(X_{1}, X_{2}\right)$ is said to be \green{lower (upper) tail dependent};
+
+If $\lambda_{l}=0\left(\lambda_{u}=0\right),\left(X_{1}, X_{2}\right)$ is said to be \green{lower (upper) tail independent}.
+
+\begin{itemize}[leftmargin=*]
+    \item Tail dependence is a copula property, since
+$$
+\begin{aligned}
+&\mathbb{P}\left[X_{2} \leq q_{X_{2}}^{-}(\alpha) \mid X_{1}  \leq q_{X_{1}}^{-}(\alpha)\right] \\
+=&\frac{\mathbb{P}\left[X_{1} \leq q_{X_{1}}^{-}(\alpha), X_{2} \leq q_{X_{2}}^{-}(\alpha)\right]}{\mathbb{P}\left[X_{1} \leq q_{X_{1}}^{-}(\alpha)\right]} \\
+=&\frac{F\left(q_{X_{1}}^{-}(\alpha), q_{X_{2}}^{-}(\alpha)\right)}{F_{1}\left(q_{X_{1}}^{-}(\alpha)\right)}=\frac{C(\alpha, \alpha)}{\alpha}, \alpha \in(0,1)
+\end{aligned}
+$$
+    \item \green{Lower tail dependence coeff}: $\lambda_{l}=\lim _{\alpha \downarrow 0} \frac{C(\alpha, \alpha)}{\alpha}$.
+    \item \green{Upper tail dep coeff}: $\lambda_{u}=2-\lim _{\alpha \uparrow 1} \frac{1-C(\alpha, \alpha)}{1-\alpha}$
+    \item If $\alpha \mapsto C(\alpha, \alpha)$ is differentiable in a neighborhood of 0 and the limit exists, then $\lambda_{l}=\lim _{\alpha \downarrow 0} \frac{d}{d \alpha} C(\alpha, \alpha)$ (\melon{l'Hôpital's rule})
+    \item If $(x, y) \mapsto C(x, y)$ is differentiable in a neighborhood of 0 and the limit exists, then $\lambda_{l}=\lim _{\alpha \downarrow 0}\left(\partial_{1} C(\alpha, \alpha)+\partial_{2} C(\alpha, \alpha)\right)$ (\melon{chain rule})
+
+    \item For all \melon{radially symmetric} copulas (e.g. the bivariate $C_{P}^{G a}$ and $C_{\nu, P}^{t}$ copulas), $\lambda_{l}=\lambda_{u}=: \lambda$.
+    \item For \green{Archimedean copulas} with strict $\psi$, $\lambda_{l}=2 \lim _{x \rightarrow \infty} \frac{\psi^{\prime}(2 x)}{\psi^{\prime}(x)}$, $\lambda_{u}=2-2 \lim _{x \downarrow 0} \frac{\psi^{\prime}(2 x)}{\psi^{\prime}(x)}$
+    
+$$
+\begin{aligned}
+\lambda_{l}&=\lim _{\alpha \downarrow 0} \frac{\psi\left(2 \psi^{-1}(\alpha)\right)}{\alpha}=\lim _{x \rightarrow \infty} \frac{\psi(2 x)}{\psi(x)} \\
+&=2 \lim _{x \rightarrow \infty} \frac{\psi^{\prime}(2 x)}{\psi^{\prime}(x)} 
+\end{aligned}
+$$
+$$
+\begin{aligned}
+\lambda_{u}&=2-\lim _{\alpha \uparrow 1} \frac{1-\psi\left(2 \psi^{-1}(\alpha)\right)}{1-\alpha}=2-\lim _{x \downarrow 0} \frac{1-\psi(2 x)}{1-\psi(x)} \\
+&=2-2 \lim _{x \downarrow 0} \frac{\psi^{\prime}(2 x)}{\psi^{\prime}(x)}
+\end{aligned}
+$$
+
+    \item \green{Clayton}: $\lambda_{l}=2^{-1 / \theta}, \lambda_{u}=0$
+    \item \green{Gumbel}: $\lambda_{l}=0, \lambda_{u}=2-2^{1 / \theta}$
+    
+    
+    \item If $(x, y) \mapsto C(x, y)$ is differentiable and $C$ is symmetric, then $\lambda_{l}=2 \lim _{\alpha \downarrow 0} \partial_{1} C(\alpha, \alpha)$.
+    
+Moreover,
+\begin{itemize}[leftmargin=*]
+    \item $\partial_{1} C(\alpha, \alpha)=\partial_{1} \int_{0}^{\alpha} \int_{0}^{\alpha} c(x, y) d x d y=\int_{0}^{\alpha} c(\alpha, y) d y$
+    \item $\int_{0}^{1} c(\alpha, y) d y=\partial_{1} \int_{0}^{\alpha} \int_{0}^{1} c(x, y) d x d y=\partial_{1} C(\alpha, 1)=\frac{d}{d \alpha} \alpha=1$
+    \item $\int_{0}^{\alpha} c(\alpha, y) d y=\frac{\int_{0}^{\alpha} c(\alpha, y) d y}{\int_{0}^{1} c(\alpha, y) d y}=\mathbb{P}\left[U_{2} \leq \alpha \mid U_{1}=\alpha\right] \quad$ if $\left(U_{1}, U_{2}\right) \sim C$
+    \item $\lambda_{l}=2 \lim _{\alpha \downarrow 0} \mathbb{P}\left[U_{2} \leq \alpha \mid U_{1}=\alpha\right] \quad$ for $\left(U_{1}, U_{2}\right) \sim C$
+    \item If $G(x)=\int_{-\infty}^{x} g(y) d y$ for a positive density $g$, then for $\left(X_{1}, X_{2}\right)=\left(G^{-1}\left(U_{1}\right), G^{-1}\left(U_{2}\right)\right)$, one has
+$$
+\begin{aligned}
+\lambda_{l}&=2 \lim _{x \downarrow-\infty} \mathbb{P}\left[X_{2} \leq x \mid X_{1}=x\right] \\
+&=2 \lim _{x \downarrow-\infty} \int_{-\infty}^{x} f_{X_{2} \mid X_{1}=x}(y) d y
+\end{aligned}
+$$
+\end{itemize}
+\end{itemize}
+
+
+
+
+
+
+\pink{7.3 Normal mixture copulas}
+\subsection*{Tail Dependence}
+\subsubsection*{Coefficients of tail dependence}
+Let $\left(X_{1}, X_{2}\right)$ be distributed according to a normal variance mixture and assume (w.l.o.g.) that $\mmu=(0,0)$ and $\A \A^{\T}=\mSigma=\vect{P}=\left(\begin{array}{cc}1 & \rho \\ \rho & 1\end{array}\right)$. In this case, $F_{1}=F_{2}$ and $C$ is symmetric as well as radially symmetric. One thus obtains
+$$
+\begin{aligned}
+\lambda&=\lambda_{l}=\lambda_{u}=2 \lim _{x \downarrow-\infty} \mathbb{P}\left[X_{2} \leq x \mid X_{1}=x\right]\\
+&=2 \lim _{x \downarrow-\infty} \int_{-\infty}^{x} f_{X_{2} \mid X_{1}=x}(y) d y
+\end{aligned}
+$$
+
+
+
+\subsubsection*{Example: tail dependence for the Gauss- and t-copula}
+\begin{itemize}[leftmargin=*]
+    \item For $\left(X_{1}, X_{2}\right) \sim \N(0, \vect{P})$ for $\vect{P}=\left(\begin{array}{cc}1 & \rho \\ \rho & 1\end{array}\right)$, one has $X_{2} \mid X_{1}=x \sim \N\left(\rho x, 1-\rho^{2}\right)$.
+
+Hence
+$\lambda=2 \lim _{x \downarrow-\infty} \mathbb{P}\left[X_{2} \leq x \mid X_{1}=x\right]=2 \lim _{x \downarrow-\infty} \Phi\left(\frac{x(1-\rho)}{\sqrt{1-\rho^{2}}}\right)=1_{\{\rho=1\}}$ 
+
+$\rightsquigarrow$ no tail dependence
+    \item For $C_{\nu, P}^{t}$, one can show that $X_{2} \mid X_{1}=x \sim t_{\nu+1}\left(\rho x, \frac{\left(1-\rho^{2}\right)\left(\nu+x^{2}\right)}{\nu+1}\right)$, and thus
+$\mathbb{P}\left[X_{2} \leq x \mid X_{1}=x\right]=t_{\nu+1}\left(\frac{x(1-\rho)}{\sqrt{\frac{\left(1-\rho^{2}\right)\left(\nu+x^{2}\right)}{\nu+1}}}\right)$. 
+
+So $\lambda=2 t_{\nu+1}\left(-\sqrt{\frac{(\nu+1)(1-\rho)}{1+\rho}}\right)$
+
+$\rightsquigarrow$ tail dependence
+\end{itemize}
+
+
+
+
+
+
+\subsection*{Rank Correlations}
+\subsubsection*{Proposition (Spearman’s rho for normal variance mixtures)}
+Let $X \sim M_{2}\left(0, P, \hat{F}_{W}\right)$ with $\mathbb{P}[X=0]=0, \rho=P_{12}$. Then
+$
+\rho_{\mathrm{S}}=\frac{6}{\pi} \mathbb{E}\left[\arcsin \left(\frac{\rho W}{\sqrt{(W+\tilde{W})(W+\bar{W})}}\right)\right]
+$, for $W, \tilde{W}, \bar{W} \stackrel{\mathrm{iid}}{\sim} F_{W}$ with Laplace-Stieltjes transform $\hat{F}_{W}$. 
+
+\red{For Gauss copulas}, $\rho_{\mathrm{S}}=\frac{6}{\pi} \arcsin (\rho / 2)$.
+
+
+\subsubsection*{Proposition (Kendall's tau for elliptical dist)}
+Let $X \sim E_{2}(0, \vect{P}, \psi)$ with $\mathbb{P}[X=0]=0$ and $\rho=\vect{P}_{12}$. Then $\rho_{\tau}=\frac{2}{\pi} \arcsin \rho$.
+
+
+
+
+
+
+
+\subsection*{Skewed Normal Mixture Copulas}
+\begin{itemize}[leftmargin=*]
+    \item Skewed normal mixture copulas are the copulas of normal mixture distributions which are not elliptical, e.g. the skewed $t$-copula is the copula of a generalized hyperbolic distribution
+    \item It can be sampled as other implicit copulas;
+(the transformations of the margins requires numerical integration of a skewed $t$-density)
+    \item The main advantage of such a copula over $C_{\nu, P}^{t}$ is its radial asymmetry (e.g. for modeling $\lambda_{l} \neq \lambda_{u}$ )
+\end{itemize}
+
+
+
+\subsection*{Grouped Normal Mixture Copulas}
+A \green{grouped normal mixture copula} is the copula of a random vector of the form $X=\left(\sqrt{W_{1}} Y_{1}, \ldots, \sqrt{W_{1}} Y_{k_{1}}, \ldots, \sqrt{W_{n}} Y_{k_{n-1}+1}, \ldots, \sqrt{W_{n}} Y_{k_{n}}\right) $ where
+(1) $\Y \sim \N_{d}(\vect{0}, \vect{P})$ for a correlation matrix $\vect{P}$; i.e. $\Y \stackrel{(d)}{=} \A \Z$ for $\A \A^{\T}=\vect{P}$; (2) $1 \leq k_{1} \leq k_{2} \leq \ldots \leq k_{n}=d$; (3) $W_{1}, \ldots, W_{n}$ are non-negative comonotone RVs.
+
+
+
+\navy{Example}: $$
+\X=\left(\sqrt{W_{1}} Y_{1}, \ldots, \sqrt{W_{1}} Y_{k_{1}}, \ldots, \sqrt{W_{n}} Y_{k_{n-1}+1}, \ldots, \sqrt{W_{n}} Y_{k_{n}}\right)
+$$
+where 
+\begin{itemize}[leftmargin=*]
+    \item $\Y \sim \N_{d}(0, \vect{P})$ for a correlation matrix $\vect{P}$. i.e. $\Y \stackrel{(d)}{=} \A \Z$ for $\A \A^{\T}=\vect{P}$
+    \item $1 \leq k_{1} \leq k_{2} \leq \cdots \leq k_{n}=d$
+    \item $W_{1}, \ldots, W_{n}$ are comonotone such that $W_{j}=1 / G_{j}$ for $G_{j} \sim \Gamma\left(\nu_{j} / 2, \nu_{j} / 2\right), j=1, \ldots, n$
+\end{itemize}
+
+The marginals are $t_{\nu_{j}}$-distributed, $j=1, \ldots, n$.
+$$
+\U=\left(t_{\nu_{1}}\left(X_{1}\right), \ldots, t_{\nu_{1}}\left(X_{k_{1}}\right), \ldots, t_{\nu_{n}}\left(X_{k_{n-1}+1}\right), \ldots, t_{\nu_{n}}\left(X_{k_{n}}\right)\right)
+$$
+follows a \green{grouped $t$-copula}.
+
+For $k_{n}=d$, \green{grouped $t$-copulas} are also known as \green{generalized $t$-copulas}.
+
+
+
+
+
+
+
+
+\pink{7.4 Archimedean copulas}
+
+Recall that an \green{Archimedean generator} $\psi$ is a function $\psi:[0, \infty) \rightarrow[0,1]$ satisfying
+\begin{itemize}[leftmargin=*]
+    \item $\psi(0)=1$
+    \item $\lim _{x \rightarrow \infty} \psi(x)=0$
+    \item $\psi$ is continuous, non-increasing and strictly decreasing on $[0, \inf \{x: \psi(x)=0\}]$
+\end{itemize}
+The set of all generators is denoted by $\Psi$.
+
+
+\subsection*{Bivariate Archimedean Copulas}
+For $\psi \in \Psi, C\left(u_{1}, u_{2}\right)=\psi\left(\psi^{-1}\left(u_{1}\right)+\psi^{-1}\left(u_{2}\right)\right)$ is a copula \red{iff} $\psi$ is convex.
+
+\begin{itemize}[leftmargin=*]
+    \item For a strict and twice-continuously differentiable $\psi$, one can show that
+$$
+\rho_{\tau}=1-4 \int_{0}^{\infty} x\left(\psi^{\prime}(x)\right)^{2} d x=1+4 \int_{0}^{1} \frac{\psi^{-1}(x)}{\left(\psi^{-1}(x)\right)^{\prime}} d x
+$$
+    \item If $\psi$ is strict, $\lambda_{l}=2 \lim _{x \rightarrow \infty} \frac{\psi^{\prime}(2 x)}{\psi^{\prime}(x)}$ and $\lambda_{u}=2-2 \lim _{x \downarrow 0} \frac{\psi^{\prime}(2 x)}{\psi^{\prime}(x)}$
+\end{itemize}
+
+
+
+
+
+
+\subsection*{Multivariate Archimedean Copulas}
+$\psi$ is \green{completely monotone (c.m.)} if $(-1)^{k} \psi^{(k)}(x) \geq 0$ for all $x \in(0, \infty)$ and all $k \in \mathbb{N}_{0}$. The set of all c.m. generators is denoted by $\Psi_{\infty}$.
+
+\subsubsection*{Thm (Kimberling)}
+For $\psi \in \Psi, C(\u)=\psi\left(\sum_{j=1}^{d} \psi^{-1}\left(u_{j}\right)\right)$ is a copula for all $d \geq 2$ \red{iff} $\psi \in \Psi_{\infty}$.
+
+\subsubsection*{Thm (Bernstein)}
+A function $\psi:[0, \infty) \rightarrow[0,1]$ is completely monotone \red{iff}
+$\psi(x)=\mathbb{E}[\exp (-x V)]$ for a non-negative random variable $V \sim G$ with $G(0)=0$
+
+\melon{Notation}: $\psi=\hat{G}$ (\green{Laplace transform})
+
+It can be shown that to generate a $d$-dimensional copula, it is enough for $\psi$ to be $d$-monotone.
+
+
+
+
+
+\subsubsection*{Proposition (Stochastic representation)}
+Let $\psi \in \Psi_{\infty}$ such that $\psi=\hat{G}$. Let $V \sim G$ and $E_{1}, \ldots, E_{d} \stackrel{\mathrm{iid}}{\sim} \operatorname{Exp}(1)$ ind of $V$. Then
+\begin{enumerate}[label = (\arabic*), leftmargin=*]
+    \item The survival copula $\hat{C}$ of $\X=\left(E_{1} / V, \ldots, E_{d} / V\right)$ is Archimedean with generator $\psi$
+    \item $\U=\left(\psi\left(X_{1}\right), \ldots, \psi\left(X_{d}\right)\right) \sim \hat{C}$ and the $U_{j}$ 's are conditionally independent given $V$ with
+$$
+\mathbb{P}\left[U_{j} \leq u \mid V=v\right]=\exp \left(-v \psi^{-1}(u)\right)
+$$
+\end{enumerate}
+
+
+\navy{Proof}: 
+\begin{enumerate}[label = (\arabic*), leftmargin=*]
+    \item The joint survival function of $\X$ is given by
+$$
+\begin{aligned}
+\bar{F}(x) &=\mathbb{P}\left[X_{j}>x_{j} \text { for all } j\right] \\
+&=\int_{0}^{\infty} \mathbb{P}\left[E_{j} / V>x_{j} \text { for all } j \mid V=v\right] d G(v) \\
+&=\int_{0}^{\infty} \mathbb{P}\left[E_{j}>v x_{j} \text { for all } j\right] d G(v) \\
+&=\int_{0}^{\infty} \prod_{j=1}^{d} \exp \left(-v x_{j}\right) d G(v) \\
+&=\int_{0}^{\infty} \exp \left(-v \sum_{j=1}^{d} x_{j}\right) d G(v)=\psi\left(\sum_{j=1}^{d} x_{j}\right) \\
+\bar{F}_{j}\left(x_{j}\right) &=\bar{F}\left(0, \ldots, 0, x_{j}, 0, \ldots, 0\right)=\psi\left(x_{j}\right) \\
+\hat{C}(u) &=\bar{F}\left(\bar{F}_{1}^{-1}\left(u_{1}\right), \ldots, \bar{F}_{d}^{-1}\left(u_{d}\right)\right)\\
+&=\psi\left(\sum_{j=1}^{d} \psi^{-1}\left(u_{j}\right)\right)
+\end{aligned}
+$$
+    \item $\mathbb{P}[U \leq u]=\mathbb{P}\left[\psi\left(X_{j}\right) \leq u_{j}\right.$ for all $\left.j\right]=\mathbb{P}\left[X_{j}>\psi^{-1}\left(u_{j}\right)\right.$ for all $\left.j\right]=\psi\left(\sum_{j=1}^{d} \psi^{-1}\left(u_{j}\right)\right)$ 
+    
+    Conditional independence is clear by construction, and
+$$
+\begin{aligned}
+&\mathbb{P}\left[U_{j} \leq u \mid V=v\right]=\mathbb{P}\left[\psi\left(X_{j}\right) \leq u \mid V=v\right] \\
+&=\mathbb{P}\left[X_{j}>\psi^{-1}(u) \mid V=v\right]=\mathbb{P}\left[E_{j}>v \psi^{-1}(u)\right] \\
+&=\exp \left(-v \psi^{-1}(u)\right)
+\end{aligned}
+$$
+\end{enumerate}
+
+
+
+
+
+\subsubsection*{Algorithm (Marshall and Olkin)}
+\begin{enumerate}[label = (\arabic*), leftmargin=*]
+    \item Sample $V \sim G$, where $\hat{G}=\psi$
+    \item Sample $E_{1}, \ldots, E_{d} \stackrel{\mathrm{iid}}{\sim} \operatorname{Exp}(1)$ ind of $V$
+    \item Return $U=\left(\psi\left(E_{1} / V\right), \ldots, \psi\left(E_{d} / V\right)\right)$
+\end{enumerate}
+
+
+
+
+
+
+
+\pink{7.5 Fitting copulas to data}
+\begin{itemize}[leftmargin=*]
+    \item Let $X, X_{1}, \ldots, X_{n}$ be independent $d$-dimensional random vectors with cdf $F$, continuous margins $F_{1}, \ldots, F_{d}$ and copula $C$
+    \item Let $x_{1}, \ldots, x_{n} \in \mathbb{R}^{d}$ be realizations of $X_{1}, \ldots, X_{n}$
+    \item Assume (1) $F_{j}=F_{j}\left(\cdot ; \theta_{j}\right)$ for some $\theta_{j} \in \Theta_{j}, j=1, \ldots, d$; (2) $C=C\left(\cdot ; \theta_{C}\right)$ for some $\theta_{C} \in \Theta_{C}$
+
+The true but unknown parameter vector $\theta^{*}=\left(\theta_{C}^{*}, \theta_{1}^{*}, \ldots, \theta_{d}^{*}\right)$ has to be estimated
+    \item Here, we focus particularly on $\theta_{C}$. Whenever necessary, we assume that the margins $F_{1}, \ldots, F_{d}$ and the copula $C$ are absolutely continuous with corresponding densities $f_{1}, \ldots, f_{d}$ and $c$, respectively
+\end{itemize}
+
+
+
+\subsection*{Method-of-Moments Using Rank Correlation}
+\begin{itemize}[leftmargin=*]
+    \item We focus on one-parameter copulas here
+    \item For $d=2$, Genest and Rivest suggested estimating $\theta_{C}$ by choosing it so that $\rho_{\tau}\left(\theta_{C}\right)=r_{\tau}(n)$, that is,
+$$
+\hat{\theta}_{n, C}^{\text {IKTE }}=\rho_{\tau}^{-1}\left(r_{\tau}(n)\right)
+$$
+(\green{inversion of Kendall's tau estimator (IKTE)})
+
+where $\rho_{\tau}(\cdot)$ denotes Kendall's tau as a function of $\theta$ and $r_{\tau}(n)$ is the sample version of Kendall's tau
+
+    \item The standardized dispersion matrix $P$ for \green{elliptical copulas} can be estimated via pairwise inversion of Kendall's tau. If $r_{\tau}^{j_{1} j_{2}}(n)$ denotes the sample version of Kendall's tau for data pair $\left(j_{1}, j_{2}\right)$, then $\hat{P}_{n, j_{1}, j_{2}}^{\mathrm{IKTE}}=\sin \left(\pi r_{\tau}^{j_{1}, j_{2}}(n) / 2\right)$.
+    
+    Recall: $\rho_{\tau}=\frac{2}{\pi} \arcsin \rho$ for elliptical distr. 
+    
+    (A correction might be needed for obtaining a proper correlation matrix $\vect{P}$; that is, one that is positive semi-definite)
+    
+    \item For Gauss copulas, it is preferable to use Spearman's rho based on
+$$
+\rho_{\mathrm{S}}=\frac{6}{\pi} \arcsin \frac{\rho}{2} \approx \rho
+$$
+
+The latter approximation error is relatively small, so that the matrix of pairwise sample versions of Spearman's rho is an estimator for $\vect{P}$
+    \item For $t$-copulas, $\hat{P}_{n}^{\mathrm{IKTE}}$ can be used to estimate $\vect{P}$ and then $\nu$ can be estimated via its MLE based on $\hat{P}_{n}^{\mathrm{IKTE}}$.
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+\subsection*{Forming a Pseudo-Sample from the Copula}
+\begin{itemize}[leftmargin=*]
+    \item $X_{1}, \ldots, X_{n}$ tipically does not have $U(0,1)$ margins. For applying the "copula approach", one needs \green{pseudo-observations} from $C$
+    \item For instance, $\hat{\U}_{i}=\left(\hat{U}_{i, 1}, \ldots, \hat{U}_{i, d}\right)=\left(\hat{F}_{1}\left(X_{i, 1}\right), \ldots, \hat{F}_{d}\left(X_{i, d}\right)\right), i=1, \ldots, n$, where $\hat{F}_{j}$ is an estimator of $F_{j}$
+    \item Note that $\hat{U}_{1}, \ldots, \hat{U}_{n}$ are typically neither independent (even if $X_{1}, \ldots, X_{n}$ are) nor perfectly $U(0,1)$
+\end{itemize}
+
+
+
+
+
+
+
+
+\subsection*{Different ways of estimating $\hat{F}_{j}$}
+\begin{enumerate}[label = (\arabic*), leftmargin=*]
+    \item \green{Non-parametric estimators} with scaled empirical df's.
+    
+The empirical $\mathrm{cf} \hat{F}_{j}$ is given by
+$$
+\hat{F}_{j}(x)=\frac{1}{n} \sum_{i=1}^{n} 1_{\left\{X_{i, j} \leq x\right\}}
+$$
+
+Set
+$
+\hat{U}_{i, j}=\frac{n}{n+1} \hat{F}_{j}\left(X_{i, j}\right)=\frac{R_{i, j}}{n+1}
+$ \red{(1)}, 
+where $R_{i, j}$ denotes the rank of $X_{i, j}$ among all $X_{1, j}, \ldots, X_{n, j}$
+
+(the rescaling $n /(n+1)$ is used to avoid density evaluation on the boundary of $[0,1]^{d}$ )
+    \item \green{Parametric estimators} (such as Student- $t$, Pareto, etc.; typically if $n$ is small).
+    
+In this case, one often still uses \red{(1)} for estimating $\theta_{C}$
+
+(to keep the error due to misspecification of the margins small)
+    \item \green{Semi-parametric estimators} (e.g. EVT-based: bodies are modeled empirically, tails semi-parametrically via GPD)
+\end{enumerate}
+
+
+
+
+
+
+
+
+\subsection*{Maximum Likelihood Estimation}
+\subsubsection*{The Classical Maximum Likelihood Estimator}
+\begin{itemize}[leftmargin=*]
+    \item By Sklar's Theorem, the density of $F$ is given by
+$$
+\begin{aligned}
+&f(x ; \theta) \\
+=&c\left(F_{1}\left(x_{1} ; \theta_{1}\right), \ldots, F_{d}\left(x_{d} ; \theta_{d}\right) ; \theta_{C}\right) \prod_{j=1}^{d} f_{j}\left(x_{j} ; \theta_{j}\right)
+\end{aligned}
+$$
+    \item The log-likelihood based on $X_{1}, \ldots, X_{n}$ is thus
+$$
+\begin{aligned}
+&\ell\left(X_{1}, \ldots, X_{n} ; \theta\right)=\sum_{i=1}^{n} \ell\left(X_{i} ; \theta\right) \\
+=&\sum_{i=1}^{n} \ell_{C}\left(F_{1}\left(X_{i, 1} ; \theta_{1}\right), \ldots, F_{d}\left(X_{i, d} ; \theta_{d}\right) ; \theta_{C}\right) \\
+& \quad +\sum_{i=1}^{n} \sum_{j=1}^{d} \ell_{j}\left(X_{i, j} ; \theta_{j}\right)
+\end{aligned}
+$$
+where $\ell_{C}\left(u_{1}, \ldots, u_{d} ; \theta_{C}\right)=\log c\left(u_{1}, \ldots, u_{d} ; \theta_{C}\right)$ and $\ell_{j}\left(x ; \theta_{j}\right)=\log f_{j}\left(x ; \theta_{j}\right), j=1, \ldots, d$
+    \item The maximum likelihood estimator (MLE) of $\theta$ is
+$$
+\hat{\theta}_{n}^{\mathrm{MLE}}=\underset{\theta \in \Theta}{\operatorname{argmax}} \ell\left(X_{1}, \ldots, X_{n} ; \theta\right) .
+$$
+
+This optimization is typically done by numerical means. But it can be quite demanding, especially in high dimensions.
+\end{itemize}
+
+
+
+\subsubsection*{The Inference Functions for Margins Estimator (IFME)}
+\begin{itemize}[leftmargin=*]
+    \item Joe and Xu (1996) suggested the following two-step estimation approach:
+    
+(1) For $j=1, \ldots, d$, estimate $\theta_{j}$ by its MLE $\hat{\theta}_{n, j}^{\mathrm{MLE}}$; 
+
+(2) Estimate $\theta_{C}$ by
+$$
+\hat{\theta}_{n, C}^{\text {IFME }}=\underset{\theta_{C} \in \Theta_{C}}{\operatorname{argmax}} \ell\left(X_{1}, \ldots, X_{n} ; \hat{\theta}_{n, 1}^{\mathrm{MLE}}, \ldots, \hat{\theta}_{n, d}^{\mathrm{MLE}}, \theta_{C}\right)
+$$
+
+The \green{inference functions for margins estimator (IFME)} of $\theta$ is thus
+$$
+\hat{\theta}_{n}^{\mathrm{IFME}}=\left(\hat{\theta}_{n, 1}^{\mathrm{MLE}}, \ldots, \hat{\theta}_{n, d}^{\mathrm{MLE}}, \hat{\theta}_{n, C}^{\mathrm{IFME}}\right)
+$$
+    \item This is typically much easier to compute than $\hat{\theta}_{n}^{\mathrm{MLE}}$ while providing good results
+    \item $\hat{\theta}_{n}^{\text {IFME }}$ can also be used as initial value for a numerical evaluation of $\hat{\theta}_{n}^{\mathrm{MLE}}$
+\end{itemize}
+
+\navy{Example}: Suppose $X_{j} \sim N\left(\mu_{j}, \sigma_{j}^{2}\right), j=1, \ldots, d$ for $d=100$, and $C$ has one parameter
+\begin{itemize}[leftmargin=*]
+    \item MLE requires to solve a 201-dimensional optimization problem
+    \item IFME only requires 100 optimizations in two dimensions and 1 one-dimensional optimization
+\end{itemize}
+If the marginals are estimated parametrically one often still uses the \green{pseudo-observations} built from the marginal empirical df's to estimate $\theta_{C}$ (see MPLE below) in order to avoid misspecification of the margins (if $n$ is sufficiently large)
+
+
+
+
+
+
+
+
+
+
+\subsubsection*{The Maximum Pseudo-Likelihood Estimator (MPLE)}
+\begin{itemize}[leftmargin=*]
+    \item The maximum pseudo-likelihood estimator (MPLE), introduced by Genest et al. (1995), works similarly to $\theta_{n}^{\text {IFME }}$, but estimates the margins non-parametrically:
+    
+(1) Compute rank-based pseudo-observations $\hat{U}_{i, j}=R_{i, j} /(n+1)$; 
+
+(2) Estimate $\theta_{C}$ by
+$$
+\begin{aligned}
+\theta_{n, C}^{\mathrm{MPLE}}&=\underset{\theta_{C} \in \Theta_{C}}{\operatorname{argmax}} \sum_{i=1}^{n} \ell_{C}\left(\hat{U}_{i, 1}, \ldots, \hat{U}_{i, d} ; \theta_{C}\right)\\
+&=\underset{\theta_{C} \in \Theta_{C}}{\operatorname{argmax}} \sum_{i=1}^{n} \log c\left(\hat{U}_{i} ; \theta_{C}\right)
+\end{aligned}
+$$
+    \item Genest and Werker (2002) show that $\hat{\theta}_{n, C}^{\mathrm{MPLE}}$ is not asymptotically efficient in general
+    \item Kim et al. (2007) compare $\hat{\theta}_{n}^{\mathrm{MLE}}, \hat{\theta}_{n}^{\text {IFME }}$ and $\hat{\theta}_{n, C}^{\mathrm{MPLE}}$ in a simulation study $(d=2$ only!) and argue in favor of $\hat{\theta}_{n, C}^{\mathrm{MPLE}}$ overall, especially w.r.t. robustness to misspecification of the margins
+\end{itemize}
+
+
+
+\navy{Example: fitting the Gauss copula}
+\begin{itemize}[leftmargin=*]
+    \item The log-likelihood $\ell_{C}$ is
+$$
+\ell_{C}\left(\hat{U}_{1}, \ldots, \hat{U}_{n} ; P\right)=\sum_{i=1}^{n} \ell_{C}\left(\hat{U}_{i} ; P\right)=\sum_{i=1}^{n} \log c_{P}^{G a}\left(\hat{U}_{i}\right)
+$$
+
+For maximization over all correlation matrices $P$, one can use the Cholesky factor $A$ as reparameterization and maximize over all lower triangular matrices $A$ with $1 \mathrm{~s}$ on the diagonal this is still $\mathcal{O}\left(d^{2}\right)$
+    \item Alternatively, one can use pairwise inversion of Spearman's rho or Kendall's tau
+\end{itemize}
+
+\navy{Example: fitting the $t$-copula}
+\begin{itemize}[leftmargin=*]
+    \item For small $d$, maximize the likelihood over all correlation matrices (as in the Gauss copula case) and the degree of freedom $\nu$
+    \item For moderate/larger $d$,
+(1) Estimate $P$ via pair-wise inversion of Kendall's tau
+(2) Plug $\hat{P}$ into the likelihood and maximize it w.r.t. $\nu$ to obtain $\hat{\nu}_{n}$
+\end{itemize}
+
+
+\navy{Example: correlation estimation for heavy-tailed data}
+
+Consider $n=3000$ realizations of independent samples of size 90 from
+$
+t_{2}\left(3,0,\left(\begin{array}{cc}
+1 & 0.5 \\
+0.5 & 1
+\end{array}\right)\right) \rightsquigarrow \text { linear correlation } \rho=0.5
+$
+
+Shall we estimate $\rho$ via \green{sample correlation} or via \green{inversion of Kendall's tau}? The variance of the latter is smaller!
+
+
+
+
+\subsection*{Estimation, Goodness-of-fit \& Model Selection}
+\green{Estimation} is only one side of the coin. The other is \green{goodness-of-fit} (i.e. to find out whether the estimated model indeed represents the given data well) and \green{model selection} (i.e. to decide which model is best among different adequate fitted models). \green{Goodness-of-fit} can be (computationally) challenging, particularly for large $d$.

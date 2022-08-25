@@ -1,0 +1,377 @@
+\section{Operational Risk}
+\subsection*{Definition of Operational Risk}
+The risk of loss resulting from inadequate or failed
+internal processes, people and systems or from external
+events.
+
+This definition includes
+\begin{itemize}[leftmargin=*]
+    \item \green{Legal Risk} – financial loss that can result from lack
+of awareness or misunderstanding of, ambiguity
+in, or reckless indifference to, the way law and
+regulation apply to your business, its relationships,
+processes, products and services
+
+but excludes
+    \item \green{Strategic Risk} – loss arising from a poor strategic
+business decision
+    \item \green{Reputational Risk} – damage to an organization
+through loss of its reputation or standing
+\end{itemize}
+
+
+
+
+
+\subsection*{Basel Op Risk categories}
+\begin{enumerate}[label = (\arabic*), leftmargin=*]
+    \item \green{Internal Fraud} – misappropriation of assets, tax
+evasion, intentional mismarking of positions, bribery
+    \item \green{External Fraud} – theft of information, hacking
+damage, third-party theft and forgery
+    \item \green{Employment Practices and Workplace Safety} –
+discrimination, workers compensation
+    \item \green{Clients, Products, and Business Practice} – market
+manipulation, product defects
+    \item \green{Damage to Physical Assets} – natural disasters,
+terrorism, vandalism
+    \item \green{Business Disruption and Systems Failures} – utility
+disruptions, software failures, hardware failures
+    \item \green{Execution, Delivery, and Process Management} –
+data entry errors, accounting errors
+\end{enumerate}
+
+
+
+
+
+
+\pink{8.1 Basel Pillar 1 - Minimal Capital Requirements}
+\subsection*{Regulatory Capital (RC)}
+Banks must hold a regulatory minimum capital to absorb losses from Op Risk. Currently, there are \red{three approaches}.
+
+\subsubsection*{Basic Indicator Approach (BIA)}
+The Regulatory Capital under the BIA equals $15 \%$ of the average annual gross income over the previous three years where it was positive, i.e.,
+$$
+\mathrm{RC}_{t}^{\mathrm{BIA}}=15 \% \cdot\left(\sum_{k=1}^{3} \max \left\{\mathrm{GI}_{t-k}, 0\right\}\right) /\left(\sum_{k=1}^{3} \mathbb{I}_{\mathrm{GI}_{t-k}>0}\right)
+$$
+where $G l_{t-k}$ is the gross income in year $t-k$.
+\begin{itemize}[leftmargin=*]
+    \item For regional, non-complex firms
+    \item Not risk-sensitive
+\end{itemize}
+
+
+
+
+
+
+\subsection*{The Standardized Approach (TSA)}
+The TSA is like the BIA, but the calculation is performed separately for each business line with different weights, i.e.,
+$$
+\mathrm{RC}_{t}^{\mathrm{TSA}}=\frac{1}{3} \cdot \sum_{k=1}^{3} \max \left\{\sum_{b=1}^{8} \beta_{b} \mathrm{GI}_{t-k}^{b}, 0\right\}
+$$
+where $\mathrm{Gl}^{\mathrm{b}} \mathrm{t-k}$ is the gross income in year $\mathrm{t}-\mathrm{k}$ of business line $b$ and $\beta_{b}$ is its weight. The 8 business lines and their weights are (note the sum of weights is equal $1.2=8 \times 15 \%$):
+$\begin{array}{ll}\text { Corporate finance } 18 \% & \text { Payment \& Settlement } 18 \% \\ \text { Trading \& Sales } 18 \% & \text { Agency Services } 15 \% \\ \text { Retail banking } 12 \% & \text { Asset management } 12 \% \\ \text { Commercial banking } 15 \% & \text { Retail brokerage } 12 \%\end{array}$
+\begin{itemize}[leftmargin=*]
+    \item Expected for most financial services firms
+    \item Not risk-sensitive
+\end{itemize}
+
+
+
+\subsection*{Advanced Measurement Approach (AMA)}
+The Regulatory Capital is equal to the \melon{Op Risk loss that is exceeded only once in 1000 years}, i.e., $\mathrm{VaR}_{0.999}(\mathrm{~L})$, where the random variable $\mathrm{L}$ is the annual Op Risk loss.
+
+Common approach to model $L$, taken in large banks, is the Loss Distribution Approach (LDA)
+
+Allows banks to use their internally generated risk estimates, based on extensive Supervisory Guidance:
+
+(1) Operational Risk - Supervisory Guidelines for the Advanced Measurement Approaches, Basel Committee on Banking Supervision
+
+(2) Supervisory Guidance for Data, Modeling, and Model Risk Management Under the Operational Risk Advanced Measurement Approaches, FED ... (and more)
+
+\begin{itemize}[leftmargin=*]
+    \item Is currently in place at many of the global and systemically important banks (e.g., UBS)
+    \item Requires prior regulatory approval
+    \item Involves complex statistical modelling, allows for flexibility
+\end{itemize}
+
+
+
+
+
+\subsection*{Loss Distribution Approach (LDA) within the AMA Framework}
+\subsubsection*{Define Units of Measure (UoM)}
+A UoM typically combines business lines and loss event types, e.g., Investment Bank and Fraud
+\subsubsection*{Model the annual UoM loss as compound sum of Frequency and Severity}
+For each $U \circ M \mathrm{u}, \mathrm{u} \in\{1,2, \ldots, \mathrm{U}\}$, annual loss $\mathrm{L}_{\mathrm{u}}=\sum_{\mathrm{k}=1}^{\mathrm{N}_{\mathrm{u}}} \mathrm{X}_{\mathrm{k}, \mathrm{u}}$, where $\left\{\mathrm{X}_{\mathrm{k}, \mathrm{u}}: \mathrm{k}=1,2, \ldots, \mathrm{N}_{\mathrm{u}}\right\}$ are i.i.d and independent from $\mathrm{N}_{\mathrm{u}}, \mathrm{N}_{\mathrm{u}}$ is the number of losses in UoM u per year (Frequency) and $\mathrm{X}_{\mathrm{k}, \mathrm{u}}$ is the amount of the $\mathrm{k}$-th loss in UoM $\mathrm{u}$ (Severity)
+\subsubsection*{Aggregate the annual UoM losses into an annual loss distribution}
+The annual Op Risk loss $\mathrm{L}$ is then $\mathrm{L}=\sum_{\mathrm{u}=1}^{\mathrm{U}} \mathrm{L}_{\mathrm{u}}$, where dependence structure of $\left(\mathrm{L}_{1}, \mathrm{~L}_{2}, \ldots, \mathrm{L}_{\mathrm{U}}\right)$ is given by Copula C
+\subsubsection*{Very challenging modelling problem}
+To estimate/justify: Segmentation into UoM / Frequency Distribution / Severity Distribution / Copula
+
+
+
+
+
+
+\subsection*{The Four Data Elements for LDA Estimation}
+1. ILD; 2. ELD; 3. SA; 4. BEICF
+
+\melon{More objective but backward-looking}:
+
+1. \green{Internal Operational Loss Event Data (ILD)}: Most relevant to the banks particular
+case, and well known
+
+2. \green{External Operational Loss Event Data (ELD)}:
+\begin{itemize}[leftmargin=*]
+    \item Data consortia, e.g., Operational Riskdata
+eXchange Association (homogeneous
+classification standards, data relevance)
+    \item Publicly available data, e.g., media or
+annual reports (reporting bias)
+\end{itemize}
+
+
+
+\melon{Forward-looking but more subjective}:
+
+3. \green{Scenario Analysis (SA)}:
+\begin{itemize}[leftmargin=*]
+    \item Systematic process of obtaining expert opinions on the
+likelihood and loss impact of plausible, high-severity
+operational losses, typically developed through
+workshops
+    \item Expert biases (overconfidence, anchoring, …) and
+subjectivity
+\end{itemize}
+
+
+3. \green{Business Environment and Internal Control Factors (BEICF)}:
+\begin{itemize}[leftmargin=*]
+    \item Indicators designed to provide a forward-looking
+assessment of a banking organization's business risk
+factors and internal control environment (impact of
+discontinuing a line of business, a change in the
+internal control environment, …)
+    \item Might be used to adjust operational risk exposure
+\end{itemize}
+
+
+
+
+
+
+\subsection*{Modelling Options within the LDA Framework}
+\begin{itemize}[leftmargin=*]
+    \item Frequency: Poisson, Negative Binomial
+    \item Severity: Log-Normal, Log-Gamma, Generalized Pareto, …
+    \item Copula / Dependence
+    \begin{itemize}[leftmargin=*]
+        \item Dependence between annual losses, $\mathrm{L}_{\mathrm{u}}, \mathrm{u} \in\{1,2, \ldots, \mathrm{U}\}$, vs dependence on frequency / severity level
+        \item Copulas: t, Clayton, Gumbel, Frank, ...
+    \end{itemize}
+    \item Use of the four data elements (ILD, ELD, SA, BEICF): 
+    – Filtering ELD to remove non-relevant events; 
+– Scaling ELD to account for differences in size or business activities; 
+– Mixing data vs mixing distributions, e.g., fit distribution to ILD plus weighted ELD vs fit distributions to both ILD and ELD and mix the densities; 
+– Benchmarking, e.g., compare ILD based main model with ELD based challenger model
+– Build an own SA distribution vs SA based adjustments; 
+– Bayesian approach: use SA distributions as prior and calculate posterior given ILD and ELD; 
+– Parameter adjustments based on BEICF
+\end{itemize}
+
+
+
+
+\subsection*{Criticism of the AMA}
+\begin{itemize}[leftmargin=*]
+    \item Comparability of AMA minimum capital figures is questionable due to the full methodological freedom within the LDA
+    \item How reliable are the quantitative estimates? 1-in-1000-year loss vs twenty years of ILD!
+    
+    \begin{itemize}[leftmargin=*]
+    \item Limited availability of data / high confidence levels $\rightarrow$ uncertainty / instability in estimates
+    \item Over-fitting and extrapolation challenges
+    \end{itemize}
+\end{itemize}
+
+
+
+
+\subsection*{Standardized Measurement Approach (SMA)}
+\begin{itemize}[leftmargin=*]
+    \item A simpler and more comparable approach will be implemented effective 1 January 2023*, see Section Minimum capital
+requirements for operational risk in Basel III: Finalising post-crisis reforms from the Basel Committee on Banking Supervision
+    \item The SMA combines the Business Indicator, a simple financial statement proxy of operational risk exposure, with bankspecific
+Internal Loss Multiplier (based on internal operational loss data) to provide some incentive for banks to improve
+their operational risk management
+    \item Nevertheless, comparability of capital charges remains a concern because
+    \begin{itemize}[leftmargin=*]
+    \item the collection of operational loss data is still determined by individual bank rules (no common standard),
+    \item national regulators may grant exclusion of (parts of) the loss history from the calculation (due to backward-looking nature of the SMA).
+    \end{itemize}
+\end{itemize}
+
+
+
+
+
+
+\pink{8.2 Basel Pillar 2 -  Supervisory Review of Capital Adequacy}
+\subsection*{Supervisory Review of Capital Adequacy}
+\begin{itemize}[leftmargin=*]
+    \item In the Internal Capital Adequacy Assessment Process, a
+bank needs to assess (among other things) whether it
+considers its capital adequate to cover the level and
+nature of the risks to which it is exposed
+    \item This includes the risk types from Pillar 1 (Credit Risk,
+Market Risk and Op Risk), but extends to every possible
+risk type and their aggregation / diversification
+\end{itemize}
+
+
+\subsection*{Stress Testing}
+Stress Testing: analysis to determine whether there is enough capital to withstand the impact of an unfavorable economic scenario, including the causality
+chain by which losses would arise if the scenario were to unfold
+
+
+
+
+
+\subsection*{Modelling Op Risk Stress Loss}
+1. Leverage the Loss Distribution Approach by choosing a particular quantile to represent the loss under stress
+\begin{itemize}[leftmargin=*]
+    \item Choice of the quantile is difficult to substantiate, which has led all CCAR banks to move away from this approach.
+\end{itemize}
+2. Regressions and case studies / scenarios analysis
+\begin{itemize}[leftmargin=*]
+    \item Quarterly operational losses may be linked to macroeconomic risk factor in certain cases, e.g., losses in “Execution, delivery, and process
+management” or “External fraud” to transaction volumes, real estate/house prices, GDP, and delinquency or unemployment rates.
+    \item A possible modelling approach is to use generalized linear models with compound distributions (e.g., Poisson-Gamma) and log-link
+functions. The stability of the model and the lack of sufficient predictive power can be a challenge.
+    \item A pool of candidate models is usually identified and the final model is selected by subject-matter experts and business intuition. If no
+economically meaningful model is found, fallback estimates may be used, e.g., historical average losses.
+    \item To capture the possibility of rare (or not yet experienced) events, to include risk controls and mitigation efforts, to include a more
+“forward-looking” view, to evaluate the vulnerabilities of the bank identified during a risk identification exercise and to overcome some of
+the challenges when building a quantitative model, case study/scenario analysis is conducted by experts in workshops and the
+corresponding loss estimates (or loss estimate refinements) are included in the projections.
+\end{itemize}
+
+
+
+
+\subsection*{Economic Capital Calculation}
+\begin{itemize}[leftmargin=*]
+    \item Economic Capital: amount of capital required to ensure solvency over a year with a pre-specified probability (e.g., 95\% or 99.9\%).
+    \item A common approach to generate the annual loss distribution is to model risk types via their marginal loss distributions and then to
+aggregate them using copulas, see picture. For the Op Risk marginal distribution, the LDA can be used again (if there is already AMA LDA
+model).
+    \item Another approach is to simulate many economic scenarios (risk drivers) consistently, and then to use methods like the ones used in Stress
+Testing to calculate the annual loss for each scenario.
+\end{itemize}
+
+
+
+
+
+
+
+\pink{8.3 Monitoring \& Surveillance of Op Risks - Compliance Models}
+\subsection*{Compliance Models – Landscape}
+\begin{itemize}[leftmargin=*]
+    \item \green{Adverse Media Screening}: Identify financial crime relevant news articles from various media sources concerning UBS clients or prospects
+    \item \green{Sanctions Screening}: Identify references to sanctioned
+entities, individuals or regions
+within payment messages in
+order to prevent the transaction
+    \item \green{AML Client Risk Rating}: Produce AML risk ratings which
+drive the frequency/depth of
+periodic client reviews and the
+level of alerting thresholds in
+downstream transaction
+monitoring systems
+    \item \green{AML Transaction Monitoring}: Detect suspicious client
+transactions relating to money
+laundering (e.g., changes in
+transaction behavior,
+transactions involving high risk
+jurisdictions, flow through)
+    \item \green{Communication Monitoring}: Detect potential compliance
+breaches in electronic
+messages (chats, e-mails, etc.)
+and audio communication
+(landline, mobile, Skype) of
+targeted UBS employees
+    \item \green{Trade Surveillance}: Detect potential cases of
+market misconduct (e.g.,
+insider trading, front running
+and trades away from the
+market price)
+\end{itemize}
+
+
+
+
+
+\subsection*{Compliance Models – Characteristics and Testing}
+\begin{itemize}[leftmargin=*]
+    \item Use
+    \begin{itemize}[leftmargin=*]
+        \item Many models monitor key
+operational risks (Financial
+Crime, Market Conduct)
+        \item Alerts go through an expert
+review process and might
+ultimately lead to a
+regulatory filing
+    \end{itemize}
+    
+    \item Input data
+    \begin{itemize}[leftmargin=*]
+    \item Large amounts of data
+(trades, orders, text, audio,
+transactions, payments,
+client data), typically
+sourced from core systems
+    \item Processing is usually
+automated
+    \end{itemize}
+    
+    \item Methodology
+    \begin{itemize}[leftmargin=*]
+    \item Monthly, daily or event
+based execution of the
+alerting logic
+    \item Many submodels based on
+rules with many tunable
+parameters, statistical
+anomaly detection and/or
+Machine Learning
+    \end{itemize}
+    
+    
+    
+    
+    \item Implementation
+    \begin{itemize}[leftmargin=*]
+    \item Inhouse built systems as
+well as on- and off-premise
+vendor solutions
+    \item Implementation under
+resposibility of the IT
+department
+    \end{itemize}
+    
+    
+    \item \red{Key model risk are
+false negatives (Type II error)}: The model does not produce an alert when it should have (false alerts “only” lead to
+extra effort and are well controlled through alert review)
+
+    \item \green{Key testing / controls}: 
+        \begin{itemize}[leftmargin=*]
+\item Regular reviews of non-alerting cases / Below-the-Line testing
+\item Regular testing with synthetic data
+\item Regular coverage assessments (regulatory/internal requirements)
+    \end{itemize}
+\end{itemize}
